@@ -3,7 +3,7 @@
 ## Software Developer Portfolio Template built with Next.js, bootstrap that helps you showcase your work and skills as a software developer.
 
 
-## To view a live example, **[click here]()**.
+## To view a live example, **[click here](https://surya-teja-portfolio-type-script.vercel.app/)**.
 
 Just Edit `portfolio.js` to get your personal portfolio. Feel free to use it as-is or customize it as much as you want.
 
