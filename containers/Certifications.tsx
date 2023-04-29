@@ -21,7 +21,7 @@ const Certifications = () => {
           <Row className="row-grid align-items-center">
             {certifications.map((info) => {
               return (
-                <Col className="order-lg-1" lg="6" key={info.schoolName}>
+                <Col className="order-lg-1" lg="6" key={info.certificate}>
                   <CertificationsCard {...info} />
                 </Col>
               );
