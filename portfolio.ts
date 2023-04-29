@@ -248,10 +248,29 @@ export const projects: ProjectType[] = [
 
 export const certifications: CertificationsType[] = [
   {
-    certificate: 'Naukri scraped data',
-    issuedby: 'Naukri scraped data refers to data extracted from the Naukri job portal using web scraping techniques, providing insights into job postings, salaries, and hiring trends, which can be used for market research and analysis.',
-    github: 'https://github.com/TadakaSuryaTeja/Automation_selenium/blob/main/naukri_scrape.py',
-    // link: 'http://tadakasuryateja.info',
+    certificate: 'AWS Certified Solutions Architect-Associate',
+    issuedby: 'AWS',
+    github: 'https://www.credly.com/badges/a3337dc2-e390-42a4-b7ae-b8fb401f1386',
+  },
+  {
+    certificate: 'AWS Cloud Certified Practitioner',
+    issuedby: 'AWS',
+    github: 'https://www.credly.com/badges/1eb48c8d-7a51-4006-a7f5-be69b65f62ff',
+  },
+  {
+    certificate: 'Machine Learning And Deep Learning',
+    issuedby: 'AppliedAI',
+    github: 'https://www.appliedaicourse.com/certificate/d7dbb737c0',
+  },
+  {
+    certificate: 'Information Security-IV',
+    issuedby: 'NPTEL',
+    github: 'https://github.com/TadakaSuryaTeja/Profile/blob/main/Information%20Security%20-%20IV.jpg',
+  },
+  {
+    certificate: 'Mobile Application Development',
+    issuedby: 'NPTEL',
+    github: 'https://github.com/TadakaSuryaTeja/Profile/blob/main/Introduction%20to%20Modern%20Application%20Development.jpg',
   },
 ];
 
