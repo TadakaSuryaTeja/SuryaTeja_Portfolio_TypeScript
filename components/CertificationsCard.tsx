@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardBody, Button, col } from 'reactstrap';
+import { Card, CardBody, Button } from 'reactstrap';
 import { CertificationsType } from '../types/sections';
 import Fade from 'react-reveal/Fade';
 
