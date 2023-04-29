@@ -2,13 +2,13 @@ import emoji from 'react-easy-emoji';
 import {
   EducationType,
   ExperienceType,
-  FeedbackType,
   ProjectType,
   SkillsSectionType,
   SkillBarsType,
   SEODataType,
   SocialLinksType,
   GreetingsType,
+  CertificationsType,
 } from './types/sections';
 
 export const greetings: GreetingsType = {
@@ -242,6 +242,16 @@ export const projects: ProjectType[] = [
     name: 'Image Classification',
     desc: 'Image classification is the process of categorizing an image into one or more predefined classes based on its content, typically using machine learning algorithms.',
     github: 'https://github.com/TadakaSuryaTeja/Image-Classification-WebApp',
+  },
+];
+
+
+export const certifiations: CertificationsType[] = [
+  {
+    certificate: 'Naukri scraped data',
+    issuedby: 'Naukri scraped data refers to data extracted from the Naukri job portal using web scraping techniques, providing insights into job postings, salaries, and hiring trends, which can be used for market research and analysis.',
+    link: 'https://github.com/TadakaSuryaTeja/Automation_selenium/blob/main/naukri_scrape.py',
+    // link: 'http://tadakasuryateja.info',
   },
 ];
 
