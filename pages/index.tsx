@@ -6,7 +6,6 @@ const Proficiency = dynamic(() => import('../containers/Proficiency'));
 const Education = dynamic(() => import('../containers/Education'));
 const Experience = dynamic(() => import('../containers/Experience'));
 const Projects = dynamic(() => import('../containers/Projects'));
-const Certifications = dynamic(() => import('../containers/Certifications'));
 const GithubProfileCard = dynamic(
   () => import('../components/GithubProfileCard')
 );
