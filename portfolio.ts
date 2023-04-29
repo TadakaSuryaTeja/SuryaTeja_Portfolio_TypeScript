@@ -246,11 +246,11 @@ export const projects: ProjectType[] = [
 ];
 
 
-export const certifiations: CertificationsType[] = [
+export const certifications: CertificationsType[] = [
   {
     certificate: 'Naukri scraped data',
     issuedby: 'Naukri scraped data refers to data extracted from the Naukri job portal using web scraping techniques, providing insights into job postings, salaries, and hiring trends, which can be used for market research and analysis.',
-    link: 'https://github.com/TadakaSuryaTeja/Automation_selenium/blob/main/naukri_scrape.py',
+    github: 'https://github.com/TadakaSuryaTeja/Automation_selenium/blob/main/naukri_scrape.py',
     // link: 'http://tadakasuryateja.info',
   },
 ];

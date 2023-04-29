@@ -77,6 +77,14 @@ export type ProjectType = {
   link?: string;
 };
 
+// * CERTIFICATIONS SECTION
+
+export type CertificationsType = {
+  certificate: string;
+  issuedby: string;
+  github?: string;
+}
+
 // * FEEDBACK SECTION
 
 export type FeedbackType = {
