@@ -64,7 +64,7 @@ export type ExperienceType = {
   company: string;
   companyLogo: string;
   date: string;
-  desc: string;
+  desc: JSX.Element | string;
   descBullets?: string[];
 };
 
