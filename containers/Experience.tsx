@@ -5,7 +5,7 @@ import ExperienceCard from '../components/ExperienceCard';
 
 const Experience = () => {
   return (
-    experience && (
+    experience?.length > 0 && (
       <section className="section section-lg">
         <Container>
           <div className="d-flex p-4">
