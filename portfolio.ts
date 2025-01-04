@@ -59,8 +59,8 @@ export const skillsSection: SkillsSectionType = {
           fontAwesomeClassName: 'vscode-icons:file-type-django',
         },
         {
-          skillName: 'Flask',
-          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg',
+            skillName: 'Flask',
+            fontAwesomeClassName: 'fa-brands:python',
         },
         {
           skillName: 'HTML-5',
