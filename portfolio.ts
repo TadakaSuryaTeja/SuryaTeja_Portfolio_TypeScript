@@ -15,8 +15,7 @@ export const greetings: GreetingsType = {
   name: 'Tadaka Surya Teja',
   title: "Hi all, I'm Tadaka Surya Teja",
   description:
-    "I am a Sr. Engineer / Tech Lead based in Hyderabad, India. I am a self-taught programmer, and I am passionate about learning new technologies and building cool stuff. I love to solve problems and I am always open to learn new things.",
-  resumeLink:
+    "I am an Associate Solutions Architect and Tech Lead based in Dallas, United States, with a strong passion for technology and problem-solving. As a self-taught programmer, I am continually exploring new technologies and innovative solutions to build impactful projects. I thrive on tackling challenges and am always eager to expand my knowledge and expertise."  resumeLink:
     'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/Surya%20teja%20resume%20as%20on%2017%20april%202023.pdf',
 };
 
@@ -37,11 +36,11 @@ export const socialLinks: SocialLinksType = {
 
 export const skillsSection: SkillsSectionType = {
   title: 'What I do',
-  subTitle: 'CRAZY PYTHON DEVELOPER WHO WANTS TO EXPLORE EVERY TECH STACK',
+  subTitle: 'ENERGETIC CODER EAGER TO PUSH BOUNDARIES IN MODERN TECHNOLOGY',
   data: [
     {
       title: 'Web Devlopment',
-      lottieAnimationFile: '/lottie/skills/fullstack.json', // Path of Lottie Animation JSON File
+      lottieAnimationFile: '/lottie/skills/fullstack.json',
       skills: [
         emoji(
           '⚡ Building Response Web Application using Python, Django and Flask'
@@ -60,8 +59,8 @@ export const skillsSection: SkillsSectionType = {
         },
         {
           skillName: 'Flask',
-          fontAwesomeClassName: 'vscode-icons:file-type-flask',
-        },       
+          fontAwesomeClassName: 'fa-brands:python',
+        },
         {
           skillName: 'HTML-5',
           fontAwesomeClassName: 'vscode-icons:file-type-html',
