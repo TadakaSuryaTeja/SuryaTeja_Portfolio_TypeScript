@@ -15,7 +15,8 @@ export const greetings: GreetingsType = {
   name: 'Tadaka Surya Teja',
   title: "Hi all, I'm Tadaka Surya Teja",
   description:
-    "I am an Associate Solutions Architect and Tech Lead based in Dallas, United States, with a strong passion for technology and problem-solving. As a self-taught programmer, I am continually exploring new technologies and innovative solutions to build impactful projects. I thrive on tackling challenges and am always eager to expand my knowledge and expertise."  resumeLink:
+    "I am an Associate Solutions Architect and Tech Lead based in Dallas, United States, with a strong passion for technology and problem-solving. As a self-taught programmer, I am continually exploring new technologies and innovative solutions to build impactful projects. I thrive on tackling challenges and am always eager to expand my knowledge and expertise.",
+  resumeLink:
     'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/Surya%20teja%20resume%20as%20on%2017%20april%202023.pdf',
 };
 
