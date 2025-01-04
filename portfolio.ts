@@ -182,22 +182,38 @@ export const educationInfo: EducationType[] = [
 ];
 
 export const experience: ExperienceType[] = [
-
   {
     role: 'Sr Software Engineer/ Tech Lead',
     company: 'Qentelli Solutions Pvt Ltd',
     companyLogo: '/img/icons/common/qentelli.png',
     date: 'Oct 2020 - present',
-    desc: 'Proposed architect-level solutions and designed end-to-end architecture for large-scale applications and data pipelines, ensuring scalability, reliability, and efficiency. Designed and implemented scalable automation frameworks, ETL workflows, and backend architectures, enabling seamless data migration from on-premises Teradata to AWS Redshift, while automating integration processes. Streamlined operations with custom tools, reducing manual QA efforts by 45%, cutting $100K in costs, and enhancing efficiency using AWS, Confluent Kafka, SonarQube, and Datadog. Developed a robust Django-based web application, integrating services such as authentication, payment gateways, third-party APIs, and cloud storage to deliver a secure and seamless user experience. ',
+    desc: (
+      <ul>
+        <li>Proposed architect-level solutions and designed end-to-end architecture for large-scale applications and data pipelines, ensuring scalability, reliability, and efficiency.</li>
+        <li>Designed and implemented scalable automation frameworks, ETL workflows, and backend architectures, enabling seamless data migration from on-premises Teradata to AWS Redshift.</li>
+        <li>Automated integration processes to streamline operations and reduce manual intervention.</li>
+        <li>Reduced manual QA efforts by 45% and cut $100K in costs by developing custom tools and enhancing operational efficiency.</li>
+        <li>Enhanced efficiency using AWS, Confluent Kafka, SonarQube, and Datadog for data streaming, code quality, and monitoring.</li>
+        <li>Developed a robust Django-based web application, integrating services such as authentication, payment gateways, third-party APIs, and cloud storage to deliver a secure and seamless user experience.</li>
+      </ul>
+    ),
   },
   {
     role: 'Software Engineer',
     company: 'SS&C Technologies(Formerly DST)',
     companyLogo: '/img/icons/common/ss&c.png',
     date: 'May 2019 - May 2020',
-    desc: 'Automated ETL processes, integrated AWS services, and improved monitoring with DataDog and SonarQube. Built web applications with Django and Flask, implemented DevOps tasks using Docker, Jenkins, and CI/CD pipelines, and automated testing with Pytest and Selenium. Applied NLP techniques for data extraction and tokenization, and streamlined data processing by 45%.',
+    desc: (
+      <ul>
+        <li>Automated ETL processes, integrated AWS services, and improved monitoring with DataDog and SonarQube.</li>
+        <li>Built web applications with Django and Flask, implementing DevOps tasks using Docker, Jenkins, and CI/CD pipelines.</li>
+        <li>Automated testing with Pytest and Selenium, reducing manual testing efforts and improving code quality.</li>
+        <li>Applied NLP techniques for data extraction and tokenization, streamlining data processing by 45%.</li>
+      </ul>
+    ),
   },
 ];
+
 
 export const projects: ProjectType[] = [
   {
