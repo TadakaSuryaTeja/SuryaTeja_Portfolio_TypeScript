@@ -60,7 +60,7 @@ export const skillsSection: SkillsSectionType = {
         },
         {
           skillName: 'Flask',
-          fontAwesomeClassName: 'fa-brands:python',
+          imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg',
         },
         {
           skillName: 'HTML-5',
@@ -78,7 +78,7 @@ export const skillsSection: SkillsSectionType = {
     },
     {
       title: 'Cloud Infra-Architecture',
-      lottieAnimationFile: '/lottie/skills/cloudinfra.json', // Path of Lottie Animation JSON File
+      lottieAnimationFile: '/lottie/skills/cloudinfra.json',
       skills: [
         emoji('⚡ Experience of working on multiple cloud platforms'),
         emoji(
@@ -137,7 +137,15 @@ export const SkillBars: SkillBarsType[] = [
     progressPercentage: '80',
   },
   {
-    Stack: 'Programming',
+    Stack: 'Data Engineering',
+    progressPercentage: '80',
+  },
+  {
+    Stack: 'DevOps',
+    progressPercentage: '80',
+  },
+  {
+    Stack: 'Web Scraping',
     progressPercentage: '80',
   },
   {
@@ -180,14 +188,14 @@ export const experience: ExperienceType[] = [
     company: 'Qentelli Solutions Pvt Ltd',
     companyLogo: '/img/icons/common/qentelli.png',
     date: 'Oct 2020 - present',
-    desc: 'Developed and implemented SDET friendly automation framework and authored test scripts resulting in 45% reduction of manual QA efforts. Collaborated with team to identify and eliminate unnecessary manual QA and cloud infra expenses, resulting in a cost reduction of $100K Improved automation platform by fixing issues identified using SonarQube and Datadog.    ',
+    desc: 'Proposed architect-level solutions and designed end-to-end architecture for large-scale applications and data pipelines, ensuring scalability, reliability, and efficiency. Designed and implemented scalable automation frameworks, ETL workflows, and backend architectures, enabling seamless data migration from on-premises Teradata to AWS Redshift, while automating integration processes. Streamlined operations with custom tools, reducing manual QA efforts by 45%, cutting $100K in costs, and enhancing efficiency using AWS, Confluent Kafka, SonarQube, and Datadog. Developed a robust Django-based web application, integrating services such as authentication, payment gateways, third-party APIs, and cloud storage to deliver a secure and seamless user experience. ',
   },
   {
     role: 'Software Engineer',
     company: 'SS&C Technologies(Formerly DST)',
     companyLogo: '/img/icons/common/ss&c.png',
     date: 'May 2019 - May 2020',
-    desc: 'Worked as a Django Developer to integrate Stripe payment gateway in wapidu.com and Created REST APIs using Django REST Framework to integrate Django Stripe backend to Vue.js Frontend and Deployed it on Azure based Docker container registry.',
+    desc: 'Automated ETL processes, integrated AWS services, and improved monitoring with DataDog and SonarQube. Built web applications with Django and Flask, implemented DevOps tasks using Docker, Jenkins, and CI/CD pipelines, and automated testing with Pytest and Selenium. Applied NLP techniques for data extraction and tokenization, and streamlined data processing by 45%.',
   },
 ];
 
