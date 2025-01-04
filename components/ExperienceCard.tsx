@@ -25,7 +25,7 @@ const ExperienceCard = ({
           style={{ flex: 1 }}
           className="shadow-lg--hover mb-3 shadow border-0 text-center rounded"
         >
-          <CardBody>
+          <CardBody className="">
             <img
               src={companyLogo}
               style={{
@@ -53,9 +53,9 @@ const ExperienceCard = ({
               {desc}
               <ul>
                 {descBullets
-                  ? descBullets.map((bullet, i) => (
-                      <li key={i}>{bullet}</li> 
-                    ))
+                  ? descBullets.map((desc) => {
+                      return <li key={desc}>{desc}</li>;
+                    })
                   : null}
               </ul>
             </CardText>
