@@ -40,7 +40,7 @@ export const skillsSection: SkillsSectionType = {
   subTitle: 'ENERGETIC CODER EAGER TO PUSH BOUNDARIES IN MODERN TECHNOLOGY',
   data: [
     {
-      title: 'Web Devlopment',
+      title: 'Web Development',
       lottieAnimationFile: '/lottie/skills/fullstack.json',
       skills: [
         emoji(
@@ -166,17 +166,17 @@ export const educationInfo: EducationType[] = [
   },
   {
     schoolName: 'Vardhaman College of Engineering',
-    subHeader: 'BTECH in Computer Scince and Engineering',
+    subHeader: 'BTECH in Computer science and Engineering',
     duration: 'June 2016 - May 2019',
   },
   {
     schoolName: 'Govt Polytechnic',
-    subHeader: 'Diploma in Computer Scince and Engineering',
+    subHeader: 'Diploma in Computer science and Engineering',
     duration: 'June 2013 - June 2016',
   },
   {
     schoolName: 'Kakatiya High School',
-    subHeader: 'SSC Class',
+    subHeader: 'SSC',
     duration: 'June 2012 - June 2013',
   },
 ];
