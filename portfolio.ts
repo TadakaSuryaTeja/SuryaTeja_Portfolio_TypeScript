@@ -183,31 +183,57 @@ export const educationInfo: EducationType[] = [
 
 export const experience: ExperienceType[] = [
   {
+    role: 'Associate Architect/ Tech Lead',
+    company: 'Qentelli Solutions Pvt Ltd',
+    client: 'Southwest Airlines',
+    companyLogo: '/img/icons/common/qentelli.png',
+    date: 'May 2023 - Present',
+    desc: 'Architect-level solutions for large-scale applications and data pipelines.',
+    descBullets: [
+      'Led the successful migration of data from on-premises Teradata to AWS Redshift, ensuring zero data loss and optimal performance.',
+      'Designed and implemented scalable data pipelines using Python and Java to support both real-time and batch processing.',
+      'Architected and deployed Confluent Kafka on AWS for real-time data streaming and message processing.',
+      'Automated AWS Glue ETL workflows to streamline data transformation and integration, enabling seamless data storage in Parquet format within Amazon S3.',
+      'Designed and optimized data warehousing solutions in AWS Redshift and Google BigQuery, ensuring high-performance querying and cost efficiency.',
+      'Established a custom reporting framework to deliver data visualizations and analytics insights to clients effectively.',
+      'Integrated AWS services such as Lambda, OpenSearch, DynamoDB, Redshift, Glue, Step Functions, SQS, SNS, and S3 using Python’s boto3 library.',
+      'Developed a reusable data generation framework capable of producing mock data in multiple formats (JSON, CSV, XML), packaged as a Python library for cross-team accessibility.',
+      'Deployed and managed containerized applications on Kubernetes, ensuring high availability and scalability of data infrastructure.',
+      'Leveraged AWS SageMaker and GroundTruth to build and deploy machine learning models, managing large datasets for AI-driven analytics.',
+      'Collaborated with cross-functional teams to integrate end-to-end data solutions with cloud-based architectures, ensuring data integrity, security, and efficiency.'
+    ],
+  },
+  {
     role: 'Sr Software Engineer/ Tech Lead',
     company: 'Qentelli Solutions Pvt Ltd',
+    client: 'Smile Direct Club',
     companyLogo: '/img/icons/common/qentelli.png',
     date: 'Oct 2020 - present',
     desc: 'Architect-level solutions for large-scale applications and data pipelines.',
     descBullets: [
-      'Proposed architect-level solutions and designed end-to-end architecture for large-scale applications and data pipelines.',
-      'Designed and implemented scalable automation frameworks, ETL workflows, and backend architectures.',
-      'Automated integration processes to streamline operations and reduce manual intervention.',
-      'Reduced manual QA efforts by 45% and cut $100K in costs.',
-      'Enhanced efficiency using AWS, Kafka, SonarQube, and Datadog for data streaming, code quality, and monitoring.',
-      'Developed a robust Django-based web application integrating various services.'
+      'Developed and implemented data quality monitoring solutions using SonarQube and DataDog, reducing system downtime by 30% through early detection and resolution of pipeline issues.',
+      'Designed and enforced CI/CD workflows for data pipelines, incorporating automated testing frameworks and achieving 95% test coverage for all ETL processes, ensuring successful data transformations before production deployment.',
+      'Integrated unit and integration testing into ETL workflows, reducing data errors by 25% and ensuring schema validation and transformation accuracy across both batch and real-time pipelines.',
+      'Automated infrastructure deployment by converting manual configurations to Infrastructure as Code (IaC) using Terraform and YAML, reducing environment setup time by 50% and increasing repeatability and scalability.',
+      'Optimized performance monitoring and anomaly detection in real-time data pipelines, reducing false alerts by 20% by leveraging AWS CloudWatch, OpenSearch, and SNS for proactive alerting and issue resolution.',
+      'Reduced cloud infrastructure costs by $100K by streamlining the automation of testing, validation, and reporting processes, minimizing the need for manual intervention.'
     ],
   },
   {
     role: 'Software Engineer',
     company: 'SS&C Technologies (Formerly DST)',
+    client: 'Amisys',
     companyLogo: '/img/icons/common/ss&c.png',
     date: 'May 2019 - May 2020',
     desc: 'Worked with web applications, automation, and cloud integration.',
     descBullets: [
-      'Automated ETL processes and improved monitoring with DataDog and SonarQube.',
-      'Built web applications with Django and Flask, implementing DevOps tasks.',
-      'Automated testing with Pytest and Selenium, improving code quality.',
-      'Applied NLP techniques for data extraction, streamlining processing by 45%.',
+      'Developed web applications using Django and Flask frameworks, enabling claims adjudication and settlement workflows to automate and streamline processing.',
+      'Parsed and extracted job and employer details using Beautiful Soup, improving data accuracy and processing speed for claims validation and employer verification.',
+      'Implemented automated data backup solutions to AWS S3, ensuring critical claims-related data is consistently backed up and compliant with organizational standards.',
+      'Utilized NLP packages such as NLTK for tokenizing words and sentences, enabling efficient claims adjudication through text-based data extraction from documents.',
+      'Containerized applications using Docker, enabling seamless performance testing across different environments, including test and production for claims settlement applications.',
+      'Used Jenkins to automate jobs and CI/CD pipelines, ensuring continuous integration and rapid deployments for updates to claims adjudication systems.',
+      'Implemented automated testing strategies with Pytest and Selenium, ensuring end-to-end functionality and bug-free deployments in both lower and production environments, particularly for critical claims adjudication processes.'
     ],
   },
 ];
