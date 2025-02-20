@@ -62,6 +62,7 @@ export type EducationType = {
 export type ExperienceType = {
   role: string;
   company: string;
+  client: string;
   companyLogo: string;
   date: string;
   desc: JSX.Element | string;
