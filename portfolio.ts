@@ -184,7 +184,7 @@ export const educationInfo: EducationType[] = [
 export const experience: ExperienceType[] = [
   {
     role: 'Associate Architect/ Tech Lead',
-    company: 'Qentelli Solutions Pvt Ltd',
+    company: 'Southwest Airlines',
     client: 'Southwest Airlines',
     companyLogo: '/img/icons/common/Southwest-Airlines.png',
     date: 'May 2023 - Present',
@@ -205,7 +205,7 @@ export const experience: ExperienceType[] = [
   },
   {
     role: 'Sr Software Engineer/ Tech Lead',
-    company: 'Qentelli Solutions Pvt Ltd',
+    company: 'Smile Direct Club',
     client: 'Smile Direct Club',
     companyLogo: '/img/icons/common/smiledirectclub_logo.jpeg',
     date: 'Oct 2020 - present',
