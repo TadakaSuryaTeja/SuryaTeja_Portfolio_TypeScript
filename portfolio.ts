@@ -186,7 +186,7 @@ export const experience: ExperienceType[] = [
     role: 'Associate Architect/ Tech Lead',
     company: 'Qentelli Solutions Pvt Ltd',
     client: 'Southwest Airlines',
-    companyLogo: '/img/icons/common/qentelli.png',
+    companyLogo: '/img/icons/common/Southwest-Airlines.png',
     date: 'May 2023 - Present',
     desc: 'Architect-level solutions for large-scale applications and data pipelines.',
     descBullets: [
@@ -207,7 +207,7 @@ export const experience: ExperienceType[] = [
     role: 'Sr Software Engineer/ Tech Lead',
     company: 'Qentelli Solutions Pvt Ltd',
     client: 'Smile Direct Club',
-    companyLogo: '/img/icons/common/qentelli.png',
+    companyLogo: '/img/icons/common/smiledirectclub_logo.jpeg',
     date: 'Oct 2020 - present',
     desc: 'Architect-level solutions for large-scale applications and data pipelines.',
     descBullets: [
