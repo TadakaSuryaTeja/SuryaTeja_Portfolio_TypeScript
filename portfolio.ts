@@ -17,7 +17,7 @@ export const greetings: GreetingsType = {
   description:
     "I am an Associate Solutions Architect and Tech Lead based in Dallas, United States, with a strong passion for technology and problem-solving. As a self-taught programmer, I am continually exploring new technologies and innovative solutions to build impactful projects. I thrive on tackling challenges and am always eager to expand my knowledge and expertise.",
   resumeLink:
-    'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/Surya%20teja%20resume%20as%20on%2017%20april%202023.pdf',
+    'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/SuryaTejaTadaka-sdet.pdf',
 };
 
 export const openSource = {
@@ -27,7 +27,7 @@ export const openSource = {
 export const contact = {};
 
 export const socialLinks: SocialLinksType = {
-  url: 'http://tadakasuryateja.info/',
+  url: 'https://surya-teja-tadaka.vercel.app/',
   linkedin: 'https://www.linkedin.com/in/surya-teja-tadaka-36ba8814a/',
   github: 'https://github.com/TadakaSuryaTeja',
   medium: 'https://medium.com/@suryateja233',
@@ -40,7 +40,7 @@ export const skillsSection: SkillsSectionType = {
   subTitle: 'ENERGETIC CODER EAGER TO PUSH BOUNDARIES IN MODERN TECHNOLOGY',
   data: [
     {
-      title: 'Web Development',
+      title: 'Web Development and Automation Testing',
       lottieAnimationFile: '/lottie/skills/fullstack.json',
       skills: [
         emoji(
@@ -133,11 +133,11 @@ export const SkillBars: SkillBarsType[] = [
     progressPercentage: '90', //Insert relative proficiency in percentage
   },
   {
-    Stack: 'AWS',
+    Stack: 'Automation Testing',
     progressPercentage: '80',
   },
   {
-    Stack: 'Data Engineering',
+    Stack: 'AWS',
     progressPercentage: '80',
   },
   {
@@ -149,7 +149,7 @@ export const SkillBars: SkillBarsType[] = [
     progressPercentage: '80',
   },
   {
-    Stack: 'Automation',
+    Stack: 'Data Engineering',
     progressPercentage: '80',
   },
   {
@@ -190,17 +190,18 @@ export const experience: ExperienceType[] = [
     date: 'May 2023 - Present',
     desc: 'Architect-level solutions for large-scale applications and data pipelines.',
     descBullets: [
-      'Led the successful migration of data from on-premises Teradata to AWS Redshift, ensuring zero data loss and optimal performance.',
-      'Designed and implemented scalable data pipelines using Python and Java to support both real-time and batch processing.',
-      'Architected and deployed Confluent Kafka on AWS for real-time data streaming and message processing.',
-      'Automated AWS Glue ETL workflows to streamline data transformation and integration, enabling seamless data storage in Parquet format within Amazon S3.',
-      'Designed and optimized data warehousing solutions in AWS Redshift and Google BigQuery, ensuring high-performance querying and cost efficiency.',
-      'Established a custom reporting framework to deliver data visualizations and analytics insights to clients effectively.',
-      'Integrated AWS services such as Lambda, OpenSearch, DynamoDB, Redshift, Glue, Step Functions, SQS, SNS, and S3 using Python’s boto3 library.',
-      'Developed a reusable data generation framework capable of producing mock data in multiple formats (JSON, CSV, XML), packaged as a Python library for cross-team accessibility.',
-      'Deployed and managed containerized applications on Kubernetes, ensuring high availability and scalability of data infrastructure.',
-      'Leveraged AWS SageMaker and GroundTruth to build and deploy machine learning models, managing large datasets for AI-driven analytics.',
-      'Collaborated with cross-functional teams to integrate end-to-end data solutions with cloud-based architectures, ensuring data integrity, security, and efficiency.'
+    'Architected, developed, and maintained automation frameworks in Python using Django, Flask, Pytest, and Selenium for testing user-facing elements and server-side logic.',
+    'Wrote efficient, reusable, and testable Python code for web automation, utilizing frameworks like PyCharm, UnitTest, Selenium, and Pytest.',
+    'Automated AWS cloud stack and EC2 instance creation using Python, and managed containerized applications with Docker for cross-platform deployment.',
+    'Validated Open API using Pytest methods and Postman for comprehensive API testing and integration.',
+    'Developed reusable Python scripts for desktop automation utilizing auto GUI features and managing driver downloads and updates.',
+    'Implemented and managed CI/CD pipelines using tools such as Jenkins, GitHub, and Jira, enabling seamless code delivery and integration.',
+    'Collaborated cross-functionally with developers, quality analysts, and requirement analysts to develop Python scripts and test cases aligned with Agile methodologies.',
+    'Led the enhancement of test automation frameworks, ensuring the development of high-quality, reusable, and maintainable test scripts for complex application functionalities.',
+    'Provided technical assistance in business user meetings and developed Python-based tools for process improvements and productivity optimization.',
+    'Proficient in working with internet technologies, ensuring seamless integration and validation during automation testing and system validation for large-scale distributed systems.',
+    'Optimized cross-platform testing using Appium and other tools to ensure compatibility across mobile and desktop environments.',
+    'Led a team in identifying requirements, enhancing frameworks, and writing optimized code snippets for automation, ensuring effective project delivery and performance.'
     ],
   },
   {
@@ -211,12 +212,17 @@ export const experience: ExperienceType[] = [
     date: 'Oct 2020 - present',
     desc: 'Architect-level solutions for large-scale applications and data pipelines.',
     descBullets: [
-      'Developed and implemented data quality monitoring solutions using SonarQube and DataDog, reducing system downtime by 30% through early detection and resolution of pipeline issues.',
-      'Designed and enforced CI/CD workflows for data pipelines, incorporating automated testing frameworks and achieving 95% test coverage for all ETL processes, ensuring successful data transformations before production deployment.',
-      'Integrated unit and integration testing into ETL workflows, reducing data errors by 25% and ensuring schema validation and transformation accuracy across both batch and real-time pipelines.',
-      'Automated infrastructure deployment by converting manual configurations to Infrastructure as Code (IaC) using Terraform and YAML, reducing environment setup time by 50% and increasing repeatability and scalability.',
-      'Optimized performance monitoring and anomaly detection in real-time data pipelines, reducing false alerts by 20% by leveraging AWS CloudWatch, OpenSearch, and SNS for proactive alerting and issue resolution.',
-      'Reduced cloud infrastructure costs by $100K by streamlining the automation of testing, validation, and reporting processes, minimizing the need for manual intervention.'
+'Developed Python automation solutions within established frameworks and cloud environments.',
+'Managed Docker containerization for seamless deployment across multiple OS platforms.',
+'Implemented Selenium test automation using Java and Python, ensuring functional accuracy, and maintaining test code.',
+'Optimized mobile and desktop test outputs with Appium for improved functionality.',
+'Strong proficiency in unit testing, debugging, and ensuring high-quality code.',
+'In-depth knowledge of front-end technologies (JavaScript, HTML5, CSS3).',
+'Demonstrated excellent problem-solving, critical thinking, and attention to detail in software development and testing.',
+'Reduced manual testing by 70% and increased release frequency by 50% with automated testing frameworks and efficient CI/CD practices.',
+'Achieved 95% test coverage, ensuring product reliability.',
+'Reduced cloud infrastructure costs by $100K through optimized automation and reporting processes.',
+'Cut defect resolution time by 40% and reduced test script execution time by 30% for faster cycles.'
     ],
   },
   {
@@ -227,13 +233,17 @@ export const experience: ExperienceType[] = [
     date: 'May 2019 - May 2020',
     desc: 'Worked with web applications, automation, and cloud integration.',
     descBullets: [
-      'Developed web applications using Django and Flask frameworks, enabling claims adjudication and settlement workflows to automate and streamline processing.',
-      'Parsed and extracted job and employer details using Beautiful Soup, improving data accuracy and processing speed for claims validation and employer verification.',
-      'Implemented automated data backup solutions to AWS S3, ensuring critical claims-related data is consistently backed up and compliant with organizational standards.',
-      'Utilized NLP packages such as NLTK for tokenizing words and sentences, enabling efficient claims adjudication through text-based data extraction from documents.',
-      'Containerized applications using Docker, enabling seamless performance testing across different environments, including test and production for claims settlement applications.',
-      'Used Jenkins to automate jobs and CI/CD pipelines, ensuring continuous integration and rapid deployments for updates to claims adjudication systems.',
-      'Implemented automated testing strategies with Pytest and Selenium, ensuring end-to-end functionality and bug-free deployments in both lower and production environments, particularly for critical claims adjudication processes.'
+      'Optimized code, achieving a 40% reduction in load times, significantly enhancing user experience.',
+      'Collaborated with cross-functional teams, driving product innovation, and improving team synergy.',
+      'Integrated API, expanding functionality and increasing user reach by 35%.',
+      'Analyzed user feedback, driving feature improvements that enhanced product satisfaction.',
+      'Utilized web element locators (ID, Name, XPath, CSS Selector) in Selenium WebDriver for effective web application testing.',
+      'Demonstrated proficiency in Gherkin language to create feature files for Cucumber test automation.',
+      'Logged defects in Jira, ensuring detailed defect tracking with clear defect types and resolution steps.',
+      'Designed and developed Page Object Model (POM) based automation testing framework using Java, Maven, Selenium WebDriver, TestNG, and Cucumber (Gherkin).',
+      'Created Page Classes and utilized Page Factory to automate testing for web applications.',
+       'Developed and executed Test Cases, Test Scenarios, and Test Plans, ensuring comprehensive test coverage and quality assurance.',
+       'Generated detailed Defect Reports for enhancements, collaborating closely with the development team to ensure issue resolution'
     ],
   },
 ];
