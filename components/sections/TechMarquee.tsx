@@ -1,3 +1,4 @@
+import { Icon } from '@/components/ui/Icon';
 import { techMarquee } from '@/portfolio';
 
 export default function TechMarquee() {
@@ -13,8 +14,9 @@ export default function TechMarquee() {
           {items.map((t, i) => (
             <span
               key={`${t.name}-${i}`}
-              className="marquee-item select-none whitespace-nowrap text-sm font-medium text-ink-muted"
+              className="marquee-item inline-flex select-none items-center whitespace-nowrap text-sm font-medium text-ink-muted"
             >
+              <Icon icon={t.icon} className="mr-2 text-lg" aria-hidden />
               {t.name}
             </span>
           ))}

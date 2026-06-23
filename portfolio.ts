@@ -300,7 +300,7 @@ export const experience: ExperienceType[] = [
     role: 'Software Engineer',
     company: 'SS&C Technologies (formerly DST)',
     client: 'Amisys',
-    companyLogo: '/img/icons/common/ss&c.png',
+    companyLogo: '/img/icons/common/ssandc.png',
     location: 'India',
     date: 'May 2019 — May 2020',
     summary:
