@@ -4,6 +4,9 @@
   "description": "Premium personal portfolio of Tadaka Surya Teja — Solutions Architect, Cloud & AI/ML Engineer. Built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.",
   "author": "Tadaka Surya Teja",
   "license": "MIT",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -15,7 +18,6 @@
     "gen:favicon": "node scripts/generate-favicon.mjs"
   },
   "dependencies": {
-    "@iconify/react": "^4.1.1",
     "framer-motion": "^11.18.2",
     "next": "^13.5.6",
     "react": "^18.3.1",
