@@ -39,6 +39,24 @@ export default function About() {
               ))}
             </div>
           </div>
+
+          {about.learning && about.learning.length > 0 && (
+            <div className="mt-7">
+              <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink-faint">
+                <Icon icon="ph:trend-up-bold" aria-hidden /> Currently learning
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {about.learning.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-hair-strong px-3 py-1 text-xs font-medium text-ink-muted"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </Reveal>
 
         {/* At a glance + education */}

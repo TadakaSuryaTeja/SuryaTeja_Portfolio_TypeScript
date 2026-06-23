@@ -50,6 +50,8 @@ export type AboutType = {
   paragraphs: string[];
   highlights: { label: string; value: string }[];
   interests: string[];
+  /** Aspirational — rendered as a clearly-labeled "Currently learning" group, never as claimed skills. */
+  learning?: string[];
 };
 
 /* --------------------------------- SKILLS --------------------------------- */

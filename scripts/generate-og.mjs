@@ -26,7 +26,7 @@ const svg = `
   <text x="122" y="135" font-family="Arial, Helvetica, sans-serif" font-size="38" font-weight="700" fill="#ffffff" text-anchor="middle">ST</text>
 
   <text x="80" y="318" font-family="Arial, Helvetica, sans-serif" font-size="78" font-weight="700" fill="#F5F7FA">Tadaka Surya Teja</text>
-  <text x="80" y="382" font-family="Arial, Helvetica, sans-serif" font-size="37" font-weight="600" fill="url(#brand)">Forward Deployed Engineer &#183; Cloud &amp; AI/ML</text>
+  <text x="80" y="382" font-family="Arial, Helvetica, sans-serif" font-size="37" font-weight="600" fill="url(#brand)">Software Engineer &#183; AI/ML &#183; Cloud Architect</text>
 
   <rect x="80" y="446" width="132" height="4" rx="2" fill="url(#brand)"/>
   <text x="80" y="512" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="500" fill="#9AA4B2">$100K+ cloud saved&#160;&#160;&#160;&#183;&#160;&#160;&#160;80% fewer errors&#160;&#160;&#160;&#183;&#160;&#160;&#160;AWS Certified&#160;&#160;&#160;&#183;&#160;&#160;&#160;Kaggle Expert</text>

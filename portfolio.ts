@@ -22,18 +22,20 @@ import type {
 export const profile: ProfileType = {
   name: 'Tadaka Surya Teja',
   initials: 'ST',
-  headline: 'Forward Deployed Engineer · Cloud & AI/ML Solutions Architect',
+  headline: 'Software Engineer · AI/ML · AWS Solutions Architect',
   roles: [
-    'Forward Deployed Engineer',
-    'Solutions Architect',
-    'Python & AWS Engineer',
+    'Software Engineer',
+    'Feature Development Engineer',
     'AI / ML Engineer',
+    'AWS Solutions Architect',
+    'Python Developer',
+    'Full Stack Engineer',
     'Cloud Engineer',
   ],
   tagline:
-    'I embed with enterprise customers and ship cloud-native Python systems end-to-end — from architecture and AWS infrastructure to AI/ML and delivery.',
+    'I build across the stack — Python services and APIs, AWS cloud architecture, and applied AI/ML — turning complex problems into scalable, production systems.',
   location: 'Dallas, Texas',
-  availability: 'Open to FDE, Solutions Architect, Cloud & AI/ML roles',
+  availability: 'Open to Software, AI/ML, Cloud & Architect roles',
   yearsExperience: '7+',
   resumeLink:
     'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/SuryaTejaTadaka-sdet.pdf',
@@ -89,42 +91,54 @@ export const metrics: MetricType[] = [
 /* ---------------------------------- ABOUT --------------------------------- */
 export const about: AboutType = {
   paragraphs: [
-    "I'm a Python-first software engineer and AWS-certified Solutions Architect who has spent 7+ years embedded directly with enterprise customers — Southwest Airlines, SmileDirectClub, and SS&C — as a forward-deployed consultant. I turn ambiguous, evolving requirements into shipped, cloud-native systems, owning problems end-to-end from stakeholder discovery to production.",
-    'My core is cloud and backend engineering on AWS: Python services, infrastructure-as-code (EKS, Lambda, Terraform), event-driven design (SQS/SNS/S3), and CI/CD with built-in observability. That work has cut $100K in cloud cost, reduced production errors by 80%, and made delivery faster and more reliable. I hold the AWS Solutions Architect – Associate certification.',
-    "I build in the open and stay sharp on AI/ML as a Kaggle Expert — PyTorch, NLP, and computer vision, from genomics text classification to forecasting. I care about pragmatic engineering close to the customer, clean architecture, and measurable impact.",
+    "I'm a software engineer with 7+ years building across the stack — Python services and APIs, AWS cloud architecture, and applied AI/ML — for enterprises in airlines, MedTech, and financial services. I've grown from hands-on engineering into architecting the cloud platforms and systems large products depend on, leading and mentoring along the way.",
+    'On the cloud and backend side I design infrastructure-as-code (EKS, Lambda, Terraform), event-driven systems (SQS/SNS/S3), Django/Flask APIs, and CI/CD with built-in observability — work that has cut $100K in cloud cost, reduced production errors by 80%, and sped data pipelines 45%. I hold the AWS Solutions Architect – Associate certification.',
+    "On the AI/ML side I work in Python — PyTorch, NLP, and computer vision — from genomics text classification to forecasting, and I'm a Kaggle Expert. I care about clean architecture, measurable impact, and going deeper on scalable systems and modern AI.",
   ],
   highlights: [
     { label: 'Based in', value: 'Dallas, Texas, USA' },
-    { label: 'Currently', value: 'Forward-Deployed · Southwest Airlines' },
+    { label: 'Currently', value: 'Associate Architect · Tech Lead' },
     { label: 'Certified', value: 'AWS Solutions Architect · Kaggle Expert' },
-    { label: 'Focus', value: 'FDE · Cloud · Python · AI/ML' },
+    { label: 'Focus', value: 'Software · Cloud · AI/ML' },
   ],
   interests: [
-    'Cloud Architecture',
-    'Infrastructure as Code',
-    'Machine Learning',
-    'Developer Experience',
-    'Open Source',
     'System Design',
+    'Machine Learning',
+    'Cloud Architecture',
+    'Distributed Systems',
+    'Open Source',
+    'Developer Experience',
+  ],
+  // Honest growth roadmap — rendered separately as "Currently learning",
+  // never mixed into the skills you already have.
+  learning: [
+    'Generative AI',
+    'LLMs & RAG',
+    'LangChain',
+    'Vector Databases',
+    'MLOps',
+    'FastAPI',
+    'PySpark',
+    'Kafka',
   ],
 };
 
 export const aboutTerminal: TerminalLineType[] = [
   {
     cmd: 'whoami',
-    out: 'Tadaka Surya Teja — Forward Deployed Engineer · Cloud & AI/ML',
+    out: 'Tadaka Surya Teja — Software Engineer · AI/ML · Cloud Architect',
   },
   {
     cmd: 'cat focus.txt',
-    out: 'Cloud-native Python · AWS (EKS / Lambda / Terraform) · AI/ML',
+    out: 'Python · AWS (EKS / Lambda / Terraform) · APIs · AI/ML',
   },
   {
     cmd: 'ls impact/',
     out: '$100K-cloud-saved   80%-fewer-errors   45%-faster-pipelines   AWS-certified',
   },
   {
-    cmd: 'deploy --where',
-    out: 'embedded with enterprise customers · Dallas, TX',
+    cmd: 'cat open-to.txt',
+    out: 'Software · Backend · AI/ML · Cloud · Architect roles · Dallas, TX',
   },
 ];
 
@@ -141,6 +155,35 @@ export const skillCategories: SkillCategoryType[] = [
       { name: 'Bash', icon: 'logos:bash' },
       { name: 'Java', icon: 'logos:java' },
       { name: 'JavaScript', icon: 'logos:javascript' },
+    ],
+  },
+  {
+    title: 'Backend & APIs',
+    description: 'Services, serverless, and integrations.',
+    icon: 'ph:stack-bold',
+    accent: 'success',
+    skills: [
+      { name: 'Django', icon: 'vscode-icons:file-type-django' },
+      { name: 'Flask', icon: 'simple-icons:flask' },
+      { name: 'REST APIs', icon: 'ph:plugs-connected-bold' },
+      { name: 'Serverless', icon: 'ph:lightning-bold' },
+      { name: 'Postman', icon: 'logos:postman-icon' },
+      { name: 'PostgreSQL', icon: 'logos:postgresql' },
+    ],
+  },
+  {
+    title: 'AI / ML & Data',
+    description: 'Modeling, NLP, vision, and data pipelines.',
+    icon: 'ph:brain-bold',
+    accent: 'violet',
+    skills: [
+      { name: 'PyTorch', icon: 'logos:pytorch-icon' },
+      { name: 'scikit-learn', icon: 'simple-icons:scikitlearn' },
+      { name: 'Pandas', icon: 'simple-icons:pandas' },
+      { name: 'NumPy', icon: 'logos:numpy' },
+      { name: 'NLP / NLTK', icon: 'ph:chat-text-bold' },
+      { name: 'Computer Vision', icon: 'ph:eye-bold' },
+      { name: 'ETL', icon: 'ph:flow-arrow-bold' },
     ],
   },
   {
@@ -171,35 +214,6 @@ export const skillCategories: SkillCategoryType[] = [
       { name: 'Jenkins', icon: 'logos:jenkins' },
       { name: 'DataDog', icon: 'logos:datadog' },
       { name: 'SonarQube', icon: 'logos:sonarqube' },
-    ],
-  },
-  {
-    title: 'Backend & APIs',
-    description: 'Services, serverless, and integrations.',
-    icon: 'ph:stack-bold',
-    accent: 'success',
-    skills: [
-      { name: 'Django', icon: 'vscode-icons:file-type-django' },
-      { name: 'Flask', icon: 'simple-icons:flask' },
-      { name: 'REST APIs', icon: 'ph:plugs-connected-bold' },
-      { name: 'Serverless', icon: 'ph:lightning-bold' },
-      { name: 'Postman', icon: 'logos:postman-icon' },
-      { name: 'PostgreSQL', icon: 'logos:postgresql' },
-    ],
-  },
-  {
-    title: 'AI / ML & Data',
-    description: 'Modeling, NLP, vision, and data pipelines.',
-    icon: 'ph:brain-bold',
-    accent: 'violet',
-    skills: [
-      { name: 'PyTorch', icon: 'logos:pytorch-icon' },
-      { name: 'scikit-learn', icon: 'simple-icons:scikitlearn' },
-      { name: 'Pandas', icon: 'simple-icons:pandas' },
-      { name: 'NumPy', icon: 'logos:numpy' },
-      { name: 'NLP / NLTK', icon: 'ph:chat-text-bold' },
-      { name: 'Computer Vision', icon: 'ph:eye-bold' },
-      { name: 'ETL', icon: 'ph:flow-arrow-bold' },
     ],
   },
   {
@@ -731,13 +745,40 @@ export const testimonials: TestimonialType[] = [];
 /* ---------------------------------- BLOG ---------------------------------- */
 // Add real Medium posts here to render article cards.
 // When empty, the Writing section shows a "Read on Medium" call-to-action.
-export const blogPosts: BlogPostType[] = [];
+// Real Medium articles. TODO: swap each `link` for the exact article URL
+// (and fine-tune the titles) — these currently point to your Medium profile.
+export const blogPosts: BlogPostType[] = [
+  {
+    title: 'Getting Started with Computer Vision in OpenCV',
+    excerpt:
+      'A practical introduction to image processing and computer vision in Python with OpenCV.',
+    tag: 'Computer Vision',
+    readTime: '6 min',
+    link: 'https://medium.com/@suryateja233',
+  },
+  {
+    title: 'Working with Amazon S3 in Python',
+    excerpt:
+      'Storing, retrieving, and managing objects in Amazon S3 programmatically with boto3.',
+    tag: 'AWS',
+    readTime: '5 min',
+    link: 'https://medium.com/@suryateja233',
+  },
+  {
+    title: 'Automating NFT Creation & Listing with Python',
+    excerpt:
+      'Scripting the mint-to-marketplace pipeline end to end with Python automation.',
+    tag: 'Python',
+    readTime: '7 min',
+    link: 'https://medium.com/@suryateja233',
+  },
+];
 
 /* --------------------------------- CONTACT -------------------------------- */
 export const contactInfo: ContactType = {
-  title: "Let's build scalable AI & cloud systems together",
+  title: "Let's build great software together",
   subtitle:
-    "Whether you're hiring, collaborating, or just want to talk architecture and ML — my inbox is open.",
+    "Whether you're hiring, collaborating, or just want to talk software, cloud, or AI/ML — my inbox is open.",
   email: '', // TODO: add your email to enable the one-click contact button
 };
 
@@ -745,28 +786,39 @@ export const showContactForm = false;
 
 /* ----------------------------------- SEO ---------------------------------- */
 export const seoData: SEODataType = {
-  title: 'Tadaka Surya Teja — Forward Deployed Engineer · Cloud & AI/ML',
+  title: 'Tadaka Surya Teja — Software Engineer · AI/ML · AWS Solutions Architect',
   description:
-    'Tadaka Surya Teja is a Forward Deployed Engineer and AWS-certified Solutions Architect with 7+ years shipping cloud-native Python systems embedded with enterprise customers — AWS (EKS, Lambda, Terraform), backend, and AI/ML.',
+    'Tadaka Surya Teja is a software engineer and AWS-certified Solutions Architect with 7+ years across Python backend, AWS cloud architecture, and applied AI/ML — building scalable, production systems.',
   author: 'Tadaka Surya Teja',
   image: '/og.png',
   url: 'https://surya-teja-tadaka.vercel.app/',
   keywords: [
     'Tadaka Surya Teja',
     'Surya Teja Tadaka',
-    'Forward Deployed Engineer',
-    'FDE',
-    'Solutions Architect',
-    'AWS Solutions Architect',
-    'Cloud Engineer',
+    'Software Engineer',
+    'Software Development Engineer',
+    'Feature Development Engineer',
     'Python Developer',
     'Backend Engineer',
-    'AI ML Engineer',
+    'Full Stack Engineer',
+    'Application Developer',
+    'API Engineer',
+    'AI Engineer',
     'Machine Learning Engineer',
-    'Kaggle Expert',
-    'Terraform',
+    'Data Engineer',
+    'Cloud Engineer',
+    'AWS Solutions Architect',
+    'Software Architect',
+    'Associate Architect',
+    'DevOps Engineer',
+    'Platform Engineer',
+    'Technical Lead',
+    'Microservices',
+    'Event-Driven Architecture',
+    'Distributed Systems',
     'Kubernetes',
-    'Portfolio',
+    'Terraform',
+    'Kaggle Expert',
     'Dallas',
   ],
 };
