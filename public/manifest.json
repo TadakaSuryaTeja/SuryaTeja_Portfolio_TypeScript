@@ -1,21 +1,21 @@
 {
-  "short_name": "Portfolio",
-  "name": "Tadaka Surya Teja's Portfolio",
-  "description": "A passionate Full Stack Web Developer and Mobile App Developer.",
+  "short_name": "Surya Teja",
+  "name": "Tadaka Surya Teja — Solutions Architect & AI/ML Engineer",
+  "description": "Solutions Architect and Tech Lead specializing in scalable cloud platforms, Python automation, and AI/ML systems.",
   "icons": [
     {
-      "src": "./favicon.png",
+      "src": "/favicon.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "./favicon.png",
+      "src": "/favicon.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#11cdef",
-  "background_color": "#11cdef"
+  "theme_color": "#0B0D10",
+  "background_color": "#0B0D10"
 }

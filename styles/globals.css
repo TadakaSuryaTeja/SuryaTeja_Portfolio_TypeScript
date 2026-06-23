@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    /* Dark theme (default) — values match the original palette exactly. */
+    --base-rgb: 11 13 16;
+    --surface-rgb: 15 18 22;
+    --elevated-rgb: 20 24 30;
+    --ink-rgb: 245 247 250;
+    --ink-muted-rgb: 154 164 178;
+    --ink-faint-rgb: 130 139 153;
+    --accent-rgb: 59 130 246;
+    --accent-strong-rgb: 37 99 235;
+    --violet-rgb: 139 92 246;
+    --success-rgb: 34 197 94;
+
+    --line: rgba(255, 255, 255, 0.08);
+    --hair-strong: rgba(255, 255, 255, 0.18);
+    --fill-1: rgba(255, 255, 255, 0.02);
+    --fill-2: rgba(255, 255, 255, 0.04);
+    --fill-3: rgba(255, 255, 255, 0.06);
+    --grid-line: rgba(255, 255, 255, 0.035);
+    --glass-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+      0 24px 60px -28px rgba(0, 0, 0, 0.7);
+    --glow-1: rgba(59, 130, 246, 0.1);
+    --glow-2: rgba(139, 92, 246, 0.08);
+    --scroll-track: #0b0d10;
+    --scroll-thumb: rgba(255, 255, 255, 0.12);
+    --scroll-thumb-hover: rgba(255, 255, 255, 0.2);
+
+    color-scheme: dark;
+  }
+
+  .light {
+    /* Light theme — brand colors darkened just enough to pass WCAG AA. */
+    --base-rgb: 246 247 249;
+    --surface-rgb: 255 255 255;
+    --elevated-rgb: 255 255 255;
+    --ink-rgb: 11 18 32;
+    --ink-muted-rgb: 71 85 105;
+    --ink-faint-rgb: 95 110 132;
+    --accent-rgb: 37 99 235;
+    --accent-strong-rgb: 37 99 235;
+    --violet-rgb: 124 58 237;
+    --success-rgb: 21 128 61;
+
+    --line: rgba(15, 23, 42, 0.1);
+    --hair-strong: rgba(15, 23, 42, 0.18);
+    --fill-1: rgba(15, 23, 42, 0.025);
+    --fill-2: rgba(15, 23, 42, 0.04);
+    --fill-3: rgba(15, 23, 42, 0.06);
+    --grid-line: rgba(15, 23, 42, 0.05);
+    --glass-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05),
+      0 16px 40px -20px rgba(15, 23, 42, 0.16);
+    --glow-1: rgba(59, 130, 246, 0.07);
+    --glow-2: rgba(139, 92, 246, 0.06);
+    --scroll-track: #eef1f5;
+    --scroll-thumb: rgba(15, 23, 42, 0.18);
+    --scroll-thumb-hover: rgba(15, 23, 42, 0.3);
+
+    color-scheme: light;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    @apply bg-base text-ink font-sans antialiased;
+    background-image: radial-gradient(
+        60rem 60rem at 70% -10%,
+        var(--glow-1),
+        transparent 60%
+      ),
+      radial-gradient(50rem 50rem at 10% 10%, var(--glow-2), transparent 55%);
+    background-attachment: fixed;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::selection {
+    background: rgb(var(--accent-rgb) / 0.28);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 999px;
+    border: 2px solid var(--scroll-track);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+  }
+
+  /* Visible, high-contrast keyboard focus.
+     .btn keeps its own ring via higher-specificity utilities. */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid rgb(var(--accent-rgb));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  /* No backdrop-blur here: cards sit on a near-flat page background, so the
+     blur cost ~30 expensive filter passes for no visual gain. Blur is kept
+     only on the navbar + menus (globals/Navbar/CommandPalette) where page
+     content actually scrolls underneath. */
+  .glass {
+    @apply rounded-3xl border border-line bg-fill-2;
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-hover {
+    @apply transition-all duration-300 hover:border-hair-strong hover:bg-fill-3;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent via-violet to-accent bg-clip-text text-transparent;
+    background-size: 200% auto;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-fill-2 px-3 py-1 text-xs font-medium text-ink-muted;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-fill-2 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-ink-muted;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-base;
+  }
+  .btn-primary {
+    @apply btn bg-accent-strong text-white shadow-glow hover:bg-[#1f57db] active:scale-[0.98];
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-fill-2 text-ink hover:border-hair-strong hover:bg-fill-3 active:scale-[0.98];
+  }
+
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] rounded-full bg-accent-strong px-4 py-2 text-sm font-semibold text-white shadow-glow;
+  }
+}
+
+@layer utilities {
+  .grid-bg {
+    background-image: linear-gradient(
+        to right,
+        var(--grid-line) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      #000 40%,
+      transparent 100%
+    );
+  }
+
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 12%,
+      #000 88%,
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 12%,
+      #000 88%,
+      transparent
+    );
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Marquee separator via pseudo-element — zero extra DOM nodes. */
+  .marquee-item::after {
+    content: '•';
+    padding: 0 1.5rem;
+    color: rgb(var(--ink-faint-rgb) / 0.45);
+  }
+
+  /* Lightweight scroll reveal (no JS animation runtime). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s cubic-bezier(0.21, 0.47, 0.32, 0.98),
+      transform 0.4s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

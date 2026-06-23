@@ -1,12 +1,20 @@
-import { AppProps } from 'next/app';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../styles/argon-design-system-react.css';
-import '../styles/styles.css';
-import '../styles/vendor/font-awesome/css/font-awesome.min.css';
-import '../styles/vendor/nucleo/css/nucleo.css';
+import type { AppProps } from 'next/app';
+import { Inter } from 'next/font/google';
+import { MotionConfig } from 'framer-motion';
+import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className={`${inter.variable} font-sans`}>
+        <Component {...pageProps} />
+      </div>
+    </MotionConfig>
+  );
 }
-
-export default MyApp;

@@ -1,52 +1,44 @@
-import dynamic from 'next/dynamic';
-const Navigation = dynamic(() => import('../components/Navigation'));
-const Greetings = dynamic(() => import('../containers/Greetings'));
-const Skills = dynamic(() => import('../containers/Skills'));
-const Proficiency = dynamic(() => import('../containers/Proficiency'));
-const Education = dynamic(() => import('../containers/Education'));
-const Experience = dynamic(() => import('../containers/Experience'));
-const Projects = dynamic(() => import('../containers/Projects'));
-const Certifications = dynamic(() => import('../containers/Certifications'));
-const GithubProfileCard = dynamic(
-  () => import('../components/GithubProfileCard')
-);
-import { openSource, showContactUs } from '../portfolio';
-import SEO from '../components/SEO';
-import Contact from '../components/ContactUs';
-import { GithubUserType } from '../types';
+import SEO from '@/components/SEO';
+import Navbar from '@/components/sections/Navbar';
+import CommandPalette from '@/components/sections/CommandPalette';
+import Hero from '@/components/sections/Hero';
+import TechMarquee from '@/components/sections/TechMarquee';
+import Metrics from '@/components/sections/Metrics';
+import About from '@/components/sections/About';
+import Experience from '@/components/sections/Experience';
+import CaseStudies from '@/components/sections/CaseStudies';
+import Projects from '@/components/sections/Projects';
+import Skills from '@/components/sections/Skills';
+import Certifications from '@/components/sections/Certifications';
+import Testimonials from '@/components/sections/Testimonials';
+import Writing from '@/components/sections/Writing';
+import Contact from '@/components/sections/Contact';
+import Footer from '@/components/sections/Footer';
 
-export default function Home({
-  githubProfileData,
-}: {
-  githubProfileData: any;
-}) {
+export default function Home() {
   return (
-    <div>
+    <>
       <SEO />
-      <Navigation />
-      <Greetings />
-      <Skills />
-      <Proficiency />
-      <Education />
-      <Experience />
-      <Projects />
-      <Certifications />
-      {showContactUs ? <Contact /> : null}
-      <GithubProfileCard {...githubProfileData} />
-    </div>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <Navbar />
+      <CommandPalette />
+      <main id="main" tabIndex={-1} className="focus:outline-none">
+        <Hero />
+        <TechMarquee />
+        <Metrics />
+        <About />
+        <Experience />
+        <CaseStudies />
+        <Projects />
+        <Skills />
+        <Certifications />
+        <Testimonials />
+        <Writing />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
-}
-
-// Home.prototype = {
-//   githubProfileData: PropTypes.object.isRequired,
-// };
-
-export async function getStaticProps() {
-  const githubProfileData: GithubUserType = await fetch(
-    `https://api.github.com/users/${openSource.githubUserName}`
-  ).then((res) => res.json());
-
-  return {
-    props: { githubProfileData },
-  };
 }

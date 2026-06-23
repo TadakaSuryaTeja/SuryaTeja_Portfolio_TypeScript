@@ -1,92 +1,57 @@
-<h1 align="center">Welcome to Tadaka Surya Teja-portfolio 👋</h1>
+# Tadaka Surya Teja — Portfolio
 
-## Software Developer Portfolio Template built with Next.js, bootstrap that helps you showcase your work and skills as a software developer.
+Personal portfolio of **Tadaka Surya Teja**, Solutions Architect & Tech Lead specializing in scalable cloud platforms, Python automation, and AI/ML systems.
 
+**Live:** https://surya-teja-tadaka.vercel.app/
 
-## To view a live example, **[click here](https://surya-teja-portfolio-type-script.vercel.app/)**.
+## Tech stack
 
-Just Edit `portfolio.js` to get your personal portfolio. Feel free to use it as-is or customize it as much as you want.
+- **Framework:** [Next.js 13](https://nextjs.org/) (Pages Router) + TypeScript
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) (custom dark, glassmorphic theme)
+- **Animation:** [Framer Motion](https://www.framer.com/motion/)
+- **Icons:** [Iconify](https://iconify.design/)
+- **Fonts:** [Inter](https://rsms.me/inter/) via `next/font` (self-hosted)
 
-## Sections
+## Editing content
 
-✔️ Summary and About me\
-✔️ Skills\
-✔️ Education\
-✔️ Work Experience\
-✔️ Feedbacks\
-✔️ Projects\
-✔️ Github Profile
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
-You'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer.
-<br>
-**For Windows** Install Visual C++ Build Environment: [Visual Studio Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools)
+All content lives in a single typed source of truth: **`portfolio.ts`** (profile, metrics, about, skills, experience, projects, certifications, testimonials, blog, contact, SEO). Types are in `types/sections.ts`.
 
 ```
-node@v10.16.0 or higher
-npm@6.9.0 or higher
-git@2.17.1 or higher
+portfolio.ts            ← all content
+types/sections.ts       ← data model
+lib/                    ← nav config, accent maps, social links
+components/
+  ui/                   ← Reveal, Section, SectionHeading
+  sections/             ← Navbar, Hero, Metrics, About, Experience,
+                          Projects, Skills, Certifications, Testimonials,
+                          Writing, Contact, Footer
+  SEO.tsx
+pages/                  ← _app, _document, index
+styles/globals.css      ← theme + utilities
 ```
 
-## How To Use
-
-1. Fork this repoistory and clone it to your local machine.
+## Getting started
 
 ```bash
-$ git clone https://github.com/<your-username>/developer-portfolio.git
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-2. Go into the repository
+## Scripts
 
-```bash
-$ cd developer-portfolio
-```
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Lint with `next lint` |
 
-3. Install dependencies
+## Personalizing
 
-```bash
-$ yarn
-```
+- **Headshot:** drop a square image at `public/profile.png` and set `profile.photo` in `portfolio.ts`.
+- **Contact email:** set `contactInfo.email` to enable the one-click email button.
+- **Testimonials / blog posts:** populate `testimonials` / `blogPosts` arrays.
 
-4. Edit `portfolio.js`
+## License
 
-5. Start's development server
-
-```bash
-$ yarn dev
-```
-
-## Linking Portfolio to Github
-
-```javascript
-  //  portfolio.js
-  githubUserName: 'YOUR GITHUB USERNAME HERE',
-```
-
-#### Using Emojis
-
-For adding emoji 😃 into the texts in `Portfolio.js`, use the `emoji()` function and pass the text you need as an argument. This would help in keeping emojis compatible across different browsers and platforms.
-
-## Technologies Used
-
-- [Next.js](https://nextjs.org/)
-- [axios](https://www.npmjs.com/package/axios)
-- [reactstrap](https://reactstrap.github.io/)
-- [react-reveal](https://www.react-reveal.com/)
-- [react-lottie](https://www.npmjs.com/package/react-lottie)
-- [react-easy-emoji](https://github.com/appfigures/react-easy-emoji)
-- [react-headroom](https://github.com/KyleAMathews/react-headroom)
-- [color-thief](https://github.com/lokesh/color-thief)
-
-## Illustrations
-
-- [Lottie File Source](https://lottiefiles.com)
-
-## Icons
-
-Iconify Icons are used in skill section. You can find all the icons here: [Iconify](https://icon-sets.iconify.design/).
-
-
+MIT
