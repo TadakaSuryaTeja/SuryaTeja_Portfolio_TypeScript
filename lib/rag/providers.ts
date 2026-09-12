@@ -21,15 +21,33 @@ export type Provider = {
   stream(prompt: PromptMessages, signal: AbortSignal): AsyncGenerator<string>;
 };
 
-const GROQ_MODEL = 'llama-3.3-70b-versatile';
-const GEMINI_MODEL = 'gemini-2.0-flash';
+/**
+ * Model ids, overridable without a code change.
+ *
+ * Providers retire hosted models on their own schedule and a retired id fails
+ * as a 404 at request time, not at build time — `gemini-2.0-flash` was already
+ * gone when this was wired up. An env override means a retirement is a
+ * dashboard edit and a redeploy rather than a patch release.
+ */
+const GROQ_MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile';
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-3.6-flash';
 
 /** Bounded so a hung provider cannot hold an invocation open indefinitely. */
 const PROVIDER_TIMEOUT_MS = 20_000;
 
 const GENERATION = {
   temperature: 0.2,
-  maxTokens: 600,
+  /**
+   * Sized for a reasoning model, not for the answer.
+   *
+   * Gemini 3.x Flash thinks before it answers and those thought tokens are
+   * billed against this same cap — measured at 200-360 for questions this
+   * size, and the budget cannot be set to zero. At 600 the thinking ate most
+   * of the allowance and answers truncated mid-sentence. Answer *length* is
+   * controlled by the system card ("two to five sentences"), so a high cap
+   * costs nothing on either provider and simply stops clipping the reply.
+   */
+  maxTokens: 2048,
 } as const;
 
 /* ------------------------------ SSE line parsing -------------------------- */

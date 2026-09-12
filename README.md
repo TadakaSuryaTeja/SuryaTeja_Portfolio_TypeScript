@@ -138,6 +138,8 @@ and fill in what you have. Never prefix any of them with `NEXT_PUBLIC_`.
 | `GITHUB_TOKEN`                    | Raises the GitHub API rate limit   |
 | `GROQ_API_KEY`                    | "Ask My Portfolio" — primary LLM   |
 | `GEMINI_API_KEY`                  | "Ask My Portfolio" — failover LLM  |
+| `GROQ_MODEL`                      | Override the Groq model id         |
+| `GEMINI_MODEL`                    | Override the Gemini model id       |
 
 ## Notion setup
 
@@ -248,8 +250,19 @@ anti-hallucination guarantee, and it is structural rather than a prompt
 instruction: a model that is never invoked cannot invent anything.
 
 Above the floor, the retrieved chunks go to Groq (`llama-3.3-70b-versatile`),
-failing over to Google (`gemini-2.0-flash`), and the answer streams back over
+failing over to Google (`gemini-3.6-flash`), and the answer streams back over
 SSE with source chips underneath.
+
+Both model ids can be overridden with `GROQ_MODEL` / `GEMINI_MODEL`. Providers
+retire hosted models on their own schedule and a retired id fails as a 404 at
+request time, not at build time — `gemini-2.0-flash` was already retired when
+this was built. If answers stop coming from one provider, check the function
+logs for a 404 naming a replacement model and set the override.
+
+Note that Gemini 3.x Flash is a reasoning model and its thought tokens count
+against `maxOutputTokens`; the cap in `lib/rag/providers.ts` is sized for
+thinking plus answer, not answer alone. Answer *length* is governed by the
+system card, not by that cap.
 
 The route runs on the **Node runtime, not Edge**. Query-time embedding needs
 the same encoder the index was built with, and the ONNX runtime behind it is
