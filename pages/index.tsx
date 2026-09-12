@@ -2,6 +2,7 @@ import type { GetStaticProps } from 'next';
 import SEO from '@/components/SEO';
 import Navbar from '@/components/sections/Navbar';
 import CommandPalette from '@/components/command/CommandPaletteLoader';
+import AskPortfolio from '@/components/chat/AskPortfolio';
 import ViewModeController from '@/components/recruiter/ViewModeController';
 import RecruiterSummary from '@/components/recruiter/RecruiterSummary';
 import Hero from '@/components/sections/Hero';
@@ -45,6 +46,7 @@ export default function Home({ articles, repos }: HomeProps) {
       <ViewModeController />
       <Navbar />
       <CommandPalette />
+      <AskPortfolio />
       <main id="main" tabIndex={-1} className="focus:outline-none">
         <RecruiterSummary />
         <Hero />
