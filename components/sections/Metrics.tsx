@@ -34,9 +34,16 @@ function CountUp({ value }: { value: string }) {
   return <span ref={ref}>{display}</span>;
 }
 
+/**
+ * Impact metrics.
+ *
+ * Sits below the tech marquee with real separation. This used to carry a
+ * negative top margin, which pulled the cards up over the marquee's bottom
+ * border — subtle on dark, clearly broken on light.
+ */
 export default function Metrics() {
   return (
-    <div className="container-px -mt-6" data-essential="true">
+    <div className="container-px mt-12 sm:mt-16" data-essential="true">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {metrics.map((m, i) => {
           const accent = accentMap[m.accent ?? 'accent'];
