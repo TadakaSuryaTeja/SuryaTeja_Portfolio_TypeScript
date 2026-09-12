@@ -417,7 +417,15 @@ npm run rag:query -- "Has he shipped RAG in production?"   # inspect retrieval, 
 npm run eval:offline                                       # guard cases
 npm run eval                                               # full golden set
 npm run verify                                             # lint + types + tests + evals
+npm run test:e2e                                           # browser checks (needs dev server)
 ```
+
+`test:e2e` is deliberately outside `npm test` and CI: it needs a running dev
+server and a Chromium binary, and a browser download on every commit would
+cost more than it catches for a panel this size. The behaviour underneath is
+covered by the unit suite; the E2E run covers what only breaks in a browser —
+code splitting, focus management, persistence across a reload, double-click
+concurrency and layout from 320px up.
 
 Provider keys are optional. Without them, retrieval still runs and sources are
 still cited — only the prose is missing.

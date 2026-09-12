@@ -23,6 +23,7 @@
     "rag:query": "tsx scripts/query-rag.ts",
     "eval": "tsx evals/run.ts",
     "eval:offline": "tsx evals/run.ts --offline",
+    "test:e2e": "node tests/e2e/chat.e2e.mjs",
     "test": "tsx --test tests/*.test.ts",
     "verify": "npm run lint && tsc --noEmit && npm test && npm run eval:offline"
   },
