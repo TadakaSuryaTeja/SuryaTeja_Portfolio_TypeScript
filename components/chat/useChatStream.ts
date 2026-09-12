@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { decodeEvent, type ChatMeta, type ChatSourceMeta } from '@/lib/ai/contracts';
 
 /**
  * The browser half of the chat protocol.
@@ -19,26 +20,68 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * completely before the turn is marked finished.
  */
 
-export type ChatSource = {
-  id: string;
-  title: string;
-  url: string;
-  section: string;
-  dateRange?: string;
-  score: number;
-};
+export type ChatSource = ChatSourceMeta;
 
 export type ChatMessage = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   sources?: ChatSource[];
+  /** Real per-request telemetry, shown in the "How this works" panel. */
+  meta?: ChatMeta;
   /** True from send until the reveal buffer has fully drained. */
   streaming?: boolean;
   /** True while the provider has sent nothing yet — drives the wait state. */
   thinking?: boolean;
   error?: string;
 };
+
+/**
+ * Transcripts survive a refresh but never outlive the tab.
+ *
+ * `sessionStorage`, not `localStorage`: a recruiter's questions are their
+ * business, and a chat about someone's career should not still be sitting in
+ * a shared browser tomorrow. There is no server-side persistence at all —
+ * nothing about a conversation ever leaves the visitor's machine except the
+ * question itself, which is exactly the property that makes this endpoint
+ * safe to run unauthenticated.
+ */
+const STORAGE_KEY = 'ask-portfolio:transcript';
+const MAX_PERSISTED = 40;
+
+function loadTranscript(): ChatMessage[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+
+    return (
+      parsed
+        .filter(
+          (m): m is ChatMessage =>
+            !!m &&
+            typeof m === 'object' &&
+            typeof (m as ChatMessage).content === 'string' &&
+            ((m as ChatMessage).role === 'user' || (m as ChatMessage).role === 'assistant'),
+        )
+        // A transcript saved mid-stream must not restore as permanently pending.
+        .map((m) => ({ ...m, streaming: false, thinking: false }))
+    );
+  } catch {
+    return [];
+  }
+}
+
+function saveTranscript(messages: ChatMessage[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-MAX_PERSISTED)));
+  } catch {
+    /* private mode, or quota exhausted — the chat still works without it */
+  }
+}
 
 const ENDPOINT = '/api/chat';
 
@@ -59,6 +102,16 @@ const REVEAL_DIVISOR = 12;
 export function useChatStream() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [busy, setBusy] = useState(false);
+
+  /** Restored after mount so the server and first client render agree. */
+  useEffect(() => {
+    const restored = loadTranscript();
+    if (restored.length) setMessages(restored);
+  }, []);
+
+  useEffect(() => {
+    if (messages.length) saveTranscript(messages);
+  }, [messages]);
 
   const abortRef = useRef<AbortController | null>(null);
   /** Text received from the server but not yet revealed. */
@@ -206,23 +259,32 @@ export function useChatStream() {
             if (line.startsWith('event:')) {
               event = line.slice(6).trim();
             } else if (line.startsWith('data:')) {
-              const payload = JSON.parse(line.slice(5).trim());
+              // Validated, not cast: a stream is untrusted input like any
+              // other, and a malformed frame decodes to null and is skipped
+              // rather than corrupting the transcript.
+              const decoded = decodeEvent(event, line.slice(5).trim());
+              if (!decoded) {
+                newline = buffer.indexOf('\n');
+                continue;
+              }
 
-              if (event === 'token') {
+              if (decoded.type === 'token') {
                 if (instant) {
                   patchLast((message) => ({
                     ...message,
-                    content: message.content + payload.text,
+                    content: message.content + decoded.text,
                     thinking: false,
                   }));
                 } else {
-                  pendingRef.current += payload.text;
+                  pendingRef.current += decoded.text;
                   ensureDraining();
                 }
-              } else if (event === 'sources') {
-                patchLast((message) => ({ ...message, sources: payload.sources }));
-              } else if (event === 'error') {
-                patchLast((message) => ({ ...message, error: payload.message }));
+              } else if (decoded.type === 'sources') {
+                patchLast((message) => ({ ...message, sources: decoded.sources }));
+              } else if (decoded.type === 'meta') {
+                patchLast((message) => ({ ...message, meta: decoded.meta }));
+              } else if (decoded.type === 'error') {
+                patchLast((message) => ({ ...message, error: decoded.message }));
               }
             }
 
@@ -261,7 +323,38 @@ export function useChatStream() {
     endedRef.current = false;
     setBusy(false);
     setMessages([]);
+    try {
+      window.sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* nothing to clean up */
+    }
   }, [stopTimer]);
 
-  return { messages, busy, ask, stop, clear };
+  /**
+   * Re-asks the last question, replacing the previous answer in place.
+   *
+   * Dropping the old pair before re-asking is what keeps regenerate from
+   * growing the transcript: a retry that appends would leave the failed
+   * attempt in the history, and that history is sent back as context on the
+   * next turn — so the model would be told about an answer that was thrown
+   * away.
+   */
+  const regenerate = useCallback(() => {
+    if (busy) return;
+
+    setMessages((current) => {
+      const lastUser = [...current].reverse().find((m) => m.role === 'user');
+      if (!lastUser) return current;
+
+      // Trim back to just before that question, then re-ask it.
+      const index = current.lastIndexOf(lastUser);
+      queueMicrotask(() => void ask(lastUser.content));
+      return current.slice(0, index);
+    });
+  }, [ask, busy]);
+
+  /** True when there is a question worth re-running. */
+  const canRegenerate = !busy && messages.some((m) => m.role === 'user');
+
+  return { messages, busy, ask, stop, clear, regenerate, canRegenerate };
 }

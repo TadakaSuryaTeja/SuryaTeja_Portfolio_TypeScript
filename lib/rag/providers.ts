@@ -11,14 +11,27 @@
  * provider that simply is not in the chain, so the site builds and runs with
  * neither key set.
  */
+import { RetryableError, isRetryableStatus, withRetry } from '@/lib/ai/retry';
 import type { PromptMessages } from './prompt';
 
 export type ProviderName = 'groq' | 'gemini';
 
+/** Side-channel for facts the caller needs but the token stream cannot carry. */
+export type ProviderHooks = {
+  /** Called once per retried attempt, so telemetry can count them. */
+  onRetry?: (attempt: number) => void;
+};
+
 export type Provider = {
   name: ProviderName;
+  /** The concrete model id, recorded in telemetry so logs are diagnosable. */
+  model: string;
   /** Yields answer text as it arrives. Throws to hand over to the next link. */
-  stream(prompt: PromptMessages, signal: AbortSignal): AsyncGenerator<string>;
+  stream(
+    prompt: PromptMessages,
+    signal: AbortSignal,
+    hooks?: ProviderHooks,
+  ): AsyncGenerator<string>;
 };
 
 /**
@@ -34,6 +47,9 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-3.6-flash';
 
 /** Bounded so a hung provider cannot hold an invocation open indefinitely. */
 const PROVIDER_TIMEOUT_MS = 20_000;
+
+/** Attempts per provider before falling over to the next one. */
+const PROVIDER_ATTEMPTS = 3;
 
 const GENERATION = {
   temperature: 0.2,
@@ -85,6 +101,24 @@ async function* sseEvents(response: Response, signal: AbortSignal): AsyncGenerat
   }
 }
 
+/**
+ * Issues the request with retries. Only the request is retried, never a
+ * stream that has already begun: re-running a partially consumed stream would
+ * duplicate text the visitor has already read.
+ */
+async function postJSONWithRetry(
+  url: string,
+  init: { headers: Record<string, string>; body: unknown },
+  signal: AbortSignal,
+  onRetry?: (attempt: number) => void,
+): Promise<Response> {
+  return withRetry(() => postJSON(url, init, signal), {
+    attempts: PROVIDER_ATTEMPTS,
+    signal,
+    onRetry: ({ attempt }) => onRetry?.(attempt),
+  });
+}
+
 async function postJSON(
   url: string,
   init: { headers: Record<string, string>; body: unknown },
@@ -105,7 +139,20 @@ async function postJSON(
 
     if (!response.ok) {
       const detail = await response.text().catch(() => '');
-      throw new Error(`${response.status} ${response.statusText} ${detail.slice(0, 200)}`);
+      const message = `${response.status} ${response.statusText} ${detail.slice(0, 200)}`;
+
+      // A transient status is worth waiting out on this provider; a 4xx that
+      // is not 429 is a bug or a bad key and will fail identically forever.
+      if (isRetryableStatus(response.status)) {
+        const advised = Number(response.headers.get('retry-after'));
+        throw new RetryableError(
+          message,
+          response.status,
+          Number.isFinite(advised) && advised > 0 ? advised : undefined,
+        );
+      }
+
+      throw new Error(message);
     }
 
     return response;
@@ -120,8 +167,9 @@ async function postJSON(
 function groqProvider(apiKey: string): Provider {
   return {
     name: 'groq',
-    async *stream(prompt, signal) {
-      const response = await postJSON(
+    model: GROQ_MODEL,
+    async *stream(prompt, signal, hooks) {
+      const response = await postJSONWithRetry(
         'https://api.groq.com/openai/v1/chat/completions',
         {
           headers: { authorization: `Bearer ${apiKey}` },
@@ -137,6 +185,7 @@ function groqProvider(apiKey: string): Provider {
           },
         },
         signal,
+        hooks?.onRetry,
       );
 
       for await (const data of sseEvents(response, signal)) {
@@ -155,12 +204,13 @@ function groqProvider(apiKey: string): Provider {
 function geminiProvider(apiKey: string): Provider {
   return {
     name: 'gemini',
-    async *stream(prompt, signal) {
+    model: GEMINI_MODEL,
+    async *stream(prompt, signal, hooks) {
       const url =
         `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:streamGenerateContent` +
         `?alt=sse&key=${encodeURIComponent(apiKey)}`;
 
-      const response = await postJSON(
+      const response = await postJSONWithRetry(
         url,
         {
           headers: {},
@@ -174,6 +224,7 @@ function geminiProvider(apiKey: string): Provider {
           },
         },
         signal,
+        hooks?.onRetry,
       );
 
       for await (const data of sseEvents(response, signal)) {
@@ -202,9 +253,13 @@ export function providerChain(env: Record<string, string | undefined>): Provider
   return chain;
 }
 
-export type GenerationResult = {
+export type GenerationOutcome = {
   /** The provider that produced tokens, or null if the chain was exhausted. */
   provider: ProviderName | null;
+  model: string | null;
+  /** True when the answer came from anything other than the first provider. */
+  fallbackUsed: boolean;
+  retriesUsed: number;
 };
 
 /**
@@ -218,25 +273,39 @@ export async function* generate(
   chain: Provider[],
   prompt: PromptMessages,
   signal: AbortSignal,
-  onProvider?: (provider: ProviderName | null) => void,
+  onOutcome?: (outcome: GenerationOutcome) => void,
 ): AsyncGenerator<string> {
-  for (const provider of chain) {
+  let retriesUsed = 0;
+  const hooks = {
+    onRetry: (attempt: number) => {
+      retriesUsed = Math.max(retriesUsed, attempt);
+    },
+  };
+
+  for (const [position, provider] of chain.entries()) {
     let started = false;
 
     try {
-      for await (const token of provider.stream(prompt, signal)) {
+      for await (const token of provider.stream(prompt, signal, hooks)) {
         if (!started) {
           started = true;
-          onProvider?.(provider.name);
+          onOutcome?.({
+            provider: provider.name,
+            model: provider.model,
+            fallbackUsed: position > 0,
+            retriesUsed,
+          });
         }
         yield token;
       }
       if (started) return;
     } catch (error) {
+      // Once text has reached the visitor there is no going back: restarting
+      // on another provider would splice two different answers together.
       if (started) return;
-      console.warn(`[chat] provider "${provider.name}" failed, trying next:`, error);
+      console.warn(`[chat] provider "${provider.name}" exhausted, trying next:`, error);
     }
   }
 
-  onProvider?.(null);
+  onOutcome?.({ provider: null, model: null, fallbackUsed: chain.length > 0, retriesUsed });
 }

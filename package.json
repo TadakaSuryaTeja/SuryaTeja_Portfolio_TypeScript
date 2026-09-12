@@ -21,7 +21,10 @@
     "gen:sitemap": "tsx scripts/generate-sitemap.ts",
     "gen:rag": "tsx scripts/build-embeddings.ts",
     "rag:query": "tsx scripts/query-rag.ts",
-    "test": "tsx --test tests/*.test.ts"
+    "eval": "tsx evals/run.ts",
+    "eval:offline": "tsx evals/run.ts --offline",
+    "test": "tsx --test tests/*.test.ts",
+    "verify": "npm run lint && tsc --noEmit && npm test && npm run eval:offline"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

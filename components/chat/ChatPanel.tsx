@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 import { profile } from '@/portfolio';
 import { trackEvent } from '@/lib/analytics';
+import Markdown from './Markdown';
 import { useChatStream, type ChatMessage } from './useChatStream';
 
 /**
@@ -21,6 +22,9 @@ const STARTERS = [
   'Walk me through his AWS work.',
 ];
 
+/** Distance from the bottom within which the view still counts as "following". */
+const FOLLOW_THRESHOLD_PX = 80;
+
 type ChatPanelProps = {
   onClose: () => void;
   /** The element focus returns to when the panel closes. */
@@ -28,8 +32,9 @@ type ChatPanelProps = {
 };
 
 export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
-  const { messages, busy, ask, stop, clear } = useChatStream();
+  const { messages, busy, ask, stop, clear, regenerate, canRegenerate } = useChatStream();
   const [draft, setDraft] = useState('');
+  const [following, setFollowing] = useState(true);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -59,7 +64,7 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
       if (event.key !== 'Tab' || !panelRef.current) return;
 
       const focusable = panelRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), textarea, input, [tabindex]:not([tabindex="-1"])',
+        'a[href], button:not([disabled]), textarea, input, summary, [tabindex]:not([tabindex="-1"])'
       );
       if (!focusable.length) return;
 
@@ -74,31 +79,45 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
         first.focus();
       }
     },
-    [onClose],
+    [onClose]
   );
 
   /* ------------------------------- autoscroll ------------------------------ */
 
-  useEffect(() => {
+  /**
+   * Follow the stream only while the visitor is already at the bottom.
+   * Yanking the view back down while someone is reading an earlier answer is
+   * the single most irritating thing a chat UI can do.
+   */
+  const onScroll = useCallback(() => {
     const log = logRef.current;
     if (!log) return;
+    const distance = log.scrollHeight - log.scrollTop - log.clientHeight;
+    setFollowing(distance < FOLLOW_THRESHOLD_PX);
+  }, []);
 
-    // `prefers-reduced-motion` covers involuntary movement too, not just
-    // decorative animation — so the transcript jumps rather than glides.
-    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    log.scrollTo({
-      top: log.scrollHeight,
-      behavior: smooth ? 'smooth' : 'auto',
-    });
-  }, [messages]);
+  const scrollToBottom = useCallback((smooth = true) => {
+    const log = logRef.current;
+    if (!log) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    log.scrollTo({ top: log.scrollHeight, behavior: smooth && !reduced ? 'smooth' : 'auto' });
+    setFollowing(true);
+  }, []);
+
+  useEffect(() => {
+    if (following) scrollToBottom(false);
+  }, [messages, following, scrollToBottom]);
 
   /* -------------------------------- sending -------------------------------- */
 
   const submit = (question: string) => {
+    // Guarding on `busy` here is what makes a double-click or a fast double
+    // Enter a no-op rather than two in-flight requests against one rate limit.
     if (!question.trim() || busy) return;
     trackEvent('ask_portfolio_question');
     void ask(question);
     setDraft('');
+    setFollowing(true);
   };
 
   const onInputKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -107,6 +126,13 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
       submit(draft);
     }
   };
+
+  /** Scrolls the matching source chip into view when a citation is clicked. */
+  const focusCitation = useCallback((index: number) => {
+    const chip = logRef.current?.querySelector<HTMLElement>(`[data-citation="${index}"]`);
+    chip?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    chip?.focus();
+  }, []);
 
   const empty = messages.length === 0;
 
@@ -154,44 +180,70 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
       </header>
 
       {/* ----------------------------- transcript ---------------------------- */}
-      <div ref={logRef} className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-        {empty ? (
-          <div className="pt-2">
-            <p className="text-sm leading-relaxed text-ink-muted">
-              I can answer from {profile.name}&rsquo;s roles and dates, the systems he&rsquo;s
-              built, the technologies behind them, his certifications and his writing. If it
-              isn&rsquo;t on this site, I&rsquo;ll say so rather than guess.
-            </p>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-ink-faint">
-              Try asking
-            </p>
-            <ul className="mt-3 space-y-2" role="list">
-              {STARTERS.map((starter) => (
-                <li key={starter}>
-                  <button
-                    type="button"
-                    onClick={() => submit(starter)}
-                    className="w-full rounded-xl border border-line bg-fill-2 px-3.5 py-2.5 text-left text-sm text-ink-muted transition-colors hover:border-hair-strong hover:bg-fill-3 hover:text-ink"
-                  >
-                    {starter}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          messages.map((message) => <Turn key={message.id} message={message} />)
-        )}
+      <div className="relative flex-1 overflow-hidden">
+        <div
+          ref={logRef}
+          onScroll={onScroll}
+          className="h-full space-y-5 overflow-y-auto px-4 py-4"
+        >
+          {empty ? (
+            <div className="pt-2">
+              <p className="text-sm leading-relaxed text-ink-muted">
+                I can answer from {profile.name}&rsquo;s roles and dates, the systems he&rsquo;s
+                built, the technologies behind them, his certifications and his writing. If it
+                isn&rsquo;t on this site, I&rsquo;ll say so rather than guess.
+              </p>
+              <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-ink-faint">
+                Try asking
+              </p>
+              <ul className="mt-3 space-y-2" role="list">
+                {STARTERS.map((starter) => (
+                  <li key={starter}>
+                    <button
+                      type="button"
+                      onClick={() => submit(starter)}
+                      className="w-full rounded-xl border border-line bg-fill-2 px-3.5 py-2.5 text-left text-sm text-ink-muted transition-colors hover:border-hair-strong hover:bg-fill-3 hover:text-ink"
+                    >
+                      {starter}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            messages.map((message, index) => (
+              <Turn
+                key={message.id}
+                message={message}
+                onCitationClick={focusCitation}
+                onRetry={index === messages.length - 1 ? regenerate : undefined}
+                canRetry={canRegenerate}
+              />
+            ))
+          )}
 
-        {/*
-          Streamed text is announced politely: `assertive` would interrupt the
-          visitor on every token, which is worse than announcing nothing.
-        */}
-        <div aria-live="polite" aria-atomic="false" className="sr-only">
-          {messages[messages.length - 1]?.role === 'assistant' && !busy
-            ? messages[messages.length - 1].content
-            : ''}
+          {/*
+            Streamed text is announced politely and only once complete:
+            `assertive`, or announcing every token, would interrupt a screen
+            reader continuously for the length of the answer.
+          */}
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {!busy && messages[messages.length - 1]?.role === 'assistant'
+              ? messages[messages.length - 1].content
+              : ''}
+          </div>
         </div>
+
+        {!following && !empty && (
+          <button
+            type="button"
+            onClick={() => scrollToBottom()}
+            className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-line bg-elevated px-3 py-1.5 text-xs font-medium text-ink-muted shadow-glass transition-colors hover:text-ink"
+          >
+            <Icon icon="ph:arrow-down-bold" className="text-xs" />
+            Latest
+          </button>
+        )}
       </div>
 
       {/* ------------------------------ composer ----------------------------- */}
@@ -228,7 +280,7 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
           </button>
         </div>
         <p className="mt-2 px-1 text-[11px] leading-relaxed text-ink-faint">
-          Generated from this site&rsquo;s content. For anything it can&rsquo;t answer,{' '}
+          Grounded in this site&rsquo;s content. For anything it can&rsquo;t answer,{' '}
           <Link href="/#contact" onClick={onClose} className="underline hover:text-ink-muted">
             contact him directly
           </Link>
@@ -241,16 +293,37 @@ export default function ChatPanel({ onClose, returnFocusTo }: ChatPanelProps) {
 
 /* ---------------------------------- a turn --------------------------------- */
 
-function Turn({ message }: { message: ChatMessage }) {
+type TurnProps = {
+  message: ChatMessage;
+  onCitationClick: (index: number) => void;
+  onRetry?: () => void;
+  canRetry: boolean;
+};
+
+function Turn({ message, onCitationClick, onRetry, canRetry }: TurnProps) {
+  const [copied, setCopied] = useState(false);
+
   if (message.role === 'user') {
     return (
       <div className="flex justify-end">
-        <p className="max-w-[85%] rounded-2xl rounded-br-md bg-accent-strong px-3.5 py-2 text-sm text-white">
+        <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-accent-strong px-3.5 py-2 text-sm text-white">
           {message.content}
         </p>
       </div>
     );
   }
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard unavailable — the text is selectable either way */
+    }
+  };
+
+  const settled = !message.streaming && !message.thinking;
 
   return (
     <div className="space-y-2.5">
@@ -273,21 +346,30 @@ function Turn({ message }: { message: ChatMessage }) {
           Reading the sources…
         </p>
       ) : (
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">
-          {message.content}
+        <div className="text-sm">
+          <Markdown content={message.content} onCitationClick={onCitationClick} />
           {message.streaming && (
             <span
               className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 bg-accent motion-safe:animate-pulse"
               aria-hidden
             />
           )}
-        </p>
+        </div>
       )}
 
       {message.error && (
-        <p className="rounded-xl border border-line bg-fill-2 px-3 py-2 text-xs text-ink-faint">
-          {message.error}
-        </p>
+        <div className="rounded-xl border border-line bg-fill-2 px-3 py-2">
+          <p className="text-xs text-ink-faint">{message.error}</p>
+          {onRetry && canRetry && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="mt-1.5 text-xs font-medium text-accent hover:underline"
+            >
+              Try again
+            </button>
+          )}
+        </div>
       )}
 
       {!!message.sources?.length && (
@@ -296,16 +378,89 @@ function Turn({ message }: { message: ChatMessage }) {
             <li key={source.id}>
               <Link
                 href={source.url}
+                data-citation={index + 1}
                 className="chip max-w-full gap-1 transition-colors hover:border-hair-strong hover:text-ink"
-                title={`${source.title}${source.dateRange ? ` · ${source.dateRange}` : ''}`}
+                title={`${source.title}${source.dateRange ? ` · ${source.dateRange}` : ''} — relevance ${source.score}`}
               >
-                <span className="font-semibold text-accent">[{index + 1}]</span>
+                <span className="font-semibold text-accent">{index + 1}</span>
                 <span className="truncate">{source.title}</span>
               </Link>
             </li>
           ))}
         </ul>
       )}
+
+      {settled && message.content && (
+        <div className="flex items-center gap-3 pt-0.5">
+          <button
+            type="button"
+            onClick={copy}
+            className="text-[11px] font-medium text-ink-faint transition-colors hover:text-ink-muted"
+          >
+            {copied ? 'Copied' : 'Copy'}
+          </button>
+          {onRetry && canRetry && !message.error && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="text-[11px] font-medium text-ink-faint transition-colors hover:text-ink-muted"
+            >
+              Regenerate
+            </button>
+          )}
+          {message.meta && <EngineeringDetails meta={message.meta} />}
+        </div>
+      )}
     </div>
+  );
+}
+
+/* --------------------------- technical transparency ------------------------ */
+
+/**
+ * Real per-request telemetry, opt-in behind a disclosure.
+ *
+ * Every number here is measured on the request that produced this answer —
+ * none of it is illustrative. It exists because the interesting thing about
+ * this feature is the pipeline behind it, and a recruiter who wants to see
+ * that should not have to read the repository to find it.
+ *
+ * Deliberately excluded: the prompt, the system card, the model's reasoning,
+ * and anything about the environment. Architectural transparency is the goal;
+ * disclosing internals is not.
+ */
+function EngineeringDetails({ meta }: { meta: NonNullable<ChatMessage['meta']> }) {
+  const rows: [string, string][] = [
+    ['Request', meta.requestId],
+    ['Retrieval', `${meta.retrievedCount} chunks in ${meta.retrievalMs} ms`],
+    ...(meta.topScore !== null ? ([['Top score', `${meta.topScore} cosine`]] as [string, string][]) : []),
+    ['Model', meta.cached ? 'cached — no model called' : (meta.model ?? 'none — sources only')],
+    ...(meta.ttftMs !== null
+      ? ([['Time to first token', `${meta.ttftMs} ms`]] as [string, string][])
+      : []),
+    ['Total', `${meta.totalMs} ms`],
+    ['Tokens', `${meta.promptTokens} in · ${meta.completionTokens} out`],
+    ...(meta.droppedSources || meta.droppedTurns
+      ? ([
+          ['Budget trim', `${meta.droppedSources} sources · ${meta.droppedTurns} turns`],
+        ] as [string, string][])
+      : []),
+    ...(meta.indexVersion ? ([['Index', meta.indexVersion]] as [string, string][]) : []),
+  ];
+
+  return (
+    <details className="group">
+      <summary className="cursor-pointer list-none text-[11px] font-medium text-ink-faint transition-colors hover:text-ink-muted">
+        How this answer was built
+      </summary>
+      <dl className="mt-2 space-y-1 rounded-xl border border-line bg-fill-1 p-2.5 text-[11px]">
+        {rows.map(([label, value]) => (
+          <div key={label} className="flex justify-between gap-3">
+            <dt className="shrink-0 text-ink-faint">{label}</dt>
+            <dd className="truncate text-right font-mono text-ink-muted">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
   );
 }

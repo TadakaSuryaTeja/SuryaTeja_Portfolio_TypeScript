@@ -105,6 +105,20 @@ const INJECTION_PATTERNS: RegExp[] = [
   /<\s*\/?\s*(system|instructions?)\s*>/i,
   /\[\s*(system|inst)\s*\]/i,
   /新しい指示|忽略(以上|之前)/i,
+
+  /*
+   * Secret exfiltration.
+   *
+   * These are deliberately verb-anchored rather than noun-anchored. Blocking
+   * the bare words "API key" or "credentials" would reject a perfectly good
+   * recruiter question — "has he worked with credential management?" is
+   * exactly the kind of thing this site exists to answer. What makes an input
+   * hostile is the demand that *this assistant* hand something over, so the
+   * pattern requires an exfiltration verb pointed at a secret.
+   */
+  /\b(show|print|reveal|list|give|tell|dump|output|expose|leak)\b[^.?!]{0,40}\b(your|the)\b[^.?!]{0,25}\b(api[\s-]?keys?|secret|credentials?|environment variables?|env\s?vars?|access tokens?|passwords?)\b/i,
+  /\b(print|show|dump|list|output|reveal|echo)\b[^.?!]{0,30}\b(all\s+)?(environment variables?|env\s?vars?|process\.env)\b/i,
+  /\bprocess\.env\b/i,
 ];
 
 export function detectInjection(input: string): boolean {

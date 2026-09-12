@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A second push to the same branch makes the first run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Content consistency
+        run: npm run check:content
+
+      - name: Unit tests
+        run: npm test
+
+      # Guard and input-validation cases only: no model, no index, no network,
+      # no provider quota. The retrieval half of the suite needs the embedding
+      # model, so it runs in the job below where the index is actually built.
+      - name: AI evals (offline)
+        run: npm run eval:offline
+
+  # Separated because it downloads ~25MB of model weights and builds the
+  # retrieval index. Failing here means retrieval quality regressed, which is
+  # a different signal from "the code is broken".
+  retrieval-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Weights are content-addressed by model id, so this is a safe cache key.
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: .rag-model
+          key: minilm-l6-v2-${{ runner.os }}
+
+      - name: Build retrieval index
+        run: npm run gen:rag
+
+      # Fails the build if recall@5, refusal accuracy or injection blocking
+      # drop below their thresholds. No LLM is called: generation is
+      # non-deterministic and costs quota, and every property worth gating on
+      # is decided before a model is invoked.
+      - name: AI evals (retrieval)
+        run: npm run eval
+
+      - name: Production build
+        run: npx next build

@@ -115,6 +115,9 @@ npm run gen:icons      # re-bundle icons after adding new ones
 npm run gen:og         # regenerate the static social card
 npm run gen:rag        # rebuild the "Ask My Portfolio" retrieval index
 npm run rag:query      # inspect what a question would retrieve (no LLM call)
+npm run eval           # golden-set evals against the real index
+npm run eval:offline   # guard + injection evals (no model, no network)
+npm run verify         # lint + typecheck + tests + offline evals
 ```
 
 Run `npm run check:content` and `npm test` before every commit — they are what
@@ -140,6 +143,8 @@ and fill in what you have. Never prefix any of them with `NEXT_PUBLIC_`.
 | `GEMINI_API_KEY`                  | "Ask My Portfolio" — failover LLM  |
 | `GROQ_MODEL`                      | Override the Groq model id         |
 | `GEMINI_MODEL`                    | Override the Gemini model id       |
+| `AI_USD_PER_MTOK_INPUT`           | Cost accounting rate (default 0)   |
+| `AI_USD_PER_MTOK_OUTPUT`          | Cost accounting rate (default 0)   |
 
 ## Notion setup
 
@@ -204,6 +209,9 @@ and progress-bar-free by construction.
 
 ## Ask My Portfolio (RAG chatbot)
 
+> **Full architecture, security, observability and evaluation write-up:**
+> [`docs/CHATBOT.md`](docs/CHATBOT.md)
+
 A grounded Q&A panel for recruiters, bottom-right on the homepage. It answers
 only from content already in this repository, cites every claim, and refuses
 anything the site does not cover. No vector database, no paid service.
@@ -261,7 +269,7 @@ logs for a 404 naming a replacement model and set the override.
 
 Note that Gemini 3.x Flash is a reasoning model and its thought tokens count
 against `maxOutputTokens`; the cap in `lib/rag/providers.ts` is sized for
-thinking plus answer, not answer alone. Answer *length* is governed by the
+thinking plus answer, not answer alone. Answer _length_ is governed by the
 system card, not by that cap.
 
 The route runs on the **Node runtime, not Edge**. Query-time embedding needs
