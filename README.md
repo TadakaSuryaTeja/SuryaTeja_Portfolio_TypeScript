@@ -12,38 +12,70 @@ complete production AI systems, not just call an LLM API?_
 ## Architecture
 
 ```
-                      ┌──────────────────────────────────┐
-                      │  portfolio.ts                    │
-                      │  SINGLE SOURCE OF TRUTH          │
-                      │  profile · experience · projects │
-                      │  skills · case studies · SEO     │
-                      └────────────────┬─────────────────┘
-                                       │ imported by every component
-                    ┌──────────────────┴───────────────────┐
-                    │                                      │
-        ┌───────────▼───────────┐             ┌────────────▼────────────┐
-        │  pages/index.tsx      │             │  content/resume.mjs     │
-        │  getStaticProps       │             │  résumé source          │
-        │  (ISR, revalidate 1h) │             └────────────┬────────────┘
-        └───────────┬───────────┘                          │
-                    │                            npm run build:resume
-      ┌─────────────┴──────────────┐                       │
-      │                            │                       ▼
-┌─────▼──────┐            ┌────────▼───────┐    public/resume/*.pdf
-│ lib/cms/   │            │ lib/cms/       │    resume-src/*.html
-│ notion.ts  │            │ github.ts      │
-│ (Articles) │            │ (repo metadata)│
-└─────┬──────┘            └────────┬───────┘
-      │  fails → []                │  fails → []
-      └──────────┬─────────────────┘
-                 ▼
-      local fallback content in portfolio.ts
-      (the site never breaks when an API is down)
+                    ┌──────────────────────────────────────────┐
+                    │            CONTENT GRAPH                 │
+                    │                                          │
+                    │  portfolio.ts        profile · experience │
+                    │                      certs · education    │
+                    │  content/systems.ts  systems + case       │
+                    │                      studies + diagrams   │
+                    │  content/taxonomy.ts technology ↔ system  │
+                    │                      ↔ employer edges     │
+                    │  content/resume.mjs  résumé source        │
+                    └───────────────────┬──────────────────────┘
+                                        │ one definition per fact
+        ┌───────────────────────────────┼───────────────────────────────┐
+        │                               │                               │
+┌───────▼────────┐          ┌───────────▼──────────┐        ┌───────────▼─────────┐
+│  pages/        │          │  components/         │        │  scripts/           │
+│  index.tsx     │          │  architecture/  ←────┼────────┤  check-content.ts   │
+│  work/[slug]   │          │  knowledge/          │        │  build-resume.mjs   │
+│  ai-lab        │          │  projects/           │        │  generate-sitemap   │
+│  insights      │          │  recruiter/          │        │  generate-icons     │
+│  resume        │          │  motion/             │        └─────────────────────┘
+│  api/og        │          │  command/            │
+└───────┬────────┘          └──────────────────────┘
+        │ getStaticProps (ISR 1h)
+        │
+┌───────▼──────────┐   ┌──────────────────┐
+│ lib/cms/notion   │   │ lib/cms/github   │
+│ (Articles)       │   │ (curated repos)  │
+└───────┬──────────┘   └────────┬─────────┘
+        │ fails → []            │ fails → []
+        └───────────┬───────────┘
+                    ▼
+        local fallback content
+        (the site never breaks when an API is down)
 ```
 
-Content flows one way. Components never hold facts of their own — they read
-`portfolio.ts`. External sources (Notion, GitHub) _enrich_ the page; they are
-never required for it to render.
+Content flows one way. Components never hold facts of their own — they read the
+content graph. `npm run check:content` and `npm test` enforce that the graph,
+the résumé and the portfolio cannot drift apart.
+
+### View modes
+
+The site serves two readers rather than averaging them. The active mode lives on
+`<html data-view-mode>`, so switching is pure CSS and content is only ever
+hidden, never removed:
+
+| Mode        | What it shows                                                         |
+| ----------- | --------------------------------------------------------------------- |
+| `default`   | The full narrative, in scroll order                                   |
+| `recruiter` | A 60-second summary plus experience, systems, skills, résumé, contact |
+| `deep`      | Adds inline decision logs and tradeoffs for engineering readers       |
+
+Reachable from the navbar menu, ⌘K, or `?mode=recruiter` / `?mode=deep`.
+
+### Routes
+
+| Route          | Rendering      | Purpose                                         |
+| -------------- | -------------- | ----------------------------------------------- |
+| `/`            | SSG + ISR (1h) | The homepage narrative                          |
+| `/work/[slug]` | SSG            | Deep case studies with interactive architecture |
+| `/ai-lab`      | Static         | AI components, with honest status labels        |
+| `/insights`    | SSG + ISR (1h) | Articles (Notion-backed, local fallback)        |
+| `/resume`      | Static         | Web résumé, print-friendly, PDF downloads       |
+| `/api/og`      | Edge           | Dynamic social cards                            |
 
 ## Tech stack
 
@@ -74,11 +106,18 @@ Other scripts:
 ```bash
 npm run build          # production build
 npm run lint           # ESLint
+npm test               # content + resilience tests (node:test via tsx)
+npm run check:content  # résumé ↔ portfolio ↔ taxonomy consistency
 npx tsc --noEmit       # typecheck
 npm run build:resume   # regenerate résumé HTML + PDFs
+npm run gen:sitemap    # regenerate sitemap.xml from real routes
 npm run gen:icons      # re-bundle icons after adding new ones
-npm run gen:og         # regenerate the social card
+npm run gen:og         # regenerate the static social card
 ```
+
+Run `npm run check:content` and `npm test` before every commit — they are what
+stop the résumé, the site and the knowledge graph from telling different
+stories.
 
 > **Never run `next build` while `next dev` is running** — it clobbers `.next`.
 > Stop the dev server first.
@@ -170,8 +209,17 @@ the résumé PDFs and icon bundle are committed.
   editorial; facts are not.
 - **No percentage skill bars.** Capability is shown with evidence
   (`capabilityGraph` in `portfolio.ts`), never with invented proficiency numbers.
+- **Featured means substantial.** A system is only `tier: 'featured'` if it has
+  a real case study with tradeoffs and a "what I'd improve" section. Tests
+  enforce this.
 - Accent colours come from `lib/accent.ts` static maps — never build Tailwind
   class names by string interpolation, or the scanner will purge them.
+- Animation composes from `components/motion` — don't hand-roll transitions in
+  feature components. Pointer-driven effects write transforms directly to the
+  node (rAF-throttled) rather than storing pointer position in React state.
+- Every interactive visualisation needs a keyboard path and a text equivalent;
+  see `ArchitectureVisualizer` for the pattern (roving tabindex + `sr-only`
+  connection list).
 - The Tailwind colour token is `canvas`, not `base`: a colour named `base`
   makes Tailwind emit `text-base` as a _colour_ utility, which silently
   overrides text colour in responsive variants like `sm:text-base`.

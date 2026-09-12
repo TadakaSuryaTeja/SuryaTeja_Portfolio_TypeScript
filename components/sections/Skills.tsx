@@ -1,61 +1,53 @@
-import { Icon } from '@/components/ui/Icon';
 import Section from '@/components/ui/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/ui/Reveal';
-import { accentMap } from '@/lib/accent';
-import CapabilityGraph from '@/components/sections/CapabilityGraph';
+import CapabilityGraph from '@/components/knowledge/CapabilityGraph';
 import { skillCategories } from '@/portfolio';
 
+/**
+ * Skills.
+ *
+ * The capability map is the primary view — it claims capability by pointing at
+ * the systems that prove it. The full inventory below it is deliberately plain
+ * text: it exists for completeness and keyword coverage, not as a second
+ * icon-heavy grid saying the same thing twice.
+ */
 export default function Skills() {
   return (
     <Section id="skills" essential>
       <SectionHeading
-        eyebrow="Skills"
+        eyebrow="Capabilities"
         title="From model to metal"
-        subtitle="The technologies I reach for across AI, backend, data, cloud and infrastructure — grouped by architectural capability, not by keyword count."
+        subtitle="No progress bars. Every capability below links to the systems and roles where it was actually used."
       />
 
-      <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {skillCategories.map((cat, i) => {
-          const accent = accentMap[cat.accent];
-          return (
-            <Reveal key={cat.title} delay={i * 0.06}>
-              <div className="glass glass-hover h-full rounded-3xl p-6">
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`flex h-11 w-11 items-center justify-center rounded-xl ${accent.bgSoft} ${accent.text}`}
-                  >
-                    <Icon icon={cat.icon} className="text-xl" aria-hidden />
-                  </span>
-                  <div>
-                    <h3 className="text-base font-semibold text-ink">
-                      {cat.title}
-                    </h3>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm text-ink-muted">{cat.description}</p>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {cat.skills.map((s) => (
-                    <span
-                      key={s.name}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-fill-2 px-2.5 py-1.5 text-xs font-medium text-ink-muted transition-all hover:-translate-y-0.5 hover:border-hair-strong hover:text-ink"
-                    >
-                      <Icon icon={s.icon} className="text-base" aria-hidden />
-                      {s.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          );
-        })}
-      </div>
-
-      <Reveal className="mt-10">
+      <Reveal className="mt-14">
         <CapabilityGraph />
       </Reveal>
 
+      <Reveal className="mt-6">
+        <details className="group rounded-3xl border border-line bg-fill-1 p-5 sm:p-6">
+          <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:hidden">
+            <span className="flex items-center justify-between gap-3">
+              Full technology inventory
+              <span className="text-xs font-medium text-ink-muted transition-transform group-open:rotate-180">
+                ▾
+              </span>
+            </span>
+          </summary>
+
+          <dl className="mt-5 space-y-3">
+            {skillCategories.map((cat) => (
+              <div key={cat.title} className="text-sm leading-relaxed">
+                <dt className="inline font-semibold text-ink">{cat.title}: </dt>
+                <dd className="inline text-ink-muted">
+                  {cat.skills.map((s) => s.name).join(', ')}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      </Reveal>
     </Section>
   );
 }

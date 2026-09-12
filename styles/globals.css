@@ -240,17 +240,30 @@
 }
 
 /* --------------------------------------------------------------------------
-   Recruiter Mode
-   An alternate presentation: deep-dive sections are hidden, never deleted.
-   Pure CSS off a `<html data-recruiter="on">` flag so toggling costs nothing.
+   View modes — recruiter / deep dive
+   Content is hidden, never removed. Pure CSS off a `<html data-view-mode>`
+   flag so switching costs nothing and nothing re-renders.
    -------------------------------------------------------------------------- */
-html[data-recruiter='on'] main > *:not([data-essential]) {
+
+/* Recruiter: only the sections a recruiter needs in the first minute. */
+html[data-view-mode='recruiter'] main > *:not([data-essential]) {
+  display: none;
+}
+html[data-view-mode='recruiter'] #home {
   display: none;
 }
 
-/* The hero's long-form intro collapses to the summary card above it. */
-html[data-recruiter='on'] #home {
+/* Deep dive: drop the recruiter-oriented framing, surface the engineering. */
+html[data-view-mode='deep'] [data-mode-hide~='deep'] {
   display: none;
+}
+
+/* Blocks that only exist for engineers reading in deep-dive mode. */
+[data-deep-only] {
+  display: none;
+}
+html[data-view-mode='deep'] [data-deep-only] {
+  display: block;
 }
 
 /* Hero system diagram — connection lines pulse toward the core. */
@@ -267,5 +280,61 @@ html[data-recruiter='on'] #home {
 @media (prefers-reduced-motion: reduce) {
   .net-link {
     animation: none;
+  }
+}
+
+/* Architecture diagram — connections show direction of flow. */
+.arch-flow {
+  animation: arch-flow 2.6s linear infinite;
+}
+
+@keyframes arch-flow {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arch-flow {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Print — the /resume page prints as a clean, single-column document.
+   -------------------------------------------------------------------------- */
+@media print {
+  /* Chrome only prints backgrounds on request; force legible black-on-white. */
+  :root,
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  header[class*='fixed'],
+  nav,
+  footer,
+  .skip-link {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  * {
+    color: #000 !important;
+    border-color: #bbb !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+
+  @page {
+    margin: 0.55in;
   }
 }

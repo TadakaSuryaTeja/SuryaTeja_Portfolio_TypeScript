@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-import { NAV_SECTIONS } from '@/lib/sections';
-import { profile } from '@/portfolio';
+import { NAV_SECTIONS, NAV_ROUTES } from '@/lib/sections';
+import { profile, socialLinks } from '@/portfolio';
+import ViewModeMenu from '@/components/recruiter/ViewModeMenu';
+import { trackEvent } from '@/lib/analytics';
 
 export default function Navbar() {
   const [active, setActive] = useState('home');
@@ -102,20 +105,20 @@ export default function Navbar() {
           aria-label="Primary"
           className="container-px flex h-16 items-center justify-between sm:h-[72px]"
         >
-          <a href="#home" className="flex items-center gap-2.5" aria-label="Home">
+          <Link href="/" className="flex items-center gap-2.5" aria-label="Home">
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-violet text-sm font-bold text-white shadow-glow">
               {profile.initials}
             </span>
             <span className="hidden whitespace-nowrap text-sm font-semibold tracking-tight text-ink xl:block">
               {profile.name}
             </span>
-          </a>
+          </Link>
 
           <div className="hidden items-center gap-0.5 lg:flex">
             {NAV_SECTIONS.filter((s) => s.desktop !== false).map((s) => (
               <a
                 key={s.id}
-                href={`#${s.id}`}
+                href={`/#${s.id}`}
                 aria-current={active === s.id ? 'location' : undefined}
                 className="relative whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
               >
@@ -131,19 +134,41 @@ export default function Navbar() {
                 </span>
               </a>
             ))}
+            {NAV_ROUTES.filter((r) => r.href !== '/resume').map((r) => (
+              <a
+                key={r.href}
+                href={r.href}
+                className="relative whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
+              >
+                {r.label}
+              </a>
+            ))}
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              onClick={() =>
-                window.dispatchEvent(new CustomEvent('recruiter:toggle'))
-              }
-              className="hidden items-center gap-1.5 rounded-full border border-line bg-fill-2 px-3 py-2 text-xs font-medium text-ink-muted transition-colors hover:border-hair-strong hover:text-ink lg:flex"
-              aria-label="Toggle recruiter mode — a 60-second summary view"
-            >
-              <Icon icon="ph:identification-badge-bold" aria-hidden />
-              Recruiter
-            </button>
+            <div className="hidden items-center gap-1 xl:flex">
+              <a
+                href={socialLinks.github}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="GitHub"
+                onClick={() => trackEvent('github_click', 'navbar')}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-fill-2 text-ink-muted transition-colors hover:border-hair-strong hover:text-ink"
+              >
+                <Icon icon="ph:github-logo-bold" aria-hidden />
+              </a>
+              <a
+                href={socialLinks.linkedin}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="LinkedIn"
+                onClick={() => trackEvent('linkedin_click', 'navbar')}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-fill-2 text-ink-muted transition-colors hover:border-hair-strong hover:text-ink"
+              >
+                <Icon icon="ph:linkedin-logo-bold" aria-hidden />
+              </a>
+            </div>
+            <ViewModeMenu />
             <ThemeToggle />
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
@@ -155,16 +180,13 @@ export default function Navbar() {
                 ⌘K
               </kbd>
             </button>
-            {profile.resumeLink && (
-              <a
-                href={profile.resumeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary hidden !py-2.5 px-4 text-[13px] sm:inline-flex"
-              >
-                <Icon icon="ph:download-simple-bold" aria-hidden /> Resume
-              </a>
-            )}
+            <Link
+              href="/resume"
+              onClick={() => trackEvent('resume_download', 'navbar')}
+              className="btn-primary hidden !py-2.5 px-4 text-[13px] sm:inline-flex"
+            >
+              <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
+            </Link>
             <button
               ref={toggleRef}
               onClick={() => setOpen(true)}
@@ -222,7 +244,7 @@ export default function Navbar() {
               {NAV_SECTIONS.map((s) => (
                 <a
                   key={s.id}
-                  href={`#${s.id}`}
+                  href={`/#${s.id}`}
                   onClick={() => setOpen(false)}
                   aria-current={active === s.id ? 'location' : undefined}
                   className={`rounded-xl px-4 py-3 text-base font-medium transition-colors ${
@@ -234,18 +256,22 @@ export default function Navbar() {
                   {s.label}
                 </a>
               ))}
-              {profile.resumeLink && (
-                <a
-                  href={profile.resumeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary mt-4"
-                  onClick={() => setOpen(false)}
-                >
-                  <Icon icon="ph:download-simple-bold" aria-hidden /> Download
-                  Résumé
-                </a>
-              )}
+              <div className="my-3 border-t border-line pt-3">
+                {NAV_ROUTES.map((r) => (
+                  <a
+                    key={r.href}
+                    href={r.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl px-4 py-3 text-base font-medium text-ink-muted transition-colors hover:text-ink"
+                  >
+                    <Icon icon={r.icon} className="text-lg" aria-hidden />
+                    {r.label}
+                  </a>
+                ))}
+              </div>
+              <Link href="/resume" className="btn-primary mt-1" onClick={() => setOpen(false)}>
+                <Icon icon="ph:file-text-bold" aria-hidden /> View résumé
+              </Link>
             </motion.nav>
           </motion.div>
         )}

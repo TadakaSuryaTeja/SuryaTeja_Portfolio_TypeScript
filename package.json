@@ -1,7 +1,7 @@
 {
   "name": "suryateja-portfolio",
   "version": "2.0.0",
-  "description": "Personal portfolio of Surya Teja Tadaka — Technical Lead, Enterprise AI & Agentic Systems Engineer. Next.js, TypeScript, Tailwind CSS, Framer Motion.",
+  "description": "Personal portfolio of Surya Teja Tadaka \u2014 Technical Lead, Enterprise AI & Agentic Systems Engineer. Next.js, TypeScript, Tailwind CSS, Framer Motion.",
   "author": "Surya Teja Tadaka",
   "license": "MIT",
   "engines": {
@@ -16,10 +16,14 @@
     "gen:icons": "node scripts/generate-icons.mjs",
     "gen:og": "node scripts/generate-og.mjs",
     "gen:favicon": "node scripts/generate-favicon.mjs",
-    "build:resume": "node scripts/build-resume.mjs"
+    "build:resume": "node scripts/build-resume.mjs",
+    "check:content": "tsx scripts/check-content.ts",
+    "gen:sitemap": "tsx scripts/generate-sitemap.ts",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "@vercel/og": "^1.0.2",
     "@vercel/speed-insights": "^2.0.0",
     "framer-motion": "^11.18.2",
     "next": "^13.5.6",
@@ -43,6 +47,7 @@
     "prettier": "^3.3.3",
     "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.13",
     "typescript": "^5.4.3"
   }
 }

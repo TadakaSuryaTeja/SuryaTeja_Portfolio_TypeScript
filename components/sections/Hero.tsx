@@ -1,21 +1,57 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from '@/components/ui/Icon';
 import { profile, socialLinks } from '@/portfolio';
 import { SOCIAL_ITEMS } from '@/lib/socials';
 import SystemNetwork from '@/components/hero/SystemNetwork';
 
+/**
+ * Rotating value proposition.
+ *
+ * The interval is paused whenever the hero scrolls out of view or the tab is
+ * hidden — a decorative timer should not keep waking the main thread while
+ * someone is reading the rest of the page.
+ */
 function RotatingRole({ roles }: { roles: string[] }) {
   const [i, setI] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setInterval(() => setI((p) => (p + 1) % roles.length), 2600);
-    return () => clearInterval(t);
+
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const start = () => {
+      if (timer) return;
+      timer = setInterval(() => setI((p) => (p + 1) % roles.length), 2600);
+    };
+    const stop = () => {
+      if (!timer) return;
+      clearInterval(timer);
+      timer = null;
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => (entry?.isIntersecting && !document.hidden ? start() : stop()),
+      { threshold: 0 }
+    );
+    if (ref.current) io.observe(ref.current);
+
+    const onVisibility = () => (document.hidden ? stop() : undefined);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      stop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [roles.length]);
 
   return (
-    <span className="relative inline-flex h-[1.15em] items-center overflow-hidden align-bottom">
+    <span
+      ref={ref}
+      className="relative inline-flex h-[1.15em] items-center overflow-hidden align-bottom"
+    >
       <span key={i} className="gradient-text animate-role-in whitespace-nowrap">
         {roles[i]}
       </span>
@@ -89,19 +125,12 @@ export default function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3 animate-fade-up"
               style={{ animationDelay: '0.12s' }}
             >
-              <a href="#projects" className="btn-primary">
+              <a href="#work" className="btn-primary">
                 <Icon icon="ph:rocket-launch-bold" aria-hidden /> Explore Work
               </a>
-              {profile.resumeLink && (
-                <a
-                  href={profile.resumeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost"
-                >
-                  <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
-                </a>
-              )}
+              <Link href="/resume" className="btn-ghost">
+                <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
+              </Link>
             </div>
 
             <div

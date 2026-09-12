@@ -3,6 +3,7 @@ import Section from '@/components/ui/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/ui/Reveal';
 import { accentMap } from '@/lib/accent';
+import TechChips from '@/components/knowledge/TechChips';
 import { ownershipLayers } from '@/portfolio';
 
 /**
@@ -15,7 +16,7 @@ export default function Ownership() {
       <SectionHeading
         eyebrow="Scope"
         title="I build across the stack AI actually depends on"
-        subtitle="Most AI work fails between the layers. Here is the slice I can own end-to-end — and have."
+        subtitle="Most AI work fails between the layers. Here is the slice I can own end-to-end — and have. Select any capability to see the systems behind it."
       />
 
       <div className="mt-14 space-y-3">
@@ -43,19 +44,10 @@ export default function Ownership() {
                       </div>
                     </div>
 
-                    <ul
-                      className="flex flex-wrap gap-1.5 sm:max-w-[50%] sm:justify-end"
-                      role="list"
-                    >
-                      {layer.items.map((item) => (
-                        <li
-                          key={item}
-                          className="rounded-lg border border-line bg-fill-2 px-2.5 py-1 text-[0.7rem] font-medium text-ink-muted"
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Chips resolve into the knowledge graph where a
+                        taxonomy entry exists, so a visitor can jump from a
+                        layer straight to the systems that prove it. */}
+                    <TechChips tech={layer.items} className="sm:max-w-[52%]" />
                   </div>
                 </div>
 

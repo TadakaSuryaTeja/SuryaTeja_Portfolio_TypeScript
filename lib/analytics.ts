@@ -13,6 +13,8 @@ export type PortfolioEvent =
   | 'case_study_open'
   | 'contact_click'
   | 'recruiter_mode_enable'
+  | 'deep_dive_enable'
+  | 'technology_explore'
   | 'command_palette_open';
 
 export function trackEvent(event: PortfolioEvent, label?: string) {

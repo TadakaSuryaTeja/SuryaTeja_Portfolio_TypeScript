@@ -16,8 +16,6 @@ import type {
   SkillCategoryType,
   ExperienceType,
   EducationType,
-  ProjectType,
-  CaseStudyType,
   CertificationType,
   TestimonialType,
   BlogPostType,
@@ -25,8 +23,6 @@ import type {
   MarqueeItemType,
   SEODataType,
   OwnershipLayerType,
-  CapabilityDomainType,
-  AILabEntryType,
 } from './types/sections';
 
 /* ----------------------------- HERO / PROFILE ----------------------------- */
@@ -72,6 +68,37 @@ export const resumes = [
     primary: false,
   },
 ];
+
+/* ------------------------- RECRUITER BRIEF (60 seconds) -------------------- */
+/* Every line here must be defensible in the first interview question about it. */
+export const recruiterBrief = {
+  coreAreas: [
+    'Generative AI',
+    'Agentic Systems',
+    'RAG',
+    'MCP',
+    'Python',
+    'AWS',
+    'Data Engineering',
+    'Cloud Architecture',
+  ],
+  achievements: [
+    'Designed and led an end-to-end enterprise AI automation platform on AWS Bedrock and Amazon Q Business, in production at Southwest Airlines.',
+    'Built a multi-agent ecosystem across Jira, GitLab and Xray through custom MCP servers enabling structured tool-calling.',
+    'Architected a RAG pipeline over thousands of Confluence documents, grounding Bedrock models in real engineering documentation.',
+    'Led a zero-data-loss Teradata → AWS Redshift migration and deployed Confluent Kafka for real-time streaming.',
+    'Reduced cloud infrastructure cost by $100K annually and cut environment setup time by 50% through automation and IaC.',
+  ],
+  /* Interest, stated confidently — never availability anxiety. */
+  interestedIn: [
+    'Staff / Principal AI Engineering',
+    'Applied AI',
+    'AI Platforms',
+    'Agentic Systems',
+    'Enterprise GenAI',
+    'Technical Leadership',
+  ],
+};
 
 /* --------------------------------- SOCIALS -------------------------------- */
 export const socialLinks: SocialLinksType = {
@@ -294,7 +321,7 @@ export const ownershipLayers: OwnershipLayerType[] = [
     accent: 'violet',
     summary:
       'The surface users touch — assistants, copilots and automation that produce real work products.',
-    items: ['Chat & copilot UX', 'Prompt design', 'Human-in-the-loop review', 'Demo-ready delivery'],
+    items: ['LLMs', 'Tool Calling', 'Human-in-the-loop review', 'LLM Evaluation'],
   },
   {
     layer: 'Agent & Orchestration Layer',
@@ -302,93 +329,28 @@ export const ownershipLayers: OwnershipLayerType[] = [
     accent: 'violet',
     summary:
       'Reasoning agents, structured tool-calling over MCP, and the guardrails that keep them safe.',
-    items: ['Multi-agent workflows', 'MCP tool servers', 'RAG retrieval', 'Rate limiting & fallbacks'],
+    items: ['AI Agents', 'MCP', 'RAG', 'AWS Bedrock'],
   },
   {
     layer: 'API & Backend Layer',
     icon: 'ph:stack-bold',
     accent: 'success',
     summary: 'The services that make AI callable, observable and safe to depend on.',
-    items: ['Python / FastAPI services', 'REST & webhooks', 'Microservices', 'Auth & error handling'],
+    items: ['Python', 'FastAPI', 'REST APIs', 'Microservices', 'Auth & Security'],
   },
   {
     layer: 'Data Layer',
     icon: 'ph:database-bold',
     accent: 'accent',
     summary: 'The pipelines and stores that make enterprise knowledge retrievable.',
-    items: ['Kafka streaming', 'Glue ETL → S3/Parquet', 'Redshift & BigQuery', 'Embeddings & vector search'],
+    items: ['Kafka', 'AWS Glue', 'Redshift', 'S3 / Parquet', 'Vector Search'],
   },
   {
     layer: 'Cloud & Infrastructure Layer',
     icon: 'ph:cloud-bold',
     accent: 'accent',
     summary: 'Everything provisioned as code, deployed continuously, and watched in production.',
-    items: ['Terraform IaC', 'Lambda / ECS / Fargate', 'CI/CD pipelines', 'CloudWatch & Grafana'],
-  },
-];
-
-/* --------------------------- CAPABILITY GRAPH ----------------------------- */
-/* Deliberately no percentages — each node carries verifiable evidence instead. */
-export const capabilityGraph: CapabilityDomainType[] = [
-  {
-    domain: 'AI / GenAI',
-    icon: 'ph:sparkle-bold',
-    accent: 'violet',
-    blurb: 'Production agentic systems, not API calls.',
-    nodes: [
-      { name: 'Agents', icon: 'ph:circles-three-bold', evidence: 'Multi-agent ecosystem across Jira, GitLab and Xray in production.' },
-      { name: 'MCP', icon: 'ph:plugs-connected-bold', evidence: 'Custom MCP servers giving agents structured, auditable tool access.' },
-      { name: 'RAG', icon: 'ph:magnifying-glass-bold', evidence: 'Embeddings + vector retrieval over thousands of Confluence documents.' },
-      { name: 'Bedrock', icon: 'logos:aws', evidence: 'Claude, Llama and Titan integrated with reasoning agents.' },
-    ],
-  },
-  {
-    domain: 'Backend',
-    icon: 'ph:stack-bold',
-    accent: 'success',
-    blurb: 'Services that hold up under enterprise load.',
-    nodes: [
-      { name: 'Python', icon: 'logos:python', evidence: 'Primary language across all three roles for 7+ years.' },
-      { name: 'FastAPI', icon: 'simple-icons:fastapi', evidence: 'Backend services and automation workflows at Southwest.' },
-      { name: 'APIs', icon: 'ph:plugs-connected-bold', evidence: 'Real-time API integrations across enterprise systems.' },
-      { name: 'Microservices', icon: 'ph:squares-four-bold', evidence: 'Containerized, independently deployed service boundaries.' },
-    ],
-  },
-  {
-    domain: 'Data',
-    icon: 'ph:database-bold',
-    accent: 'accent',
-    blurb: 'Batch and streaming at warehouse scale.',
-    nodes: [
-      { name: 'Kafka', icon: 'simple-icons:apachekafka', evidence: 'Confluent Kafka on AWS for event-driven processing.' },
-      { name: 'Redshift', icon: 'logos:aws-redshift', evidence: 'Zero-data-loss Teradata → Redshift migration.' },
-      { name: 'Glue ETL', icon: 'logos:aws-glue', evidence: 'Automated ETL into S3/Parquet; 95% test coverage.' },
-      { name: 'BigQuery', icon: 'logos:google-cloud', evidence: 'Warehouse design and query/cost optimization.' },
-    ],
-  },
-  {
-    domain: 'Cloud',
-    icon: 'ph:cloud-bold',
-    accent: 'accent',
-    blurb: 'AWS-certified, production-operated.',
-    nodes: [
-      { name: 'Lambda', icon: 'logos:aws-lambda', evidence: 'Serverless compute across automation and data workloads.' },
-      { name: 'ECS / Fargate', icon: 'logos:aws-ecs', evidence: 'Containerized service deployment at Southwest.' },
-      { name: 'Step Functions', icon: 'logos:aws-step-functions', evidence: 'Orchestrated multi-step data workflows.' },
-      { name: 'OpenSearch', icon: 'logos:aws-open-search', evidence: 'Search and real-time observability pipelines.' },
-    ],
-  },
-  {
-    domain: 'Infrastructure',
-    icon: 'ph:gear-six-bold',
-    accent: 'success',
-    blurb: 'Everything as code, everything observed.',
-    nodes: [
-      { name: 'Terraform', icon: 'logos:terraform-icon', evidence: 'Manual deployments → IaC; 50% faster environment setup.' },
-      { name: 'Kubernetes', icon: 'logos:kubernetes', evidence: 'Container orchestration for enterprise workloads.' },
-      { name: 'CI/CD', icon: 'ph:infinity-bold', evidence: 'GitLab and GitHub Actions pipelines with quality gates.' },
-      { name: 'Observability', icon: 'logos:grafana', evidence: 'Grafana, CloudWatch and DataDog; 30% fewer pipeline failures.' },
-    ],
+    items: ['Terraform', 'Kubernetes', 'Lambda', 'ECS / Fargate', 'CI/CD', 'Observability'],
   },
 ];
 
@@ -494,392 +456,6 @@ export const educationInfo: EducationType[] = [
     schoolName: 'Government Polytechnic',
     subHeader: 'Diploma, Computer Science',
     duration: 'Graduated 2016',
-  },
-];
-
-/* ---------------------- SYSTEMS I'VE BUILT (projects) --------------------- */
-/* Tier 1 (featured) = production systems from the résumé.                     */
-/* Tier 3 (archive)  = public GitHub work kept for provenance, de-emphasized.  */
-export const projects: ProjectType[] = [
-  {
-    name: 'Enterprise AI Code-Automation Platform',
-    category: 'Agentic AI',
-    problem:
-      'Engineering cycle time was dominated by mechanical work: read a Jira ticket, create a branch, scaffold the code, open a merge request.',
-    desc: 'An end-to-end platform on AWS Bedrock and Amazon Q Business where reasoning agents take a Jira ticket and drive it through to an open GitLab merge request — retrieving the summary, generating a feature branch, writing boilerplate, committing and raising the MR with minimal human involvement.',
-    highlights: [
-      'Multi-agent orchestration across Jira, GitLab and Xray',
-      'Bedrock LLMs (Claude, Llama, Titan) behind reasoning agents',
-      'Rate limiting, fallback logic and structured agent workflows',
-      'Delivered end-to-end: discovery → architecture → production',
-    ],
-    tech: ['AWS Bedrock', 'Amazon Q', 'MCP', 'Python', 'GitLab', 'Terraform'],
-    impact: 'Cut engineering cycle time and manual workload across the delivery org.',
-    featured: true,
-  },
-  {
-    name: 'Custom MCP Tool Servers',
-    category: 'Agentic AI',
-    problem:
-      'Agents that reach enterprise systems through ad-hoc prompt glue are unsafe, unauditable and impossible to extend.',
-    desc: 'A set of custom Model Context Protocol servers exposing Jira, GitLab and Xray as typed, structured tools. Agents call capabilities through a contract instead of improvising API calls, so tool access is explicit, auditable and reusable across workflows.',
-    highlights: [
-      'Structured tool-calling contract per system',
-      'Cross-system automation without bespoke glue',
-      'Reusable across multiple agent workflows',
-    ],
-    tech: ['MCP', 'Python', 'Jira API', 'GitLab API', 'Xray'],
-    impact: 'Made agent tool access explicit and auditable instead of prompt-driven.',
-    featured: true,
-  },
-  {
-    name: 'Confluence RAG Knowledge Assistant',
-    category: 'Generative AI',
-    problem:
-      'Thousands of Confluence pages held the answers engineers needed, but search returned documents rather than answers.',
-    desc: 'A scalable retrieval-augmented generation pipeline that ingests and chunks enterprise Confluence documentation, embeds it into a vector store, and serves grounded answers through Bedrock models — built for accuracy on internal engineering questions rather than general chat.',
-    highlights: [
-      'Ingestion and chunking over thousands of documents',
-      'Embeddings + vector retrieval feeding Bedrock models',
-      'Grounded answers with enterprise error handling',
-    ],
-    tech: ['RAG', 'Embeddings', 'Vector DB', 'AWS Bedrock', 'Python'],
-    impact: 'Engineering answers sourced from internal documentation instead of tribal knowledge.',
-    featured: true,
-  },
-  {
-    name: 'Teradata → Redshift Migration & Streaming Platform',
-    category: 'Data Platforms',
-    problem:
-      'An on-prem Teradata warehouse capped scale and cost, with no path to real-time event processing.',
-    desc: 'A zero-data-loss migration to AWS Redshift alongside a Confluent Kafka streaming backbone and automated Glue ETL into S3/Parquet — with data-quality monitoring, 95% automated ETL coverage and Terraform-provisioned environments.',
-    highlights: [
-      'Zero data loss across the migration',
-      'Confluent Kafka on AWS for event-driven processing',
-      'Glue ETL → S3/Parquet with quality monitoring',
-      '$100K annual cloud cost reduction',
-    ],
-    tech: ['Redshift', 'Kafka', 'AWS Glue', 'S3/Parquet', 'Terraform', 'Python'],
-    impact: '$100K saved annually, 30% fewer pipeline failures, 50% faster environment setup.',
-    featured: true,
-  },
-  {
-    name: 'Cloud-Native Infrastructure as Code',
-    category: 'Cloud Platforms',
-    problem: 'Standing up Kubernetes by hand is slow, error-prone and impossible to reproduce.',
-    desc: 'Provisions an Amazon EKS cluster declaratively with eksctl and Terraform — cluster manifests and variables codified for repeatable, version-controlled deployments.',
-    highlights: ['EKS provisioned via eksctl', 'Terraform-managed configuration', 'Reproducible, version-controlled infra'],
-    tech: ['AWS EKS', 'Terraform', 'Kubernetes', 'eksctl'],
-    github: 'https://github.com/TadakaSuryaTeja/aws_eks',
-  },
-  {
-    name: 'Serverless REST API on AWS Lambda',
-    category: 'Cloud Platforms',
-    problem: 'Always-on servers are overkill and costly for spiky CRUD workloads.',
-    desc: 'A pay-per-use CRUD REST API built on AWS Lambda in Python, with custom JSON serialization and a Postman test collection.',
-    highlights: ['AWS Lambda (Python) handlers', 'Custom JSON encoder', 'Postman-tested endpoints'],
-    tech: ['AWS Lambda', 'Python', 'API Gateway'],
-    github: 'https://github.com/TadakaSuryaTeja/sample_CRUD_in_AWS',
-  },
-  {
-    name: 'Broadcom Driver Installer',
-    category: 'Developer Tools',
-    problem: 'Enabling Broadcom Wi-Fi on fresh Linux installs is a notorious, repetitive pain point.',
-    desc: 'A shell utility that automates Broadcom driver enablement on Linux — adopted by the community with 42 stars and 27 forks.',
-    highlights: ['⭐ 42 stars · 27 forks', 'Solves a real hardware-enablement pain', 'Clean, reusable shell tooling'],
-    tech: ['Bash', 'Linux', 'Shell'],
-    github: 'https://github.com/TadakaSuryaTeja/BroadcomInstaller2021',
-  },
-  {
-    name: 'NLP Text-Classification Service',
-    category: 'Product Engineering',
-    problem: 'A trained NLP model is useless until it is served behind an interface users can hit.',
-    desc: 'A Django web service that serves an NLP text-classification model end-to-end — training to inference to a usable web interface.',
-    highlights: ['Django-served ML model', 'End-to-end train → infer → serve', 'NLP classification pipeline'],
-    tech: ['Python', 'Django', 'NLP', 'NLTK'],
-    github: 'https://github.com/TadakaSuryaTeja/nlp_webapp',
-  },
-  {
-    name: 'Personalized Cancer Diagnosis',
-    category: 'Product Engineering',
-    problem: 'Classifying genetic mutations from dense clinical literature is a high-dimensional NLP problem.',
-    desc: 'A machine-learning pipeline classifying genetic mutations into clinical categories from text — feature engineering, multiclass modeling and evaluation on a real genomics dataset.',
-    highlights: ['Genomics NLP', 'Multiclass classification', 'Feature engineering + evaluation'],
-    tech: ['Python', 'scikit-learn', 'NLP', 'Pandas'],
-    github: 'https://github.com/TadakaSuryaTeja/PersonalizedCancerDiagnosis',
-  },
-];
-
-/* --------------------------------- AI LAB --------------------------------- */
-/* Only entries backed by shipped work or explicitly marked as exploration.    */
-export const aiLab: AILabEntryType[] = [
-  {
-    title: 'Jira → Merge Request agent loop',
-    description:
-      'A reasoning agent that reads a ticket, plans the change, writes boilerplate, commits and opens the MR — with fallback logic when a step fails.',
-    tech: ['Bedrock', 'Multi-agent', 'GitLab API'],
-    status: 'In production',
-    icon: 'ph:git-merge-bold',
-    accent: 'violet',
-  },
-  {
-    title: 'MCP servers for enterprise tools',
-    description:
-      'Jira, GitLab and Xray exposed as typed MCP tools so agents call contracts, not improvised HTTP.',
-    tech: ['MCP', 'Python', 'Tool calling'],
-    status: 'In production',
-    icon: 'ph:plugs-connected-bold',
-    accent: 'accent',
-  },
-  {
-    title: 'RAG over Confluence',
-    description:
-      'Chunking, embedding and retrieval tuned for internal engineering documentation, served through Bedrock.',
-    tech: ['Embeddings', 'Vector DB', 'Bedrock'],
-    status: 'In production',
-    icon: 'ph:magnifying-glass-bold',
-    accent: 'success',
-  },
-  {
-    title: 'Model routing across Claude, Llama and Titan',
-    description:
-      'Comparing Bedrock foundation models per task — code generation, ticket comprehension, documentation — rather than defaulting to one.',
-    tech: ['Bedrock', 'Claude', 'Llama', 'Titan'],
-    status: 'Shipped',
-    icon: 'ph:brain-bold',
-    accent: 'violet',
-  },
-  {
-    title: 'Agent reliability guardrails',
-    description:
-      'Rate limiting, structured error handling, observability and fallback paths so agent workflows degrade instead of failing loudly.',
-    tech: ['Observability', 'Rate limiting', 'Fallbacks'],
-    status: 'In production',
-    icon: 'ph:shield-check-bold',
-    accent: 'accent',
-  },
-  {
-    title: 'LLM evaluation harness',
-    description:
-      'Measuring retrieval quality and generation accuracy on internal engineering questions — an area I am actively deepening.',
-    tech: ['Evaluation', 'RAG', 'Python'],
-    status: 'Exploring',
-    icon: 'ph:chart-line-up-bold',
-    accent: 'success',
-  },
-];
-
-/* ------------------------------ CASE STUDIES ------------------------------ */
-export const caseStudies: CaseStudyType[] = [
-  {
-    id: 'southwest',
-    company: 'Southwest Airlines (Qentelli)',
-    title: 'An agentic AI platform that turns Jira tickets into merge requests',
-    period: 'June 2023 — Present',
-    accent: 'violet',
-    problem:
-      'A large airline engineering org spent a meaningful share of every sprint on mechanical work — reading tickets, creating branches, scaffolding code, opening merge requests — and answers to internal engineering questions were buried in thousands of Confluence pages.',
-    approach: [
-      'Designed an end-to-end AI automation platform on AWS Bedrock and Amazon Q Business with multi-agent orchestration driving the Jira → code → GitLab MR workflow.',
-      'Exposed Jira, GitLab and Xray to agents through custom MCP servers so tool-calling is structured and auditable rather than prompt-glued.',
-      'Built a RAG pipeline — chunking, embeddings, vector retrieval — over thousands of Confluence documents so Bedrock models answer from real documentation.',
-      'Integrated Claude, Llama and Titan with reasoning agents, selecting models per task across code generation, ticket comprehension and documentation.',
-      'Hardened the platform for enterprise use with rate limiting, structured error handling, fallback logic and observability.',
-    ],
-    challenges: [
-      'Keeping agent tool access auditable and safe across three separate enterprise systems.',
-      'Retrieval quality over heterogeneous, inconsistently structured internal documentation.',
-      'Making a non-deterministic system reliable enough for engineers to trust in their daily workflow.',
-    ],
-    results: [
-      'A production multi-agent platform owned end-to-end, from discovery through rollout',
-      'Reusable MCP tool servers shared across agent workflows',
-      'Grounded engineering answers sourced from internal documentation',
-      'Demonstrated reductions in engineering cycle time and manual workload to leadership',
-    ],
-    stack: ['AWS Bedrock', 'Amazon Q', 'MCP', 'RAG', 'Python', 'FastAPI', 'Terraform', 'GitLab CI'],
-    architecture: {
-      caption:
-        'Ticket in, merge request out — agents reach enterprise systems through MCP, grounded by RAG over Confluence.',
-      layers: [
-        {
-          title: 'Trigger',
-          nodes: [
-            { label: 'Jira Ticket', icon: 'logos:jira' },
-            { label: 'Engineer', icon: 'ph:user-bold' },
-          ],
-        },
-        {
-          title: 'Orchestration',
-          nodes: [
-            { label: 'Agent Planner', icon: 'ph:circles-three-bold' },
-            { label: 'Amazon Q', icon: 'logos:aws' },
-          ],
-        },
-        {
-          title: 'Reasoning',
-          nodes: [
-            { label: 'Bedrock LLMs', icon: 'ph:brain-bold' },
-            { label: 'RAG Retriever', icon: 'ph:magnifying-glass-bold' },
-          ],
-        },
-        {
-          title: 'Tools (MCP)',
-          nodes: [
-            { label: 'Jira MCP', icon: 'ph:plugs-connected-bold' },
-            { label: 'GitLab MCP', icon: 'logos:gitlab' },
-            { label: 'Xray MCP', icon: 'ph:wrench-bold' },
-          ],
-        },
-        {
-          title: 'Output',
-          nodes: [
-            { label: 'Merge Request', icon: 'ph:git-merge-bold' },
-            { label: 'Observability', icon: 'logos:grafana' },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    id: 'smiledirectclub',
-    company: 'Smile Direct Club (Qentelli)',
-    title: 'Teradata to Redshift with zero data loss — and a streaming backbone',
-    period: 'Oct 2020 — May 2023',
-    accent: 'success',
-    problem:
-      'A consumer MedTech platform ran analytics on an on-prem Teradata warehouse: expensive, capacity-bound, and with no path to real-time event processing. Pipelines failed quietly and environments were built by hand.',
-    approach: [
-      'Led the Teradata → AWS Redshift migration with zero data loss, then optimized warehouse design across Redshift and BigQuery for query performance and cost.',
-      'Architected and deployed Confluent Kafka on AWS for real-time streaming and event-driven processing.',
-      'Automated Glue ETL workflows transforming and landing data in S3 as Parquet, integrating Lambda, DynamoDB, OpenSearch, Step Functions, SQS and SNS via boto3.',
-      'Built data-quality monitoring with SonarQube and DataDog, and added unit plus integration testing to ETL pipelines.',
-      'Converted manual infrastructure to Terraform and YAML IaC, and enhanced observability with CloudWatch, OpenSearch and SNS.',
-    ],
-    challenges: [
-      'Guaranteeing zero data loss while cutting over a live analytics warehouse.',
-      'Making batch and streaming pipelines observable enough to catch silent failures.',
-      'Reducing cloud spend without sacrificing pipeline coverage or freshness.',
-    ],
-    results: [
-      'Zero-loss warehouse migration with improved downstream performance',
-      'Real-time event processing on Confluent Kafka',
-      '95% automated test coverage across ETL processes',
-      'Reusable Python data-generation library adopted across teams',
-    ],
-    metrics: [
-      { value: '$100K', label: 'Annual cloud cost saved' },
-      { value: '95%', label: 'ETL test coverage' },
-      { value: '30%', label: 'Fewer pipeline failures' },
-      { value: '50%', label: 'Faster env setup' },
-    ],
-    stack: ['Redshift', 'Kafka', 'AWS Glue', 'S3/Parquet', 'Step Functions', 'DynamoDB', 'Terraform', 'DataDog'],
-    architecture: {
-      caption: 'Streaming and batch ingestion landing in Parquet, warehoused in Redshift, watched end-to-end.',
-      layers: [
-        {
-          title: 'Sources',
-          nodes: [
-            { label: 'Teradata', icon: 'ph:database-bold' },
-            { label: 'App Events', icon: 'ph:lightning-bold' },
-          ],
-        },
-        {
-          title: 'Streaming',
-          nodes: [
-            { label: 'Confluent Kafka', icon: 'simple-icons:apachekafka' },
-            { label: 'SQS / SNS', icon: 'logos:aws-sqs' },
-          ],
-        },
-        {
-          title: 'Processing',
-          nodes: [
-            { label: 'Glue ETL', icon: 'logos:aws-glue' },
-            { label: 'Step Functions', icon: 'logos:aws-step-functions' },
-            { label: 'Lambda', icon: 'logos:aws-lambda' },
-          ],
-        },
-        {
-          title: 'Storage',
-          nodes: [
-            { label: 'S3 / Parquet', icon: 'logos:aws-s3' },
-            { label: 'Redshift', icon: 'logos:aws-redshift' },
-            { label: 'DynamoDB', icon: 'logos:aws-dynamodb' },
-          ],
-        },
-        {
-          title: 'Observability',
-          nodes: [
-            { label: 'CloudWatch', icon: 'logos:aws-cloudwatch' },
-            { label: 'DataDog', icon: 'logos:datadog' },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    id: 'ssc',
-    company: 'SS&C Technologies',
-    title: 'Secure backend services for health-insurance claims adjudication',
-    period: 'May 2019 — April 2020',
-    accent: 'accent',
-    problem:
-      'Claims adjudication depended on manual review of unstructured employer and job data, inside an application with strict security and compliance requirements.',
-    approach: [
-      'Built backend services across Django, Flask, React and Spring Boot for claims adjudication and health-insurance workflows.',
-      'Implemented OAuth2, JWT, SSL and encryption for authentication and data protection.',
-      'Applied BeautifulSoup and NLTK to parse employer/job details and extract text, improving data accuracy and adjudication speed.',
-      'Containerized applications with Docker and automated builds, tests and deployments through Jenkins CI/CD.',
-      'Built automated data-backup pipelines to AWS S3 for compliant claims storage.',
-    ],
-    challenges: [
-      'Handling sensitive claims data under compliance constraints.',
-      'Extracting reliable structure from inconsistent employer and job text.',
-      'Keeping QA and production environments at parity to stop defect leakage.',
-    ],
-    results: [
-      'Secure, authenticated claims services in production',
-      'Automated text extraction feeding adjudication',
-      'Jenkins CI/CD with enforced automated test coverage',
-      'Reduced production defects through environment parity',
-    ],
-    stack: ['Python', 'Django', 'Flask', 'React', 'Spring Boot', 'OAuth2', 'Docker', 'Jenkins'],
-    architecture: {
-      caption: 'Authenticated claims services with automated text extraction and compliant S3 backup.',
-      layers: [
-        {
-          title: 'Client',
-          nodes: [{ label: 'React UI', icon: 'logos:react' }],
-        },
-        {
-          title: 'Auth',
-          nodes: [
-            { label: 'OAuth2 / JWT', icon: 'ph:shield-check-bold' },
-          ],
-        },
-        {
-          title: 'Services',
-          nodes: [
-            { label: 'Django / Flask', icon: 'vscode-icons:file-type-django' },
-            { label: 'Spring Boot', icon: 'logos:java' },
-          ],
-        },
-        {
-          title: 'Processing',
-          nodes: [
-            { label: 'NLTK', icon: 'ph:chat-text-bold' },
-            { label: 'BeautifulSoup', icon: 'ph:funnel-bold' },
-          ],
-        },
-        {
-          title: 'Storage & CI',
-          nodes: [
-            { label: 'AWS S3', icon: 'logos:aws-s3' },
-            { label: 'Jenkins', icon: 'logos:jenkins' },
-          ],
-        },
-      ],
-    },
   },
 ];
 

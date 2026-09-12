@@ -16,8 +16,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <MotionConfig reducedMotion="user">
       <div className={`${inter.variable} font-sans`}>
         <Component {...pageProps} />
-        <Analytics />
-        <SpeedInsights />
+        {/* Vercel injects these scripts only in production; mounting them in
+            development just logs 404s for scripts that cannot exist there. */}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
       </div>
     </MotionConfig>
   );
