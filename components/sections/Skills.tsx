@@ -1,18 +1,18 @@
-import { motion } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
 import Section from '@/components/ui/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/ui/Reveal';
 import { accentMap } from '@/lib/accent';
-import { skillCategories, skillBars } from '@/portfolio';
+import CapabilityGraph from '@/components/sections/CapabilityGraph';
+import { skillCategories } from '@/portfolio';
 
 export default function Skills() {
   return (
-    <Section id="skills">
+    <Section id="skills" essential>
       <SectionHeading
         eyebrow="Skills"
-        title="A full-stack, cloud-to-model toolkit"
-        subtitle="The technologies I reach for across cloud, backend, AI/ML, and infrastructure."
+        title="From model to metal"
+        subtitle="The technologies I reach for across AI, backend, data, cloud and infrastructure — grouped by architectural capability, not by keyword count."
       />
 
       <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -52,31 +52,10 @@ export default function Skills() {
         })}
       </div>
 
-      {/* Proficiency bars */}
       <Reveal className="mt-10">
-        <div className="glass rounded-4xl p-6 sm:p-8">
-          <h3 className="text-base font-semibold text-ink">Proficiency</h3>
-          <div className="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-            {skillBars.map((bar) => (
-              <div key={bar.stack}>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-ink">{bar.stack}</span>
-                  <span className="text-ink-muted">{bar.level}%</span>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-fill-3">
-                  <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-accent to-violet"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${bar.level}%` }}
-                    viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 1, ease: 'easeOut' }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CapabilityGraph />
       </Reveal>
+
     </Section>
   );
 }

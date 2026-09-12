@@ -126,7 +126,7 @@ function ExperienceCard({
 
 export default function Experience() {
   return (
-    <Section id="experience">
+    <Section id="experience" essential>
       <SectionHeading
         eyebrow="Experience"
         title="Where I've made an impact"

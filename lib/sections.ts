@@ -8,11 +8,15 @@ export type NavSection = {
 export const NAV_SECTIONS: NavSection[] = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
+  { id: 'ownership', label: 'Scope', desktop: false },
   { id: 'experience', label: 'Experience' },
   { id: 'case-studies', label: 'Case Studies' },
-  { id: 'projects', label: 'Projects' },
+  { id: 'projects', label: 'Work' },
+  { id: 'ai-lab', label: 'AI Lab' },
   { id: 'skills', label: 'Skills' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'writing', label: 'Writing', desktop: false },
+  { id: 'certifications', label: 'Certifications', desktop: false },
+  { id: 'open-source', label: 'Open Source', desktop: false },
+  { id: 'writing', label: 'Insights', desktop: false },
+  { id: 'resume', label: 'Résumé', desktop: false },
   { id: 'contact', label: 'Contact' },
 ];

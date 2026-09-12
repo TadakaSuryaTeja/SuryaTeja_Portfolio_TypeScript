@@ -1,6 +1,8 @@
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import { MotionConfig } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import '../styles/globals.css';
 
 const inter = Inter({
@@ -14,6 +16,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <MotionConfig reducedMotion="user">
       <div className={`${inter.variable} font-sans`}>
         <Component {...pageProps} />
+        <Analytics />
+        <SpeedInsights />
       </div>
     </MotionConfig>
   );

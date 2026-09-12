@@ -1,57 +1,177 @@
-# Tadaka Surya Teja — Portfolio
+# Surya Teja Tadaka — Portfolio
 
-Personal portfolio of **Tadaka Surya Teja**, Solutions Architect & Tech Lead specializing in scalable cloud platforms, Python automation, and AI/ML systems.
+Personal site of **Surya Teja Tadaka** — Technical Lead, Enterprise AI & Agentic
+Systems Engineer. It exists to answer one question for a recruiter or an
+engineering leader in about five seconds: _can this person design and build
+complete production AI systems, not just call an LLM API?_
 
 **Live:** https://surya-teja-tadaka.vercel.app/
 
+---
+
+## Architecture
+
+```
+                      ┌──────────────────────────────────┐
+                      │  portfolio.ts                    │
+                      │  SINGLE SOURCE OF TRUTH          │
+                      │  profile · experience · projects │
+                      │  skills · case studies · SEO     │
+                      └────────────────┬─────────────────┘
+                                       │ imported by every component
+                    ┌──────────────────┴───────────────────┐
+                    │                                      │
+        ┌───────────▼───────────┐             ┌────────────▼────────────┐
+        │  pages/index.tsx      │             │  content/resume.mjs     │
+        │  getStaticProps       │             │  résumé source          │
+        │  (ISR, revalidate 1h) │             └────────────┬────────────┘
+        └───────────┬───────────┘                          │
+                    │                            npm run build:resume
+      ┌─────────────┴──────────────┐                       │
+      │                            │                       ▼
+┌─────▼──────┐            ┌────────▼───────┐    public/resume/*.pdf
+│ lib/cms/   │            │ lib/cms/       │    resume-src/*.html
+│ notion.ts  │            │ github.ts      │
+│ (Articles) │            │ (repo metadata)│
+└─────┬──────┘            └────────┬───────┘
+      │  fails → []                │  fails → []
+      └──────────┬─────────────────┘
+                 ▼
+      local fallback content in portfolio.ts
+      (the site never breaks when an API is down)
+```
+
+Content flows one way. Components never hold facts of their own — they read
+`portfolio.ts`. External sources (Notion, GitHub) _enrich_ the page; they are
+never required for it to render.
+
 ## Tech stack
 
-- **Framework:** [Next.js 13](https://nextjs.org/) (Pages Router) + TypeScript
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) (custom dark, glassmorphic theme)
-- **Animation:** [Framer Motion](https://www.framer.com/motion/)
-- **Icons:** [Iconify](https://iconify.design/)
-- **Fonts:** [Inter](https://rsms.me/inter/) via `next/font` (self-hosted)
+| Layer     | Choice                                          |
+| --------- | ----------------------------------------------- |
+| Framework | Next.js 13 (Pages Router), React 18             |
+| Language  | TypeScript (strict)                             |
+| Styling   | Tailwind CSS 3, CSS custom properties           |
+| Motion    | Framer Motion + hand-rolled CSS/IO animations   |
+| Icons     | Iconify sets, **bundled offline** at build time |
+| CMS       | Notion REST API (dependency-free `fetch`)       |
+| Analytics | Vercel Analytics + Speed Insights               |
+| Hosting   | Vercel                                          |
 
-## Editing content
+No 3D library, no animation library duplication, no icon runtime. Every
+dependency has to earn its bytes.
 
-All content lives in a single typed source of truth: **`portfolio.ts`** (profile, metrics, about, skills, experience, projects, certifications, testimonials, blog, contact, SEO). Types are in `types/sections.ts`.
-
-```
-portfolio.ts            ← all content
-types/sections.ts       ← data model
-lib/                    ← nav config, accent maps, social links
-components/
-  ui/                   ← Reveal, Section, SectionHeading
-  sections/             ← Navbar, Hero, Metrics, About, Experience,
-                          Projects, Skills, Certifications, Testimonials,
-                          Writing, Contact, Footer
-  SEO.tsx
-pages/                  ← _app, _document, index
-styles/globals.css      ← theme + utilities
-```
-
-## Getting started
+## Local setup
 
 ```bash
+nvm use            # Node 22
 npm install
-npm run dev      # http://localhost:3000
+npm run dev        # http://localhost:3000
 ```
 
-## Scripts
+Other scripts:
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | Lint with `next lint` |
+```bash
+npm run build          # production build
+npm run lint           # ESLint
+npx tsc --noEmit       # typecheck
+npm run build:resume   # regenerate résumé HTML + PDFs
+npm run gen:icons      # re-bundle icons after adding new ones
+npm run gen:og         # regenerate the social card
+```
 
-## Personalizing
+> **Never run `next build` while `next dev` is running** — it clobbers `.next`.
+> Stop the dev server first.
 
-- **Headshot:** drop a square image at `public/profile.png` and set `profile.photo` in `portfolio.ts`.
-- **Contact email:** set `contactInfo.email` to enable the one-click email button.
-- **Testimonials / blog posts:** populate `testimonials` / `blogPosts` arrays.
+## Environment variables
 
-## License
+All are **optional and server-side only**. Copy `.env.example` to `.env.local`
+and fill in what you have. Never prefix any of them with `NEXT_PUBLIC_`.
 
-MIT
+| Variable                          | Purpose                            |
+| --------------------------------- | ---------------------------------- |
+| `NOTION_TOKEN`                    | Notion internal integration secret |
+| `NOTION_ARTICLES_DATABASE_ID`     | Insights / articles database       |
+| `NOTION_CASE_STUDIES_DATABASE_ID` | Case-studies database              |
+| `NOTION_AI_LAB_DATABASE_ID`       | AI Lab experiments database        |
+| `GITHUB_TOKEN`                    | Raises the GitHub API rate limit   |
+
+## Notion setup
+
+1. Create an internal integration at <https://www.notion.so/my-integrations>
+   and copy the secret into `NOTION_TOKEN`.
+2. Create the databases below, then **share each one with the integration**
+   (`•••` → Connections → your integration).
+3. Copy each database ID out of its URL into the matching variable.
+
+**Articles** — `Title` (title), `Slug` (rich text), `Summary` (rich text),
+`Tags` (multi-select), `Published` (checkbox), `Published Date` (date),
+`Read Time` (rich text), `URL` (url), `Featured` (checkbox).
+
+**Case Studies** — `Title`, `Slug`, `Category` (select), `Problem` (rich text),
+`Technologies` (multi-select), `GitHub URL` (url), `Live URL` (url),
+`Featured` (checkbox), `Status` (select: `Draft` / `Published`).
+
+**AI Lab** — `Experiment` (title), `Description` (rich text),
+`Technology` (multi-select), `Status` (select), `GitHub` (url), `Demo` (url),
+`Published` (checkbox).
+
+Only rows with `Published` checked (or `Status = Published`) are surfaced —
+drafts stay invisible, so nothing is ever presented as published before it is.
+
+Content is fetched in `getStaticProps` and revalidated hourly. If Notion is
+unconfigured, rate-limited or down, `lib/cms/notion.ts` returns an empty array,
+a warning is logged server-side, and the local fallback content renders instead.
+
+## GitHub integration
+
+`lib/cms/github.ts` fetches metadata for a **curated** list of repositories
+(quality over vanity metrics) at build time. It works unauthenticated;
+`GITHUB_TOKEN` only raises the rate limit. Any failure yields an empty list and
+the Open Source section collapses to a profile CTA.
+
+## Content management
+
+| What you want to change        | Where                                   |
+| ------------------------------ | --------------------------------------- |
+| Any fact on the site           | `portfolio.ts`                          |
+| Navigation order / labels      | `lib/sections.ts`                       |
+| Résumé content                 | `content/resume.mjs`                    |
+| Articles, case studies, AI Lab | Notion (falls back to `portfolio.ts`)   |
+| Featured repositories          | `FEATURED_REPOS` in `lib/cms/github.ts` |
+
+After adding an icon anywhere, run `npm run gen:icons` — icons are bundled
+offline into `lib/icons-bundle.json`, so an unbundled icon renders blank.
+
+## Résumé update process
+
+1. Edit `content/resume.mjs`.
+2. Run `npm run build:resume`.
+3. Two ATS-safe PDFs land in `public/resume/`, with the HTML source in
+   `resume-src/` for deterministic re-export.
+4. Keep every fact in step with `portfolio.ts` — same employers, titles, dates.
+
+The original résumé PDF is preserved untouched at
+`resume-src/original/` as the factual reference.
+
+The generated PDFs are single-column, text-selectable, table-free, image-free
+and progress-bar-free by construction.
+
+## Deployment
+
+Vercel, on push to `main`. Add the environment variables in the Vercel project
+settings (Production + Preview). No build step beyond `npm run build` is needed;
+the résumé PDFs and icon bundle are committed.
+
+## Conventions
+
+- **Never fabricate.** Employers, titles, dates, education, certifications and
+  metrics come from the résumé and nothing else. Positioning and wording are
+  editorial; facts are not.
+- **No percentage skill bars.** Capability is shown with evidence
+  (`capabilityGraph` in `portfolio.ts`), never with invented proficiency numbers.
+- Accent colours come from `lib/accent.ts` static maps — never build Tailwind
+  class names by string interpolation, or the scanner will purge them.
+- The Tailwind colour token is `canvas`, not `base`: a colour named `base`
+  makes Tailwind emit `text-base` as a _colour_ utility, which silently
+  overrides text colour in responsive variants like `sm:text-base`.

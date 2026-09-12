@@ -76,7 +76,7 @@
   }
 
   body {
-    @apply bg-base text-ink font-sans antialiased;
+    @apply bg-canvas text-ink font-sans antialiased;
     background-image: radial-gradient(
         60rem 60rem at 70% -10%,
         var(--glow-1),
@@ -149,7 +149,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-base;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
   }
   .btn-primary {
     @apply btn bg-accent-strong text-white shadow-glow hover:bg-[#1f57db] active:scale-[0.98];
@@ -236,5 +236,36 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Recruiter Mode
+   An alternate presentation: deep-dive sections are hidden, never deleted.
+   Pure CSS off a `<html data-recruiter="on">` flag so toggling costs nothing.
+   -------------------------------------------------------------------------- */
+html[data-recruiter='on'] main > *:not([data-essential]) {
+  display: none;
+}
+
+/* The hero's long-form intro collapses to the summary card above it. */
+html[data-recruiter='on'] #home {
+  display: none;
+}
+
+/* Hero system diagram — connection lines pulse toward the core. */
+.net-link {
+  animation: net-flow 3.2s linear infinite;
+}
+
+@keyframes net-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .net-link {
+    animation: none;
   }
 }

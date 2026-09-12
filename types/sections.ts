@@ -173,3 +173,40 @@ export type CaseStudyType = {
   stack: string[];
   architecture: ArchitectureType;
 };
+
+/* ------------------------- OWNERSHIP ("What I Can Own") ------------------- */
+export type OwnershipLayerType = {
+  layer: string;
+  icon: string;
+  accent: 'accent' | 'violet' | 'success';
+  summary: string;
+  items: string[];
+};
+
+/* --------------------------- CAPABILITY GRAPH ----------------------------- */
+export type CapabilityNodeType = {
+  name: string;
+  icon: string;
+  /** Short, verifiable evidence sentence — never a percentage. */
+  evidence: string;
+};
+
+export type CapabilityDomainType = {
+  domain: string;
+  icon: string;
+  accent: 'accent' | 'violet' | 'success';
+  blurb: string;
+  nodes: CapabilityNodeType[];
+};
+
+/* -------------------------------- AI LAB ---------------------------------- */
+export type AILabEntryType = {
+  title: string;
+  description: string;
+  tech: string[];
+  status: 'Shipped' | 'In production' | 'Prototype' | 'Exploring';
+  icon: string;
+  accent: 'accent' | 'violet' | 'success';
+  github?: string;
+  demo?: string;
+};

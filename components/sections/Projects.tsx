@@ -115,7 +115,7 @@ export default function Projects() {
     filter === 'All' ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <Section id="projects">
+    <Section id="projects" essential>
       <SectionHeading
         eyebrow="Projects"
         title="Things I've designed & shipped"

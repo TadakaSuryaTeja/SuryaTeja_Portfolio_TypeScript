@@ -28,20 +28,49 @@ export default function SEO() {
     url: seoData.url,
     image: ogImage,
     sameAs,
-    worksFor: { '@type': 'Organization', name: 'Southwest Airlines' },
+    worksFor: { '@type': 'Organization', name: 'Qentelli Solutions' },
     alumniOf: {
       '@type': 'CollegeOrUniversity',
       name: 'Vardhaman College of Engineering',
     },
     knowsAbout: [
+      'Generative AI',
+      'AI Agents',
+      'Agentic Workflows',
+      'Retrieval Augmented Generation',
+      'Model Context Protocol',
+      'Large Language Models',
+      'Amazon Bedrock',
       'Solutions Architecture',
-      'Cloud Computing',
       'Amazon Web Services',
-      'Machine Learning',
-      'DevOps',
+      'Data Engineering',
+      'Distributed Systems',
       'Python',
-      'Test Automation',
     ],
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'AWS Certified Solutions Architect – Associate',
+        recognizedBy: { '@type': 'Organization', name: 'Amazon Web Services' },
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'AWS Certified Cloud Practitioner',
+        recognizedBy: { '@type': 'Organization', name: 'Amazon Web Services' },
+      },
+    ],
+  };
+
+  /** ProfilePage wrapper so search engines read this as a person's profile. */
+  const profilePageLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    name: seoData.title,
+    description: seoData.description,
+    url: seoData.url,
+    mainEntity: { '@type': 'Person', name: profile.name, url: seoData.url },
   };
 
   return (
@@ -91,6 +120,11 @@ export default function SEO() {
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageLd) }}
       />
     </Head>
   );

@@ -94,7 +94,7 @@ export default function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'border-b border-line bg-base/70 backdrop-blur-xl'
+            ? 'border-b border-line bg-canvas/70 backdrop-blur-xl'
             : 'border-b border-transparent'
         }`}
       >
@@ -134,6 +134,16 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() =>
+                window.dispatchEvent(new CustomEvent('recruiter:toggle'))
+              }
+              className="hidden items-center gap-1.5 rounded-full border border-line bg-fill-2 px-3 py-2 text-xs font-medium text-ink-muted transition-colors hover:border-hair-strong hover:text-ink lg:flex"
+              aria-label="Toggle recruiter mode — a 60-second summary view"
+            >
+              <Icon icon="ph:identification-badge-bold" aria-hidden />
+              Recruiter
+            </button>
             <ThemeToggle />
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('cmdk:open'))}
@@ -182,7 +192,7 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
           >
             <div
-              className="absolute inset-0 bg-base/90 backdrop-blur-xl"
+              className="absolute inset-0 bg-canvas/90 backdrop-blur-xl"
               onClick={() => setOpen(false)}
             />
             <motion.nav

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
-import { profile, socialLinks } from '@/portfolio';
+import { profile, socialLinks, resumes } from '@/portfolio';
+import { NAV_SECTIONS } from '@/lib/sections';
 
 type Command = {
   id: string;
@@ -15,26 +16,21 @@ type Command = {
 const SECTION_ICONS: Record<string, string> = {
   home: 'ph:house-bold',
   about: 'ph:user-bold',
+  ownership: 'ph:stack-bold',
   experience: 'ph:briefcase-bold',
   'case-studies': 'ph:cube-bold',
   projects: 'ph:folder-simple-bold',
+  'ai-lab': 'ph:sparkle-bold',
   skills: 'ph:code-bold',
   certifications: 'ph:certificate-bold',
+  'open-source': 'ph:github-logo-bold',
   writing: 'ph:pen-nib-bold',
+  resume: 'ph:file-text-bold',
   contact: 'ph:envelope-simple-bold',
 };
 
-const NAV = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'case-studies', label: 'Case Studies' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'writing', label: 'Writing' },
-  { id: 'contact', label: 'Contact' },
-];
+/** Navigation comes from the same source the navbar and footer use. */
+const NAV = NAV_SECTIONS;
 
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
@@ -66,6 +62,14 @@ export default function CommandPalette() {
         keywords: 'theme dark light mode appearance',
         run: () => window.dispatchEvent(new CustomEvent('theme:toggle')),
       },
+      {
+        id: 'recruiter',
+        label: 'Toggle Recruiter Mode',
+        hint: 'Action',
+        icon: 'ph:identification-badge-bold',
+        keywords: 'recruiter hiring summary quick overview 60 seconds',
+        run: () => window.dispatchEvent(new CustomEvent('recruiter:toggle')),
+      },
     ];
     if (profile.resumeLink)
       actions.push({
@@ -76,6 +80,16 @@ export default function CommandPalette() {
         keywords: 'cv download pdf',
         run: () => window.open(profile.resumeLink, '_blank', 'noopener'),
       });
+    resumes.forEach((r) =>
+      actions.push({
+        id: `resume-${r.href}`,
+        label: `Download ${r.label}`,
+        hint: 'Action',
+        icon: 'ph:download-simple-bold',
+        keywords: 'cv resume pdf download ats',
+        run: () => window.open(r.href, '_blank', 'noopener'),
+      })
+    );
     if (socialLinks.email)
       actions.push({
         id: 'email',
@@ -182,7 +196,7 @@ export default function CommandPalette() {
           exit={{ opacity: 0 }}
         >
           <div
-            className="absolute inset-0 bg-base/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-canvas/80 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <motion.div

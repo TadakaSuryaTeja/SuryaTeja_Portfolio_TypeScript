@@ -21,7 +21,7 @@ export default function Contact() {
   };
 
   return (
-    <Section id="contact">
+    <Section id="contact" essential>
       <Reveal>
         <div className="relative overflow-hidden rounded-[2.5rem] border border-line bg-gradient-to-b from-fill-3 to-fill-1 px-6 py-16 text-center sm:px-12 sm:py-20">
           <div
