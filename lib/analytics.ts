@@ -15,7 +15,9 @@ export type PortfolioEvent =
   | 'recruiter_mode_enable'
   | 'deep_dive_enable'
   | 'technology_explore'
-  | 'command_palette_open';
+  | 'command_palette_open'
+  | 'ask_portfolio_open'
+  | 'ask_portfolio_question';
 
 export function trackEvent(event: PortfolioEvent, label?: string) {
   try {
