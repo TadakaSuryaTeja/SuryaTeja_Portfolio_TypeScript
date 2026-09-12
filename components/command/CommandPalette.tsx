@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Icon } from '@/components/ui/Icon';
-import { profile, socialLinks } from '@/portfolio';
+import { socialLinks, resumes, experience } from '@/portfolio';
+import { NAV_SECTIONS, NAV_ROUTES } from '@/lib/sections';
+import { systems } from '@/content/systems';
+import { technologies } from '@/content/taxonomy';
+import { setMode } from '@/lib/modes';
+import { trackEvent } from '@/lib/analytics';
 
 type Command = {
   id: string;
@@ -12,29 +18,6 @@ type Command = {
   run: () => void;
 };
 
-const SECTION_ICONS: Record<string, string> = {
-  home: 'ph:house-bold',
-  about: 'ph:user-bold',
-  experience: 'ph:briefcase-bold',
-  'case-studies': 'ph:cube-bold',
-  projects: 'ph:folder-simple-bold',
-  skills: 'ph:code-bold',
-  certifications: 'ph:certificate-bold',
-  writing: 'ph:pen-nib-bold',
-  contact: 'ph:envelope-simple-bold',
-};
-
-const NAV = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'case-studies', label: 'Case Studies' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'writing', label: 'Writing' },
-  { id: 'contact', label: 'Contact' },
-];
 
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
@@ -43,18 +26,104 @@ export default function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const go = useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+  const router = useRouter();
+
+  /** Scroll to a section on the homepage, routing there first if needed. */
+  const go = useCallback(
+    (id: string) => {
+      if (router.pathname === '/') {
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        router.push(`/#${id}`);
+      }
+    },
+    [router]
+  );
 
   const commands = useMemo<Command[]>(() => {
-    const nav: Command[] = NAV.map((s) => ({
+    const nav: Command[] = NAV_SECTIONS.map((s) => ({
       id: `go-${s.id}`,
       label: `Go to ${s.label}`,
       hint: 'Section',
-      icon: SECTION_ICONS[s.id] ?? 'ph:arrow-right-bold',
+      icon: s.icon ?? 'ph:arrow-right-bold',
       keywords: s.label,
       run: () => go(s.id),
+    }));
+
+    const routes: Command[] = NAV_ROUTES.map((r) => ({
+      id: `route-${r.href}`,
+      label: `Open ${r.label}`,
+      hint: 'Page',
+      icon: r.icon,
+      keywords: r.label,
+      run: () => router.push(r.href),
+    }));
+
+    const modes: Command[] = [
+      {
+        id: 'mode-recruiter',
+        label: 'Recruiter mode',
+        hint: 'Mode',
+        icon: 'ph:identification-badge-bold',
+        keywords: 'recruiter hiring summary quick overview 60 seconds',
+        run: () => setMode('recruiter'),
+      },
+      {
+        id: 'mode-deep',
+        label: 'Engineering deep dive',
+        hint: 'Mode',
+        icon: 'ph:blueprint-bold',
+        keywords: 'engineer architecture tradeoffs decisions technical depth',
+        run: () => setMode('deep'),
+      },
+      {
+        id: 'mode-default',
+        label: 'Full portfolio',
+        hint: 'Mode',
+        icon: 'ph:squares-four-bold',
+        keywords: 'default reset everything normal',
+        run: () => setMode('default'),
+      },
+    ];
+
+    /* Search index — systems, technologies and roles are all reachable. */
+    const systemCommands: Command[] = systems.map((sys) => ({
+      id: `system-${sys.slug}`,
+      label: sys.name,
+      hint: sys.caseStudy ? 'Case study' : sys.category,
+      icon: 'ph:cube-bold',
+      keywords: `${sys.category} ${sys.systemType} ${sys.tech.join(' ')} ${sys.problem} ${sys.origin}`,
+      run: () => {
+        if (sys.caseStudy) {
+          trackEvent('case_study_open', sys.slug);
+          router.push(`/work/${sys.slug}`);
+        } else if (sys.github) {
+          window.open(sys.github, '_blank', 'noopener');
+        } else {
+          go('work');
+        }
+      },
+    }));
+
+    const techCommands: Command[] = technologies.map((t) => ({
+      id: `tech-${t.id}`,
+      label: t.label,
+      hint: 'Technology',
+      icon: t.icon,
+      keywords: `${t.domain} ${t.blurb} ${t.related.join(' ')}`,
+      run: () => {
+        trackEvent('technology_explore', t.id);
+        go('skills');
+      },
+    }));
+
+    const roleCommands: Command[] = experience.map((e) => ({
+      id: `role-${e.company}`,
+      label: `${e.role} — ${e.company}`,
+      hint: 'Experience',
+      icon: 'ph:briefcase-bold',
+      keywords: `${e.date} ${e.tech.join(' ')}`,
+      run: () => go('experience'),
     }));
 
     const actions: Command[] = [
@@ -67,15 +136,21 @@ export default function CommandPalette() {
         run: () => window.dispatchEvent(new CustomEvent('theme:toggle')),
       },
     ];
-    if (profile.resumeLink)
+
+    resumes.forEach((r) =>
       actions.push({
-        id: 'resume',
-        label: 'Open résumé',
+        id: `resume-${r.href}`,
+        label: `Download ${r.label}`,
         hint: 'Action',
-        icon: 'ph:file-text-bold',
-        keywords: 'cv download pdf',
-        run: () => window.open(profile.resumeLink, '_blank', 'noopener'),
-      });
+        icon: 'ph:download-simple-bold',
+        keywords: 'cv resume pdf download ats',
+        run: () => {
+          trackEvent('resume_download', r.label);
+          window.open(r.href, '_blank', 'noopener');
+        },
+      })
+    );
+
     if (socialLinks.email)
       actions.push({
         id: 'email',
@@ -101,20 +176,43 @@ export default function CommandPalette() {
         hint: 'Link',
         icon: l.icon,
         keywords: l.label,
-        run: () =>
-          window.open(socialLinks[l.key] as string, '_blank', 'noopener'),
+        run: () => {
+          if (l.key === 'github') trackEvent('github_click', 'palette');
+          if (l.key === 'linkedin') trackEvent('linkedin_click', 'palette');
+          window.open(socialLinks[l.key] as string, '_blank', 'noopener');
+        },
       }));
 
-    return [...nav, ...actions, ...links];
-  }, [go]);
+    /* Shown at rest — a short, scannable menu. */
+    const primary = [...modes, ...nav, ...routes, ...actions, ...links];
+    /* Searchable long tail — surfaced only once the visitor types. */
+    const searchable = [...systemCommands, ...techCommands, ...roleCommands];
+
+    return [...primary, ...searchable];
+  }, [go, router]);
+
+  /** Resting state hides the search index so the menu stays short. */
+  const restingCount = useMemo(
+    () => commands.findIndex((c) => c.id.startsWith('system-')),
+    [commands]
+  );
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return commands;
-    return commands.filter((c) =>
-      `${c.label} ${c.keywords ?? ''}`.toLowerCase().includes(q)
-    );
-  }, [commands, query]);
+    if (!q) return restingCount > 0 ? commands.slice(0, restingCount) : commands;
+    const terms = q.split(/\s+/);
+    return commands
+      .filter((c) => {
+        const haystack = `${c.label} ${c.hint} ${c.keywords ?? ''}`.toLowerCase();
+        return terms.every((t) => haystack.includes(t));
+      })
+      /* Label matches rank above keyword-only matches. */
+      .sort((a, b) => {
+        const score = (c: (typeof commands)[number]) =>
+          c.label.toLowerCase().includes(q) ? 0 : 1;
+        return score(a) - score(b);
+      });
+  }, [commands, query, restingCount]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -182,7 +280,7 @@ export default function CommandPalette() {
           exit={{ opacity: 0 }}
         >
           <div
-            className="absolute inset-0 bg-base/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-canvas/80 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <motion.div
@@ -206,7 +304,7 @@ export default function CommandPalette() {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search sections, links, actions…"
+                placeholder="Search systems, technologies, sections…"
                 aria-label="Search commands"
                 className="w-full bg-transparent py-4 text-sm text-ink outline-none placeholder:text-ink-faint"
               />

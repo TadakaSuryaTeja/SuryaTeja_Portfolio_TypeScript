@@ -1,3 +1,12 @@
+/**
+ * SINGLE SOURCE OF TRUTH
+ * ----------------------
+ * Every fact rendered anywhere on this site comes from this file.
+ * Employers, official titles, dates, education and certifications are copied
+ * verbatim from the source résumé kept at `resume-src/original/` and must
+ * never be embellished. Wording, ordering and emphasis are editorial; facts
+ * are not. When the résumé changes, change this file — nothing else.
+ */
 import type {
   ProfileType,
   SocialLinksType,
@@ -5,40 +14,36 @@ import type {
   AboutType,
   TerminalLineType,
   SkillCategoryType,
-  SkillBarType,
   ExperienceType,
   EducationType,
-  ProjectType,
-  CaseStudyType,
   CertificationType,
   TestimonialType,
   BlogPostType,
   ContactType,
   MarqueeItemType,
   SEODataType,
+  OwnershipLayerType,
 } from './types/sections';
 
 /* ----------------------------- HERO / PROFILE ----------------------------- */
 export const profile: ProfileType = {
-  name: 'Tadaka Surya Teja',
+  name: 'Surya Teja Tadaka',
   initials: 'ST',
-  headline: 'Software Engineer · AI/ML · AWS Solutions Architect',
+  headline:
+    'Technical Lead · Enterprise AI & Agentic Systems · GenAI • RAG • MCP • Python • AWS',
   roles: [
-    'Software Engineer',
-    'Feature Development Engineer',
-    'AI / ML Engineer',
-    'AWS Solutions Architect',
-    'Python Developer',
-    'Full Stack Engineer',
-    'Cloud Engineer',
+    'AI Agents',
+    'Enterprise RAG',
+    'MCP Integrations',
+    'AI Platforms',
+    'Cloud-Native Systems',
   ],
   tagline:
-    'I build across the stack — Python services and APIs, AWS cloud architecture, and applied AI/ML — turning complex problems into scalable, production systems.',
+    'I build production AI systems that connect models, data, tools and infrastructure — multi-agent orchestration over MCP, RAG over enterprise knowledge, and the Python/AWS platforms underneath them.',
   location: 'Dallas, Texas',
-  availability: 'Open to Software, AI/ML, Cloud & Architect roles',
+  availability: 'Open to Staff / Principal AI & GenAI engineering roles',
   yearsExperience: '7+',
-  resumeLink:
-    'https://github.com/TadakaSuryaTeja/TadakaSuryaTeja/blob/main/SuryaTejaTadaka-sdet.pdf',
+  resumeLink: '/resume/Surya_Teja_Tadaka_AI_Engineer_Resume.pdf',
   // Drop a square, professional headshot at public/profile.png and set this to
   // '/profile.png'. While empty, the hero shows a clean gradient-initials card.
   photo: '',
@@ -48,11 +53,57 @@ export const openSource = {
   githubUserName: 'TadakaSuryaTeja',
 };
 
+/** Résumé variants surfaced in the UI and the command palette. */
+export const resumes = [
+  {
+    label: 'AI / GenAI Engineer résumé',
+    description: 'Targeted at Staff / Principal AI, GenAI and agentic-systems roles.',
+    href: '/resume/Surya_Teja_Tadaka_AI_Engineer_Resume.pdf',
+    primary: true,
+  },
+  {
+    label: 'Master résumé',
+    description: 'Full engineering history — AI, backend, data and cloud.',
+    href: '/resume/Surya_Teja_Tadaka_Resume.pdf',
+    primary: false,
+  },
+];
+
+/* ------------------------- RECRUITER BRIEF (60 seconds) -------------------- */
+/* Every line here must be defensible in the first interview question about it. */
+export const recruiterBrief = {
+  coreAreas: [
+    'Generative AI',
+    'Agentic Systems',
+    'RAG',
+    'MCP',
+    'Python',
+    'AWS',
+    'Data Engineering',
+    'Cloud Architecture',
+  ],
+  achievements: [
+    'Designed and led an end-to-end enterprise AI automation platform on AWS Bedrock and Amazon Q Business, in production at Southwest Airlines.',
+    'Built a multi-agent ecosystem across Jira, GitLab and Xray through custom MCP servers enabling structured tool-calling.',
+    'Architected a RAG pipeline over thousands of Confluence documents, grounding Bedrock models in real engineering documentation.',
+    'Led a zero-data-loss Teradata → AWS Redshift migration and deployed Confluent Kafka for real-time streaming.',
+    'Reduced cloud infrastructure cost by $100K annually and cut environment setup time by 50% through automation and IaC.',
+  ],
+  /* Interest, stated confidently — never availability anxiety. */
+  interestedIn: [
+    'Staff / Principal AI Engineering',
+    'Applied AI',
+    'AI Platforms',
+    'Agentic Systems',
+    'Enterprise GenAI',
+    'Technical Leadership',
+  ],
+};
+
 /* --------------------------------- SOCIALS -------------------------------- */
 export const socialLinks: SocialLinksType = {
   url: 'https://surya-teja-tadaka.vercel.app/',
-  // TODO: replace with your preferred contact email
-  email: '',
+  email: 'suryateja233@gmail.com',
   linkedin: 'https://www.linkedin.com/in/surya-teja-tadaka-36ba8814a/',
   github: 'https://github.com/TadakaSuryaTeja',
   medium: 'https://medium.com/@suryateja233',
@@ -61,29 +112,30 @@ export const socialLinks: SocialLinksType = {
 };
 
 /* --------------------------------- METRICS -------------------------------- */
+/* Every number below appears verbatim on the résumé. Nothing is extrapolated. */
 export const metrics: MetricType[] = [
   {
     value: '7+',
-    label: 'Years Experience',
-    sublabel: 'Forward-deployed delivery',
+    label: 'Years Engineering',
+    sublabel: 'Backend · data · cloud · AI',
     accent: 'accent',
   },
   {
-    value: '$100K+',
-    label: 'Cloud Cost Saved',
-    sublabel: 'Automation & right-sizing',
+    value: '$100K',
+    label: 'Annual Cloud Cost Cut',
+    sublabel: 'Workflow automation & optimization',
     accent: 'success',
   },
   {
-    value: '80%',
-    label: 'Fewer Prod Errors',
-    sublabel: 'Monitoring & alerting',
+    value: '95%',
+    label: 'ETL Test Coverage',
+    sublabel: 'Automated pipeline verification',
     accent: 'violet',
   },
   {
-    value: '45%',
-    label: 'Faster Data Pipelines',
-    sublabel: 'Automated ETL',
+    value: '50%',
+    label: 'Faster Env Setup',
+    sublabel: 'Terraform / YAML IaC migration',
     accent: 'accent',
   },
 ];
@@ -91,59 +143,69 @@ export const metrics: MetricType[] = [
 /* ---------------------------------- ABOUT --------------------------------- */
 export const about: AboutType = {
   paragraphs: [
-    "I'm a software engineer with 7+ years building across the stack — Python services and APIs, AWS cloud architecture, and applied AI/ML — for enterprises in airlines, MedTech, and financial services. I've grown from hands-on engineering into architecting the cloud platforms and systems large products depend on, leading and mentoring along the way.",
-    'On the cloud and backend side I design infrastructure-as-code (EKS, Lambda, Terraform), event-driven systems (SQS/SNS/S3), Django/Flask APIs, and CI/CD with built-in observability — work that has cut $100K in cloud cost, reduced production errors by 80%, and sped data pipelines 45%. I hold the AWS Solutions Architect – Associate certification.',
-    "On the AI/ML side I work in Python — PyTorch, NLP, and computer vision — from genomics text classification to forecasting, and I'm a Kaggle Expert. I care about clean architecture, measurable impact, and going deeper on scalable systems and modern AI.",
+    "I'm a Technical Lead with 7+ years of software, data and cloud engineering, now specialized in production Generative AI. At Southwest Airlines I designed and led an end-to-end AI automation platform on AWS Bedrock and Amazon Q Business — multi-agent orchestration that turns a Jira ticket into a branch, generated code and an open GitLab merge request.",
+    'The agent layer talks to Jira, GitLab and Xray through custom MCP servers, so tool-calling is structured and auditable rather than glued together with prompts. Alongside it I built a RAG pipeline over thousands of Confluence documents — embeddings, vector retrieval and Bedrock models (Claude, Llama, Titan) answering real engineering questions — with rate limiting, fallback logic, error handling and observability so it behaves like a product, not a demo.',
+    'That AI work sits on a deep systems foundation: a zero-loss Teradata-to-Redshift migration, Confluent Kafka streaming on AWS, Glue ETL into S3/Parquet, and Python services across Lambda, ECS, Fargate, DynamoDB and Step Functions — all Terraform-provisioned and instrumented. I lead engagements end-to-end: discovery, architecture, delivery, rollout and the demo to leadership afterwards.',
   ],
   highlights: [
     { label: 'Based in', value: 'Dallas, Texas, USA' },
-    { label: 'Currently', value: 'Associate Architect · Tech Lead' },
-    { label: 'Certified', value: 'AWS Solutions Architect · Kaggle Expert' },
-    { label: 'Focus', value: 'Software · Cloud · AI/ML' },
+    { label: 'Currently', value: 'Tech Lead — Southwest Airlines (Qentelli)' },
+    { label: 'Specialty', value: 'Agentic systems · RAG · MCP · AWS Bedrock' },
+    { label: 'Certified', value: 'AWS Solutions Architect – Associate' },
   ],
   interests: [
-    'System Design',
-    'Machine Learning',
-    'Cloud Architecture',
+    'Agent Orchestration',
+    'Retrieval Architecture',
+    'Model Context Protocol',
+    'LLM Evaluation',
     'Distributed Systems',
-    'Open Source',
     'Developer Experience',
-  ],
-  // Honest growth roadmap — rendered separately as "Currently learning",
-  // never mixed into the skills you already have.
-  learning: [
-    'Generative AI',
-    'LLMs & RAG',
-    'LangChain',
-    'Vector Databases',
-    'MLOps',
-    'FastAPI',
-    'PySpark',
-    'Kafka',
   ],
 };
 
 export const aboutTerminal: TerminalLineType[] = [
   {
     cmd: 'whoami',
-    out: 'Tadaka Surya Teja — Software Engineer · AI/ML · Cloud Architect',
+    out: 'Surya Teja Tadaka — Technical Lead · Enterprise AI & Agentic Systems',
   },
   {
     cmd: 'cat focus.txt',
-    out: 'Python · AWS (EKS / Lambda / Terraform) · APIs · AI/ML',
+    out: 'Agents · MCP · RAG · AWS Bedrock · Python · Cloud-native platforms',
   },
   {
-    cmd: 'ls impact/',
-    out: '$100K-cloud-saved   80%-fewer-errors   45%-faster-pipelines   AWS-certified',
+    cmd: 'ls shipped/',
+    out: 'ai-code-automation-platform   confluence-rag   mcp-tool-servers   teradata->redshift   kafka-streaming',
+  },
+  {
+    cmd: 'cat impact.txt',
+    out: '$100K-cloud-saved   95%-ETL-coverage   30%-fewer-pipeline-failures   50%-faster-env-setup',
   },
   {
     cmd: 'cat open-to.txt',
-    out: 'Software · Backend · AI/ML · Cloud · Architect roles · Dallas, TX',
+    out: 'Staff / Principal AI · GenAI · Agentic AI · AI Platform · Forward Deployed · Dallas, TX or remote',
   },
 ];
 
 /* --------------------------------- SKILLS --------------------------------- */
 export const skillCategories: SkillCategoryType[] = [
+  {
+    title: 'Generative AI & Agents',
+    description: 'The layer I specialize in today.',
+    icon: 'ph:sparkle-bold',
+    accent: 'violet',
+    skills: [
+      { name: 'AWS Bedrock', icon: 'logos:aws' },
+      { name: 'Amazon Q Business', icon: 'logos:aws' },
+      { name: 'Multi-Agent Orchestration', icon: 'ph:circles-three-bold' },
+      { name: 'MCP Servers', icon: 'ph:plugs-connected-bold' },
+      { name: 'Tool Calling', icon: 'ph:wrench-bold' },
+      { name: 'RAG Pipelines', icon: 'ph:magnifying-glass-bold' },
+      { name: 'Embeddings & Vector DBs', icon: 'ph:vector-three-bold' },
+      { name: 'Claude · Llama · Titan', icon: 'ph:brain-bold' },
+      { name: 'NLP', icon: 'ph:chat-text-bold' },
+      { name: 'MLOps', icon: 'ph:flow-arrow-bold' },
+    ],
+  },
   {
     title: 'Languages',
     description: 'The core toolkit I build with.',
@@ -151,39 +213,43 @@ export const skillCategories: SkillCategoryType[] = [
     accent: 'accent',
     skills: [
       { name: 'Python', icon: 'logos:python' },
-      { name: 'SQL', icon: 'vscode-icons:file-type-sql' },
-      { name: 'Bash', icon: 'logos:bash' },
-      { name: 'Java', icon: 'logos:java' },
+      { name: 'TypeScript', icon: 'logos:typescript-icon' },
       { name: 'JavaScript', icon: 'logos:javascript' },
+      { name: 'SQL', icon: 'vscode-icons:file-type-sql' },
+      { name: 'Java', icon: 'logos:java' },
+      { name: 'Bash', icon: 'logos:bash' },
     ],
   },
   {
     title: 'Backend & APIs',
-    description: 'Services, serverless, and integrations.',
+    description: 'Services, serverless and integrations.',
     icon: 'ph:stack-bold',
     accent: 'success',
     skills: [
+      { name: 'FastAPI', icon: 'simple-icons:fastapi' },
       { name: 'Django', icon: 'vscode-icons:file-type-django' },
       { name: 'Flask', icon: 'simple-icons:flask' },
-      { name: 'REST APIs', icon: 'ph:plugs-connected-bold' },
-      { name: 'Serverless', icon: 'ph:lightning-bold' },
-      { name: 'Postman', icon: 'logos:postman-icon' },
-      { name: 'PostgreSQL', icon: 'logos:postgresql' },
+      { name: 'Node.js', icon: 'logos:nodejs-icon' },
+      { name: 'REST APIs & Webhooks', icon: 'ph:plugs-connected-bold' },
+      { name: 'Microservices', icon: 'ph:squares-four-bold' },
+      { name: 'Message Queues', icon: 'logos:aws-sqs' },
+      { name: 'React', icon: 'logos:react' },
     ],
   },
   {
-    title: 'AI / ML & Data',
-    description: 'Modeling, NLP, vision, and data pipelines.',
-    icon: 'ph:brain-bold',
+    title: 'Data Engineering',
+    description: 'Batch and streaming pipelines at enterprise scale.',
+    icon: 'ph:database-bold',
     accent: 'violet',
     skills: [
-      { name: 'PyTorch', icon: 'logos:pytorch-icon' },
-      { name: 'scikit-learn', icon: 'simple-icons:scikitlearn' },
-      { name: 'Pandas', icon: 'simple-icons:pandas' },
-      { name: 'NumPy', icon: 'logos:numpy' },
-      { name: 'NLP / NLTK', icon: 'ph:chat-text-bold' },
-      { name: 'Computer Vision', icon: 'ph:eye-bold' },
-      { name: 'ETL', icon: 'ph:flow-arrow-bold' },
+      { name: 'Confluent Kafka', icon: 'simple-icons:apachekafka' },
+      { name: 'AWS Glue ETL', icon: 'logos:aws-glue' },
+      { name: 'Amazon Redshift', icon: 'logos:aws-redshift' },
+      { name: 'BigQuery', icon: 'logos:google-cloud' },
+      { name: 'Step Functions', icon: 'logos:aws-step-functions' },
+      { name: 'OpenSearch', icon: 'logos:aws-open-search' },
+      { name: 'S3 / Parquet', icon: 'logos:aws-s3' },
+      { name: 'Streaming Pipelines', icon: 'ph:flow-arrow-bold' },
     ],
   },
   {
@@ -192,489 +258,204 @@ export const skillCategories: SkillCategoryType[] = [
     icon: 'ph:cloud-bold',
     accent: 'accent',
     skills: [
-      { name: 'AWS', icon: 'logos:aws' },
       { name: 'Lambda', icon: 'logos:aws-lambda' },
-      { name: 'Amazon EKS', icon: 'logos:kubernetes' },
-      { name: 'EC2', icon: 'logos:aws-ec2' },
-      { name: 'S3', icon: 'logos:aws-s3' },
+      { name: 'ECS / Fargate', icon: 'logos:aws-ecs' },
+      { name: 'API Gateway', icon: 'logos:aws-api-gateway' },
+      { name: 'DynamoDB', icon: 'logos:aws-dynamodb' },
+      { name: 'IAM', icon: 'logos:aws-iam' },
       { name: 'SQS / SNS', icon: 'logos:aws-sqs' },
       { name: 'CloudWatch', icon: 'logos:aws-cloudwatch' },
+      { name: 'GCP', icon: 'logos:google-cloud' },
     ],
   },
   {
     title: 'Infrastructure & DevOps',
-    description: 'IaC, containers, pipelines, and observability.',
+    description: 'IaC, containers, pipelines and observability.',
     icon: 'ph:gear-six-bold',
-    accent: 'violet',
+    accent: 'success',
     skills: [
       { name: 'Terraform', icon: 'logos:terraform-icon' },
       { name: 'Docker', icon: 'logos:docker-icon' },
       { name: 'Kubernetes', icon: 'logos:kubernetes' },
+      { name: 'GitLab CI', icon: 'logos:gitlab' },
       { name: 'GitHub Actions', icon: 'logos:github-actions' },
       { name: 'Jenkins', icon: 'logos:jenkins' },
+      { name: 'Grafana', icon: 'logos:grafana' },
       { name: 'DataDog', icon: 'logos:datadog' },
-      { name: 'SonarQube', icon: 'logos:sonarqube' },
     ],
   },
   {
-    title: 'Architecture & Delivery',
-    description: 'How I design and ship close to the customer.',
-    icon: 'ph:compass-tool-bold',
+    title: 'Databases',
+    description: 'Relational, document and cache layers.',
+    icon: 'ph:hard-drives-bold',
     accent: 'accent',
     skills: [
+      { name: 'PostgreSQL', icon: 'logos:postgresql' },
+      { name: 'MySQL', icon: 'logos:mysql' },
+      { name: 'DynamoDB', icon: 'logos:aws-dynamodb' },
+      { name: 'Redis', icon: 'logos:redis' },
+      { name: 'Teradata', icon: 'ph:database-bold' },
+    ],
+  },
+  {
+    title: 'Customer & Delivery',
+    description: 'How I run an engagement end-to-end.',
+    icon: 'ph:compass-tool-bold',
+    accent: 'violet',
+    skills: [
+      { name: 'Technical Discovery', icon: 'ph:magnifying-glass-bold' },
       { name: 'Solution Architecture', icon: 'ph:blueprint-bold' },
-      { name: 'Event-Driven Design', icon: 'ph:tree-structure-bold' },
-      { name: 'System Design', icon: 'ph:graph-bold' },
-      { name: 'Stakeholder Partnership', icon: 'ph:handshake-bold' },
-      { name: 'Agile', icon: 'ph:repeat-bold' },
-      { name: 'Reliability & Testing', icon: 'ph:shield-check-bold' },
+      { name: 'Stakeholder Alignment', icon: 'ph:handshake-bold' },
+      { name: 'Demo-Driven Delivery', icon: 'ph:presentation-chart-bold' },
+      { name: 'Forward Deployment', icon: 'ph:rocket-launch-bold' },
+      { name: 'Mentoring', icon: 'ph:users-three-bold' },
     ],
   },
 ];
 
-export const skillBars: SkillBarType[] = [
-  { stack: 'Python Engineering', level: 92 },
-  { stack: 'AWS Cloud & IaC', level: 88 },
-  { stack: 'Backend & APIs', level: 85 },
-  { stack: 'CI/CD & DevOps', level: 85 },
-  { stack: 'AI / ML', level: 75 },
-  { stack: 'System Design', level: 80 },
+/* --------------------- WHAT I CAN OWN (stack ownership) ------------------- */
+export const ownershipLayers: OwnershipLayerType[] = [
+  {
+    layer: 'AI Application Layer',
+    icon: 'ph:sparkle-bold',
+    accent: 'violet',
+    summary:
+      'The surface users touch — assistants, copilots and automation that produce real work products.',
+    items: ['LLMs', 'Tool Calling', 'Human-in-the-loop review', 'LLM Evaluation'],
+  },
+  {
+    layer: 'Agent & Orchestration Layer',
+    icon: 'ph:circles-three-bold',
+    accent: 'violet',
+    summary:
+      'Reasoning agents, structured tool-calling over MCP, and the guardrails that keep them safe.',
+    items: ['AI Agents', 'MCP', 'RAG', 'AWS Bedrock'],
+  },
+  {
+    layer: 'API & Backend Layer',
+    icon: 'ph:stack-bold',
+    accent: 'success',
+    summary: 'The services that make AI callable, observable and safe to depend on.',
+    items: ['Python', 'FastAPI', 'REST APIs', 'Microservices', 'Auth & Security'],
+  },
+  {
+    layer: 'Data Layer',
+    icon: 'ph:database-bold',
+    accent: 'accent',
+    summary: 'The pipelines and stores that make enterprise knowledge retrievable.',
+    items: ['Kafka', 'AWS Glue', 'Redshift', 'S3 / Parquet', 'Vector Search'],
+  },
+  {
+    layer: 'Cloud & Infrastructure Layer',
+    icon: 'ph:cloud-bold',
+    accent: 'accent',
+    summary: 'Everything provisioned as code, deployed continuously, and watched in production.',
+    items: ['Terraform', 'Kubernetes', 'Lambda', 'ECS / Fargate', 'CI/CD', 'Observability'],
+  },
 ];
 
 /* ------------------------------- EXPERIENCE ------------------------------- */
+/* Company, official title, dates and location are verbatim from the résumé.   */
 export const experience: ExperienceType[] = [
   {
-    role: 'Associate Architect / Tech Lead',
-    company: 'Southwest Airlines',
+    role: 'Tech Lead',
+    company: 'Southwest Airlines (Qentelli)',
     client: 'Southwest Airlines',
     companyLogo: '/img/icons/common/Southwest-Airlines.png',
-    location: 'Dallas, TX',
-    date: 'May 2023 — Present',
+    location: 'TX',
+    date: 'June 2023 — Present',
     summary:
-      'Forward-deployed architect for AWS cloud platforms, infrastructure-as-code, and Python services powering enterprise systems.',
+      'Designed and led an end-to-end enterprise AI automation platform — Bedrock, Amazon Q Business and multi-agent orchestration over custom MCP servers.',
     bullets: [
-      'Embedded with the client as a forward-deployed engineer — partnered directly with product, engineering, and business stakeholders to turn ambiguous requirements into shipped systems, owning delivery end-to-end.',
-      'Provisioned AWS infrastructure-as-code — EKS (Kubernetes) and EC2 via Terraform and eksctl — and automated cloud-stack operations in Python (boto3).',
-      'Built event-driven services with Lambda, SQS/SNS, and S3, and containerized Python applications with Docker for reproducible deployment.',
-      'Designed CI/CD pipelines (AWS CodePipeline/CodeBuild, Jenkins, GitHub Actions) with SonarQube quality gates for continuous, reliable delivery.',
-      'Instrumented observability with CloudWatch and DataDog, reducing production error rates and hardening reliability across distributed services.',
-      'Led the team on architecture and infrastructure standards, mentoring engineers across cross-functional Agile delivery.',
+      'Designed and led development of an end-to-end AI automation platform using AWS Bedrock, Amazon Q Business and multi-agent orchestration to auto-generate code, create branches and raise GitLab merge requests directly from Jira tickets.',
+      'Built a multi-agent ecosystem spanning Jira, GitLab and Xray through custom MCP servers, enabling structured tool-calling and seamless cross-system automation.',
+      'Architected a scalable RAG pipeline using embeddings and vector databases over thousands of Confluence documents, letting Bedrock models answer engineering questions accurately and with citations.',
+      'Integrated Bedrock LLMs (Claude, Llama, Titan) with reasoning agents to improve code generation, ticket comprehension and automated documentation.',
+      'Ensured enterprise reliability through rate limiting, error handling, observability, fallback logic and structured agent workflows.',
+      'Delivered end-to-end — technical discovery, requirements, architecture, development, CI/CD, AWS deployment, monitoring and iterative optimization — as primary technical POC across cross-functional teams.',
+      'Architected production backend services and automation workflows in Python, FastAPI, React, Docker, Terraform and AWS, and mentored junior engineers on design, observability and reliability practices.',
     ],
     tech: [
+      'AWS Bedrock',
+      'Amazon Q',
+      'MCP',
+      'Multi-Agent',
+      'RAG',
       'Python',
-      'AWS',
+      'FastAPI',
       'Terraform',
-      'Lambda',
-      'Docker',
-      'CI/CD',
-      'CloudWatch',
-      'boto3',
+      'GitLab CI',
+      'React',
     ],
   },
   {
-    role: 'Sr. Software Engineer / Tech Lead',
-    company: 'Smile Direct Club',
+    role: 'Sr. Software Engineer',
+    company: 'Smile Direct Club (Qentelli)',
     client: 'Smile Direct Club',
     companyLogo: '/img/icons/common/smiledirectclub_logo.jpeg',
     location: 'Remote, USA',
-    date: 'Oct 2020 — Apr 2023',
+    date: 'Oct 2020 — May 2023',
     summary:
-      'Senior engineer and tech lead for Python services, AWS automation, and containerized delivery — cutting $100K in cloud cost.',
+      'Led a zero-loss Teradata → Redshift migration and built the streaming and ETL backbone for a consumer MedTech platform.',
     bullets: [
-      'Built Python services and automation across AWS cloud environments, replacing slow, manual processes for the consumer MedTech platform.',
-      'Containerized workloads with Docker for reproducible, multi-OS deployment, and tuned CI/CD to shorten feedback loops.',
-      'Cut cloud infrastructure costs by $100K through automation and right-sizing, and increased release frequency by 50%.',
-      'Reduced manual effort by 70% and improved defect-resolution time by 40% with reliable, maintainable engineering practices.',
-      'Hardened reliability with monitoring and consistent code quality across front-end (JavaScript) and back-end work.',
-      'Partnered with stakeholders to align delivery with product needs in an Agile environment.',
+      'Led the migration from on-prem Teradata to AWS Redshift with zero data loss and optimized downstream query performance.',
+      'Architected and deployed Confluent Kafka on AWS for real-time streaming and event-driven data processing.',
+      'Automated AWS Glue ETL workflows transforming and storing data in S3 (Parquet), improving reliability and cutting manual operations.',
+      'Integrated Lambda, DynamoDB, OpenSearch, Step Functions, SQS, SNS and S3 via boto3, and designed batch and real-time pipelines in Python and Java.',
+      'Built data-quality monitoring with SonarQube and DataDog, reducing pipeline failures and downtime by 30%, and reached 95% automated test coverage for ETL processes.',
+      'Converted manual infrastructure deployments to Terraform and YAML IaC, reducing environment setup time by 50%.',
+      'Reduced cloud infrastructure cost by $100K annually through workflow automation and test/reporting optimization.',
     ],
-    tech: ['Python', 'AWS', 'Docker', 'CI/CD', 'boto3', 'CloudWatch'],
+    tech: [
+      'Python',
+      'Kafka',
+      'Redshift',
+      'AWS Glue',
+      'Step Functions',
+      'DynamoDB',
+      'OpenSearch',
+      'Terraform',
+      'BigQuery',
+    ],
     metrics: [
-      { value: '$100K', label: 'Cloud cost saved' },
-      { value: '50%', label: 'Faster releases' },
-      { value: '70%', label: 'Less manual effort' },
-      { value: '40%', label: 'Faster defect resolution' },
+      { value: '$100K', label: 'Annual cloud cost saved' },
+      { value: '95%', label: 'ETL test coverage' },
+      { value: '30%', label: 'Fewer pipeline failures' },
+      { value: '50%', label: 'Faster env setup' },
     ],
   },
   {
     role: 'Software Engineer',
-    company: 'SS&C Technologies (formerly DST)',
-    client: 'Amisys',
+    company: 'SS&C Technologies',
+    client: 'Health insurance & claims',
     companyLogo: '/img/icons/common/ssandc.png',
     location: 'India',
-    date: 'May 2019 — May 2020',
+    date: 'May 2019 — April 2020',
     summary:
-      'Built Python/Java services and REST APIs for enterprise healthcare-claims web applications, optimizing performance 40%.',
+      'Built secure backend services for claims adjudication and health-insurance workflows across Django, Flask, React and Spring Boot.',
     bullets: [
-      'Optimized application code paths and queries to cut page load times by 40%, materially improving user experience.',
-      'Integrated REST APIs that expanded functionality and increased user reach by 35%.',
-      'Built Python/Java services for enterprise healthcare-claims web applications.',
-      'Established a maintainable Java automation framework (Selenium, TestNG) to lock in reliability and catch regressions.',
-      'Collaborated cross-functionally to drive feature improvements and resolve defects from user feedback.',
+      'Developed backend services using Django, Flask, React and Spring Boot for claims adjudication and health-insurance workflows.',
+      'Implemented secure authentication and data protection with OAuth2, JWT, SSL and encryption.',
+      'Built automated data-backup pipelines to AWS S3, ensuring compliant storage of claims data.',
+      'Applied BeautifulSoup and NLTK for parsing and text extraction, improving data accuracy and automated claims adjudication.',
+      'Containerized applications with Docker and built Jenkins CI/CD workflows to automate builds, tests and deployments.',
+      'Reduced production defects by enforcing automated test coverage and environment parity.',
     ],
-    tech: ['Java', 'Python', 'REST APIs', 'Selenium', 'TestNG', 'Jira'],
-    metrics: [
-      { value: '40%', label: 'Faster load times' },
-      { value: '35%', label: 'More user reach' },
-    ],
+    tech: ['Python', 'Django', 'Flask', 'React', 'Spring Boot', 'OAuth2', 'Docker', 'Jenkins'],
   },
 ];
 
 /* -------------------------------- EDUCATION ------------------------------- */
 export const educationInfo: EducationType[] = [
   {
-    schoolName: 'Applied AI Course',
-    subHeader: 'Machine Learning & Deep Learning Specialization',
-    duration: 'May 2020 — May 2021',
-  },
-  {
     schoolName: 'Vardhaman College of Engineering',
-    subHeader: 'B.Tech, Computer Science & Engineering',
-    duration: 'Jun 2016 — May 2019',
+    subHeader: 'B.Tech, Computer Science',
+    duration: 'Graduated 2019',
   },
   {
-    schoolName: 'Govt. Polytechnic',
-    subHeader: 'Diploma, Computer Science & Engineering',
-    duration: 'Jun 2013 — Jun 2016',
-  },
-];
-
-/* --------------------------------- PROJECTS ------------------------------- */
-export const projects: ProjectType[] = [
-  {
-    name: 'Cloud-Native Infrastructure as Code',
-    category: 'Cloud',
-    problem:
-      'Standing up Kubernetes by hand is slow, error-prone, and impossible to reproduce.',
-    desc: 'Provisions an Amazon EKS (Kubernetes) cluster declaratively with eksctl and Terraform — cluster manifests and variables codified for repeatable, version-controlled deployments.',
-    highlights: [
-      'EKS cluster provisioned via eksctl',
-      'Terraform-managed configuration',
-      'Reproducible, version-controlled infra',
-    ],
-    tech: ['AWS EKS', 'Terraform', 'Kubernetes', 'eksctl', 'YAML'],
-    impact: 'Repeatable Kubernetes provisioning straight from code.',
-    github: 'https://github.com/TadakaSuryaTeja/aws_eks',
-    featured: true,
-  },
-  {
-    name: 'Serverless REST API on AWS Lambda',
-    category: 'Cloud',
-    problem:
-      'Always-on servers are overkill and costly for spiky, simple CRUD workloads.',
-    desc: 'A pay-per-use CRUD REST API built on AWS Lambda in Python, with custom JSON serialization and a Postman test collection — event-driven and serverless.',
-    highlights: [
-      'AWS Lambda (Python) handlers',
-      'Custom JSON encoder',
-      'Postman-tested endpoints',
-    ],
-    tech: ['AWS Lambda', 'Python', 'API Gateway', 'Postman'],
-    impact: 'Event-driven backend with zero idle cost.',
-    github: 'https://github.com/TadakaSuryaTeja/sample_CRUD_in_AWS',
-    featured: true,
-  },
-  {
-    name: 'NLP Text-Classification Service',
-    category: 'AI / ML',
-    problem:
-      'A trained NLP model is useless until it is served behind an interface users can hit.',
-    desc: 'A Django web service that serves an NLP text-classification model end-to-end — training to inference to a usable web interface.',
-    highlights: [
-      'Django-served ML model',
-      'End-to-end train → infer → serve',
-      'NLP classification pipeline',
-    ],
-    tech: ['Python', 'Django', 'NLP', 'NLTK'],
-    impact: 'Full ML lifecycle behind a web app.',
-    github: 'https://github.com/TadakaSuryaTeja/nlp_webapp',
-    featured: true,
-  },
-  {
-    name: 'Personalized Cancer Diagnosis',
-    category: 'AI / ML',
-    problem:
-      'Classifying genetic mutations from dense clinical literature is a high-stakes, high-dimensional NLP problem.',
-    desc: 'A machine-learning pipeline that classifies genetic mutations into clinical categories from text — feature engineering, multiclass modeling, and evaluation on a real genomics dataset.',
-    highlights: [
-      'Genomics NLP',
-      'Multiclass classification',
-      'Feature engineering + evaluation',
-    ],
-    tech: ['Python', 'scikit-learn', 'NLP', 'Pandas'],
-    impact: 'Applied ML on a real-world healthcare dataset.',
-    github: 'https://github.com/TadakaSuryaTeja/PersonalizedCancerDiagnosis',
-    featured: true,
-  },
-  {
-    name: 'Broadcom Driver Installer',
-    category: 'Open Source',
-    problem:
-      'Enabling Broadcom Wi-Fi on fresh Linux installs is a notorious, repetitive pain point.',
-    desc: 'A robust shell utility that automates Broadcom driver enablement on Linux — adopted by the community with 42 stars and 27 forks.',
-    highlights: [
-      '⭐ 42 stars · 27 forks',
-      'Solves a real hardware-enablement pain',
-      'Clean, reusable shell tooling',
-    ],
-    tech: ['Bash', 'Linux', 'Shell'],
-    impact: '40+ developers starred it; forked into active use.',
-    github: 'https://github.com/TadakaSuryaTeja/BroadcomInstaller2021',
-    featured: true,
-  },
-  {
-    name: 'Computer-Vision Image Classifier',
-    category: 'AI / ML',
-    problem:
-      'Putting a CV model in front of non-technical users requires real serving infrastructure.',
-    desc: 'A Flask app serving an image classifier built with scikit-image — upload an image, get a label in real time.',
-    highlights: [
-      'Flask model serving',
-      'scikit-image CV pipeline',
-      'Real-time inference UI',
-    ],
-    tech: ['Python', 'Flask', 'Computer Vision', 'scikit-image'],
-    github: 'https://github.com/TadakaSuryaTeja/Image-Classification-WebApp',
-  },
-  {
-    name: 'World Countries REST API',
-    category: 'Backend',
-    problem: 'Apps need clean, queryable reference data exposed over a stable API.',
-    desc: 'A Django REST API exposing world-countries data with clean resource modeling and queryable endpoints.',
-    highlights: ['Django REST', 'Resource modeling', 'Queryable endpoints'],
-    tech: ['Python', 'Django', 'REST APIs'],
-    github: 'https://github.com/TadakaSuryaTeja/API_django',
-  },
-  {
-    name: 'Walmart Sales Forecasting',
-    category: 'Data',
-    problem:
-      'Retail demand is seasonal and noisy; accurate forecasts drive inventory and staffing.',
-    desc: 'Time-series forecasting of Walmart store sales — EDA, feature engineering, and regression modeling.',
-    highlights: [
-      'Time-series forecasting',
-      'Feature engineering',
-      'EDA + modeling',
-    ],
-    tech: ['Python', 'Pandas', 'scikit-learn'],
-    github: 'https://github.com/TadakaSuryaTeja/Walmart-Sales-Forecasting',
-  },
-];
-
-/* ------------------------------ CASE STUDIES ------------------------------ */
-export const caseStudies: CaseStudyType[] = [
-  {
-    id: 'smiledirectclub',
-    company: 'Smile Direct Club',
-    title: 'Cutting $100K in cloud cost through automation & right-sizing',
-    period: 'Oct 2020 — Apr 2023',
-    accent: 'success',
-    problem:
-      'A fast-shipping consumer MedTech platform leaned on slow, manual processes and over-provisioned cloud infrastructure. Release velocity was capped, errors leaked late, and costs ran high.',
-    approach: [
-      'Standardized Python automation and tooling across cloud environments, replacing slow, manual processes.',
-      'Containerized workloads with Docker for reproducible execution across multiple OS platforms.',
-      'Right-sized cloud infrastructure and tuned CI/CD to cut redundant compute and shorten feedback loops.',
-      'Hardened reliability through monitoring and consistent, maintainable engineering practices.',
-    ],
-    challenges: [
-      'Cross-platform parity — identical behavior across browsers, mobile, and desktop.',
-      'Right-sizing cloud test infrastructure without losing coverage or speed.',
-      'Keeping a large suite reliable while the product changed rapidly.',
-    ],
-    results: [
-      'Reproducible test runs on any OS via Docker',
-      'Faster, cheaper feedback loops through CI/CD tuning',
-      'A standardized, reusable automation suite',
-    ],
-    metrics: [
-      { value: '$100K', label: 'Cloud cost saved' },
-      { value: '50%', label: 'Faster releases' },
-      { value: '70%', label: 'Less manual effort' },
-      { value: '95%', label: 'Automated coverage' },
-    ],
-    stack: ['Python', 'AWS', 'Docker', 'CI/CD', 'boto3', 'CloudWatch'],
-    architecture: {
-      caption:
-        'Containerized cross-platform test automation with cost-optimized cloud execution.',
-      layers: [
-        {
-          title: 'Source & CI',
-          nodes: [
-            { label: 'GitHub', icon: 'ph:github-logo-bold' },
-            { label: 'CI/CD', icon: 'ph:infinity-bold' },
-          ],
-        },
-        {
-          title: 'Containerize',
-          nodes: [{ label: 'Docker', icon: 'logos:docker-icon' }],
-        },
-        {
-          title: 'Test Engine',
-          nodes: [
-            { label: 'Selenium', icon: 'logos:selenium' },
-            { label: 'Appium', icon: 'simple-icons:appium' },
-            { label: 'Python', icon: 'logos:python' },
-          ],
-        },
-        {
-          title: 'Targets',
-          nodes: [
-            { label: 'Web', icon: 'ph:browser-bold' },
-            { label: 'Mobile', icon: 'ph:device-mobile-bold' },
-            { label: 'Desktop', icon: 'ph:desktop-bold' },
-          ],
-        },
-        {
-          title: 'Insight',
-          nodes: [
-            { label: 'Reports', icon: 'ph:chart-bar-bold' },
-            { label: 'Jira', icon: 'logos:jira' },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    id: 'southwest',
-    company: 'Southwest Airlines',
-    title: 'An enterprise cloud platform built with Python & infrastructure-as-code',
-    period: 'May 2023 — Present',
-    accent: 'accent',
-    problem:
-      'Large-scale, distributed airline systems needed reliable services and AWS infrastructure that could be provisioned on demand and delivered continuously — codified and observable, not hand-maintained.',
-    approach: [
-      'Provisioned AWS infrastructure-as-code — EKS (Kubernetes) and EC2 via Terraform and eksctl — and automated cloud-stack operations in Python (boto3).',
-      'Built event-driven flows with Lambda, SQS/SNS, and S3; containerized Python services with Docker for reproducible deployment.',
-      'Designed CI/CD with AWS CodePipeline/CodeBuild, Jenkins, and GitHub Actions, with quality gates via SonarQube.',
-      'Instrumented observability with CloudWatch and DataDog, partnering with stakeholders to harden reliability across services.',
-    ],
-    challenges: [
-      'On-demand, repeatable provisioning instead of static, hand-managed infrastructure.',
-      'Reliability and visibility across many distributed services.',
-      'Aligning a team on reusable, version-controlled infrastructure patterns.',
-    ],
-    results: [
-      'Architect-level ownership of the cloud platform and team',
-      'On-demand, version-controlled AWS provisioning (IaC)',
-      'Continuous delivery with built-in observability',
-      'Reusable infrastructure standards adopted across services',
-    ],
-    metrics: [
-      { value: '80%', label: 'Fewer prod errors' },
-      { value: '45%', label: 'Faster data pipelines' },
-    ],
-    stack: [
-      'Python',
-      'AWS',
-      'Terraform',
-      'Lambda',
-      'EKS',
-      'Docker',
-      'CloudWatch',
-      'DataDog',
-    ],
-    architecture: {
-      caption:
-        'Infrastructure-as-code, event-driven compute, and built-in observability on AWS.',
-      layers: [
-        {
-          title: 'Source & CI',
-          nodes: [
-            { label: 'GitHub', icon: 'ph:github-logo-bold' },
-            { label: 'CodePipeline', icon: 'ph:infinity-bold' },
-          ],
-        },
-        {
-          title: 'Provision (IaC)',
-          nodes: [
-            { label: 'Terraform', icon: 'logos:terraform-icon' },
-            { label: 'EKS', icon: 'logos:kubernetes' },
-          ],
-        },
-        {
-          title: 'Compute',
-          nodes: [
-            { label: 'Lambda', icon: 'logos:aws-lambda' },
-            { label: 'Docker', icon: 'logos:docker-icon' },
-          ],
-        },
-        {
-          title: 'Events & Data',
-          nodes: [
-            { label: 'SQS / SNS', icon: 'logos:aws-sqs' },
-            { label: 'S3', icon: 'logos:aws-s3' },
-          ],
-        },
-        {
-          title: 'Observability',
-          nodes: [
-            { label: 'CloudWatch', icon: 'logos:aws-cloudwatch' },
-            { label: 'DataDog', icon: 'logos:datadog' },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    id: 'ssc',
-    company: 'SS&C Technologies (DST)',
-    title: 'Backend performance & API integration that cut load times 40%',
-    period: 'May 2019 — May 2020',
-    accent: 'violet',
-    problem:
-      'Enterprise healthcare-claims web applications needed faster page performance and reliable API integration to improve the user experience.',
-    approach: [
-      'Optimized application code paths and queries to cut page load times.',
-      'Integrated REST APIs that expanded functionality and grew user reach.',
-      'Built a maintainable Java automation framework (Selenium, TestNG) to lock in reliability and catch regressions.',
-      'Collaborated cross-functionally on feature delivery and defect resolution.',
-    ],
-    challenges: [
-      'Keeping a growing suite maintainable with the POM pattern.',
-      'Balancing thorough coverage with execution speed.',
-      'Driving performance gains without regressions.',
-    ],
-    results: [
-      'A POM framework adopted for reliable, maintainable web testing',
-      'Comprehensive coverage with structured defect tracking',
-      'Measurable performance and reach improvements',
-    ],
-    metrics: [
-      { value: '40%', label: 'Faster load times' },
-      { value: '35%', label: 'More user reach' },
-    ],
-    stack: ['Java', 'Selenium', 'TestNG', 'Cucumber', 'Maven', 'Jira'],
-    architecture: {
-      caption: 'Page Object Model test architecture over Selenium WebDriver.',
-      layers: [
-        {
-          title: 'Specs',
-          nodes: [
-            { label: 'Cucumber', icon: 'logos:cucumber' },
-            { label: 'TestNG', icon: 'carbon:test-tool' },
-          ],
-        },
-        {
-          title: 'Page Objects',
-          nodes: [
-            { label: 'Page Factory', icon: 'ph:squares-four-bold' },
-            { label: 'Java', icon: 'logos:java' },
-          ],
-        },
-        {
-          title: 'Driver',
-          nodes: [{ label: 'Selenium', icon: 'logos:selenium' }],
-        },
-        {
-          title: 'App',
-          nodes: [{ label: 'Web App', icon: 'ph:browser-bold' }],
-        },
-        {
-          title: 'Defects',
-          nodes: [{ label: 'Jira', icon: 'logos:jira' }],
-        },
-      ],
-    },
+    schoolName: 'Government Polytechnic',
+    subHeader: 'Diploma, Computer Science',
+    duration: 'Graduated 2016',
   },
 ];
 
@@ -695,8 +476,8 @@ export const certifications: CertificationType[] = [
     link: 'https://www.credly.com/badges/1eb48c8d-7a51-4006-a7f5-be69b65f62ff',
   },
   {
-    certificate: 'Machine Learning & Deep Learning',
-    issuedby: 'Applied AI Course',
+    certificate: 'Machine Learning and Artificial Intelligence',
+    issuedby: 'AppliedAI',
     category: 'AI / ML',
     accent: 'violet',
     link: 'https://www.appliedaicourse.com/certificate/d7dbb737c0',
@@ -709,7 +490,9 @@ export const certifications: CertificationType[] = [
     link: 'https://github.com/TadakaSuryaTeja/Profile/blob/main/Information%20Security%20-%20IV.jpg',
   },
   {
-    certificate: 'Modern Application Development',
+    // NOTE: résumé says "Mobile Application Development"; the linked image file
+    // is named "Modern Application Development". Confirm which is correct.
+    certificate: 'Mobile Application Development',
     issuedby: 'NPTEL',
     category: 'Engineering',
     accent: 'accent',
@@ -719,22 +502,24 @@ export const certifications: CertificationType[] = [
 
 /* ------------------------------ TECH MARQUEE ------------------------------ */
 export const techMarquee: MarqueeItemType[] = [
+  { name: 'AWS Bedrock', icon: 'logos:aws' },
+  { name: 'MCP', icon: 'ph:plugs-connected-bold' },
+  { name: 'RAG', icon: 'ph:magnifying-glass-bold' },
+  { name: 'Multi-Agent', icon: 'ph:circles-three-bold' },
   { name: 'Python', icon: 'logos:python' },
-  { name: 'AWS', icon: 'logos:aws' },
+  { name: 'FastAPI', icon: 'simple-icons:fastapi' },
+  { name: 'Vector DBs', icon: 'ph:vector-three-bold' },
+  { name: 'Lambda', icon: 'logos:aws-lambda' },
+  { name: 'Terraform', icon: 'logos:terraform-icon' },
+  { name: 'Kafka', icon: 'simple-icons:apachekafka' },
+  { name: 'Redshift', icon: 'logos:aws-redshift' },
+  { name: 'AWS Glue', icon: 'logos:aws-glue' },
+  { name: 'Kubernetes', icon: 'logos:kubernetes' },
   { name: 'Docker', icon: 'logos:docker-icon' },
-  { name: 'Django', icon: 'vscode-icons:file-type-django' },
-  { name: 'Flask', icon: 'simple-icons:flask' },
-  { name: 'TensorFlow', icon: 'logos:tensorflow' },
-  { name: 'Selenium', icon: 'logos:selenium' },
-  { name: 'Pytest', icon: 'simple-icons:pytest' },
-  { name: 'PostgreSQL', icon: 'logos:postgresql' },
-  { name: 'GitHub Actions', icon: 'logos:github-actions' },
-  { name: 'Jenkins', icon: 'logos:jenkins' },
-  { name: 'JavaScript', icon: 'logos:javascript' },
-  { name: 'Pandas', icon: 'simple-icons:pandas' },
-  { name: 'NumPy', icon: 'logos:numpy' },
-  { name: 'Nginx', icon: 'logos:nginx' },
-  { name: 'Postman', icon: 'logos:postman-icon' },
+  { name: 'React', icon: 'logos:react' },
+  { name: 'TypeScript', icon: 'logos:typescript-icon' },
+  { name: 'Grafana', icon: 'logos:grafana' },
+  { name: 'GitLab CI', icon: 'logos:gitlab' },
 ];
 
 /* ------------------------------ TESTIMONIALS ------------------------------ */
@@ -742,83 +527,90 @@ export const techMarquee: MarqueeItemType[] = [
 // The section renders only when this array is non-empty.
 export const testimonials: TestimonialType[] = [];
 
-/* ---------------------------------- BLOG ---------------------------------- */
-// Add real Medium posts here to render article cards.
-// When empty, the Writing section shows a "Read on Medium" call-to-action.
-// Real Medium articles. TODO: swap each `link` for the exact article URL
-// (and fine-tune the titles) — these currently point to your Medium profile.
+/* --------------------------------- INSIGHTS ------------------------------- */
+// Local fallback used when Notion is unavailable or unconfigured.
+// TODO: swap each `link` for the exact Medium article URL.
 export const blogPosts: BlogPostType[] = [
   {
-    title: 'Getting Started with Computer Vision in OpenCV',
+    title: 'Build a CRUD API using AWS Lambda, API Gateway and DynamoDB',
+    excerpt:
+      'A walkthrough of a fully serverless CRUD API — Lambda handlers, API Gateway routing and DynamoDB persistence.',
+    tag: 'AWS',
+    date: '2022-08-25',
+    readTime: '6 min',
+    link: 'https://medium.com/@suryateja233/build-a-crud-api-using-aws-lambda-api-gateway-and-dynamodb-df306212d329',
+  },
+  {
+    title: 'Computer Vision with OpenCV Library using Python',
     excerpt:
       'A practical introduction to image processing and computer vision in Python with OpenCV.',
     tag: 'Computer Vision',
-    readTime: '6 min',
-    link: 'https://medium.com/@suryateja233',
-  },
-  {
-    title: 'Working with Amazon S3 in Python',
-    excerpt:
-      'Storing, retrieving, and managing objects in Amazon S3 programmatically with boto3.',
-    tag: 'AWS',
+    date: '2021-12-05',
     readTime: '5 min',
-    link: 'https://medium.com/@suryateja233',
+    link: 'https://medium.com/@suryateja233/computer-vision-with-opencv-library-using-python-7246078892b7',
   },
   {
-    title: 'Automating NFT Creation & Listing with Python',
+    title: 'S3 Storage Classes',
     excerpt:
-      'Scripting the mint-to-marketplace pipeline end to end with Python automation.',
-    tag: 'Python',
-    readTime: '7 min',
-    link: 'https://medium.com/@suryateja233',
+      'How the S3 storage classes differ on cost, durability and retrieval, and how to choose between them.',
+    tag: 'AWS',
+    date: '2021-09-04',
+    readTime: '4 min',
+    link: 'https://medium.com/@suryateja233/s3-storage-classes-4cc65b5f55c4',
   },
 ];
 
 /* --------------------------------- CONTACT -------------------------------- */
 export const contactInfo: ContactType = {
-  title: "Let's build great software together",
+  title: "Let's build production AI systems",
   subtitle:
-    "Whether you're hiring, collaborating, or just want to talk software, cloud, or AI/ML — my inbox is open.",
-  email: '', // TODO: add your email to enable the one-click contact button
+    "If you're building agentic systems, enterprise RAG, or the AI platform underneath them — I'd like to hear about it.",
+  email: 'suryateja233@gmail.com',
 };
 
 export const showContactForm = false;
 
 /* ----------------------------------- SEO ---------------------------------- */
 export const seoData: SEODataType = {
-  title: 'Tadaka Surya Teja — Software Engineer · AI/ML · AWS Solutions Architect',
+  title: 'Surya Teja Tadaka — Enterprise AI & Agentic Systems Engineer · Technical Lead',
   description:
-    'Tadaka Surya Teja is a software engineer and AWS-certified Solutions Architect with 7+ years across Python backend, AWS cloud architecture, and applied AI/ML — building scalable, production systems.',
-  author: 'Tadaka Surya Teja',
+    'Surya Teja Tadaka is a Technical Lead and Enterprise AI engineer with 7+ years across backend, data and cloud — building production agentic systems on AWS Bedrock with multi-agent orchestration, custom MCP servers, RAG over enterprise knowledge, Python and AWS.',
+  author: 'Surya Teja Tadaka',
   image: '/og.png',
   url: 'https://surya-teja-tadaka.vercel.app/',
   keywords: [
-    'Tadaka Surya Teja',
     'Surya Teja Tadaka',
-    'Software Engineer',
-    'Software Development Engineer',
-    'Feature Development Engineer',
-    'Python Developer',
-    'Backend Engineer',
-    'Full Stack Engineer',
-    'Application Developer',
-    'API Engineer',
+    'Tadaka Surya Teja',
     'AI Engineer',
-    'Machine Learning Engineer',
-    'Data Engineer',
-    'Cloud Engineer',
-    'AWS Solutions Architect',
-    'Software Architect',
-    'Associate Architect',
-    'DevOps Engineer',
-    'Platform Engineer',
-    'Technical Lead',
-    'Microservices',
-    'Event-Driven Architecture',
-    'Distributed Systems',
-    'Kubernetes',
+    'Generative AI Engineer',
+    'Agentic AI Engineer',
+    'Enterprise AI Engineer',
+    'Staff AI Engineer',
+    'Principal AI Engineer',
+    'Applied AI Engineer',
+    'AI Platform Engineer',
+    'AI Solutions Architect',
+    'GenAI Architect',
+    'AI Infrastructure Engineer',
+    'Forward Deployed Engineer',
+    'Technical Lead AI',
+    'Model Context Protocol',
+    'MCP',
+    'RAG',
+    'Retrieval Augmented Generation',
+    'Multi-Agent Orchestration',
+    'AWS Bedrock',
+    'Amazon Q',
+    'LLM',
+    'Vector Databases',
+    'Python',
+    'FastAPI',
+    'AWS',
+    'Data Engineering',
+    'Kafka',
+    'Redshift',
     'Terraform',
-    'Kaggle Expert',
+    'AWS Solutions Architect',
     'Dallas',
   ],
 };

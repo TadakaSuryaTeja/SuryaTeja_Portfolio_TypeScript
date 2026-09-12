@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 import Section from '@/components/ui/Section';
 import Reveal from '@/components/ui/Reveal';
-import { contactInfo, profile, socialLinks } from '@/portfolio';
+import { contactInfo, profile, socialLinks, recruiterBrief } from '@/portfolio';
+import { trackEvent } from '@/lib/analytics';
 import { SOCIAL_ITEMS } from '@/lib/socials';
 
 export default function Contact() {
@@ -21,7 +23,7 @@ export default function Contact() {
   };
 
   return (
-    <Section id="contact">
+    <Section id="contact" essential>
       <Reveal>
         <div className="relative overflow-hidden rounded-[2.5rem] border border-line bg-gradient-to-b from-fill-3 to-fill-1 px-6 py-16 text-center sm:px-12 sm:py-20">
           <div
@@ -45,10 +47,31 @@ export default function Contact() {
               {contactInfo.subtitle}
             </p>
 
+            {/* Interest, stated confidently — not availability anxiety. */}
+            <div className="mx-auto mt-8 max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-faint">
+                Interested in
+              </p>
+              <ul className="mt-3 flex flex-wrap justify-center gap-1.5" role="list">
+                {recruiterBrief.interestedIn.map((role) => (
+                  <li
+                    key={role}
+                    className="rounded-lg border border-line bg-fill-2 px-2.5 py-1 text-xs font-medium text-ink-muted"
+                  >
+                    {role}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               {email ? (
                 <>
-                  <a href={`mailto:${email}`} className="btn-primary">
+                  <a
+                    href={`mailto:${email}`}
+                    className="btn-primary"
+                    onClick={() => trackEvent('contact_click', 'section')}
+                  >
                     <Icon icon="ph:envelope-simple-bold" aria-hidden /> Email me
                   </a>
                   <button onClick={copyEmail} className="btn-ghost">
@@ -73,14 +96,9 @@ export default function Contact() {
                 )
               )}
               {profile.resumeLink && (
-                <a
-                  href={profile.resumeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost"
-                >
-                  <Icon icon="ph:download-simple-bold" aria-hidden /> Résumé
-                </a>
+                <Link href="/resume" className="btn-ghost">
+                  <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
+                </Link>
               )}
             </div>
 

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { profile } from '@/portfolio';
 import Link from 'next/link';
 import { Icon } from '@/components/ui/Icon';
 
@@ -6,7 +7,7 @@ export default function NotFound() {
   return (
     <>
       <Head>
-        <title>404 — Page not found · Tadaka Surya Teja</title>
+        <title>{`404 — Page not found · ${profile.name}`}</title>
         <meta name="robots" content="noindex" />
       </Head>
       <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
@@ -26,7 +27,23 @@ export default function NotFound() {
             The page you&rsquo;re looking for doesn&rsquo;t exist or may have
             moved.
           </p>
-          <Link href="/" className="btn-primary mt-8">
+          <nav aria-label="Popular pages" className="mt-8 flex flex-wrap justify-center gap-2">
+            {[
+              { href: '/#work', label: 'Systems I\u2019ve built' },
+              { href: '/ai-lab', label: 'AI Lab' },
+              { href: '/resume', label: 'Résumé' },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="rounded-lg border border-line bg-fill-2 px-3 py-1.5 text-xs font-medium text-ink-muted transition-colors hover:border-hair-strong hover:text-ink"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <Link href="/" className="btn-primary mt-6">
             <Icon icon="ph:arrow-left-bold" aria-hidden /> Back to home
           </Link>
         </div>

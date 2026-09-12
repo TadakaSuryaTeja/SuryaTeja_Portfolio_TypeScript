@@ -1,20 +1,57 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Icon } from '@/components/ui/Icon';
 import { profile, socialLinks } from '@/portfolio';
 import { SOCIAL_ITEMS } from '@/lib/socials';
+import SystemNetwork from '@/components/hero/SystemNetwork';
 
+/**
+ * Rotating value proposition.
+ *
+ * The interval is paused whenever the hero scrolls out of view or the tab is
+ * hidden — a decorative timer should not keep waking the main thread while
+ * someone is reading the rest of the page.
+ */
 function RotatingRole({ roles }: { roles: string[] }) {
   const [i, setI] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const t = setInterval(() => setI((p) => (p + 1) % roles.length), 2600);
-    return () => clearInterval(t);
+
+    let timer: ReturnType<typeof setInterval> | null = null;
+    const start = () => {
+      if (timer) return;
+      timer = setInterval(() => setI((p) => (p + 1) % roles.length), 2600);
+    };
+    const stop = () => {
+      if (!timer) return;
+      clearInterval(timer);
+      timer = null;
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => (entry?.isIntersecting && !document.hidden ? start() : stop()),
+      { threshold: 0 }
+    );
+    if (ref.current) io.observe(ref.current);
+
+    const onVisibility = () => (document.hidden ? stop() : undefined);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      stop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [roles.length]);
 
   return (
-    <span className="relative inline-flex h-[1.15em] items-center overflow-hidden align-bottom">
+    <span
+      ref={ref}
+      className="relative inline-flex h-[1.15em] items-center overflow-hidden align-bottom"
+    >
       <span key={i} className="gradient-text animate-role-in whitespace-nowrap">
         {roles[i]}
       </span>
@@ -26,6 +63,7 @@ export default function Hero() {
   return (
     <section
       id="home"
+      data-essential="true"
       className="relative overflow-hidden pt-32 pb-16 sm:pt-40 sm:pb-24"
     >
       <div className="pointer-events-none absolute inset-0 grid-bg" aria-hidden />
@@ -53,12 +91,28 @@ export default function Hero() {
               {profile.name}
             </h1>
 
-            <div
-              className="mt-3 animate-fade-up text-2xl font-semibold tracking-tight sm:text-3xl"
-              style={{ animationDelay: '0.06s' }}
+            <p
+              className="mt-4 max-w-xl animate-fade-up text-balance text-xl font-semibold leading-snug text-ink sm:text-2xl"
+              style={{ animationDelay: '0.05s' }}
             >
+              Building production AI systems that connect models, data, tools
+              and infrastructure.
+            </p>
+
+            <div
+              className="mt-4 flex animate-fade-up items-baseline gap-2 text-2xl font-semibold tracking-tight sm:text-3xl"
+              style={{ animationDelay: '0.07s' }}
+            >
+              <span className="text-ink-muted">I build</span>
               <RotatingRole roles={profile.roles} />
             </div>
+
+            <p
+              className="mt-4 animate-fade-up text-sm font-medium uppercase tracking-wide text-ink-faint"
+              style={{ animationDelay: '0.08s' }}
+            >
+              Enterprise AI • Agentic Systems • RAG • MCP • Python • AWS
+            </p>
 
             <p
               className="mt-6 max-w-xl animate-fade-up text-balance text-base leading-relaxed text-ink-muted sm:text-lg"
@@ -71,19 +125,12 @@ export default function Hero() {
               className="mt-8 flex flex-wrap items-center gap-3 animate-fade-up"
               style={{ animationDelay: '0.12s' }}
             >
-              <a href="#projects" className="btn-primary">
-                <Icon icon="ph:rocket-launch-bold" aria-hidden /> View My Work
+              <a href="#work" className="btn-primary">
+                <Icon icon="ph:rocket-launch-bold" aria-hidden /> Explore Work
               </a>
-              {profile.resumeLink && (
-                <a
-                  href={profile.resumeLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost"
-                >
-                  <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
-                </a>
-              )}
+              <Link href="/resume" className="btn-ghost">
+                <Icon icon="ph:file-text-bold" aria-hidden /> Résumé
+              </Link>
             </div>
 
             <div
@@ -125,7 +172,7 @@ export default function Hero() {
                 aria-hidden
               />
               <div className="glass overflow-hidden rounded-[2rem] p-2">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-elevated to-surface">
+                <div className={`relative w-full overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-elevated to-surface ${profile.photo ? 'aspect-[4/5]' : 'aspect-square'}`}>
                   {profile.photo ? (
                     <Image
                       src={profile.photo}
@@ -136,46 +183,13 @@ export default function Hero() {
                       priority
                     />
                   ) : (
-                    <div className="relative flex h-full w-full flex-col items-center justify-center gap-5 p-8 text-center">
-                      <div className="grid-bg absolute inset-0 opacity-40" aria-hidden />
-                      <div className="relative flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-accent to-violet text-5xl font-bold text-white shadow-glow">
-                        {profile.initials}
-                      </div>
-                      <div className="relative">
-                        <p className="text-lg font-semibold text-ink">
-                          {profile.name}
-                        </p>
-                        <p className="mt-1 text-sm text-ink-muted">
-                          {profile.headline}
-                        </p>
-                      </div>
+                    <div className="relative flex h-full w-full items-center justify-center p-5">
+                      <SystemNetwork />
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="glass absolute -left-6 top-10 flex animate-float items-center gap-2.5 rounded-2xl px-3.5 py-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/15 text-success">
-                  <Icon icon="ph:trend-up-bold" aria-hidden />
-                </span>
-                <div className="leading-tight">
-                  <p className="text-sm font-semibold text-ink">$100K+</p>
-                  <p className="text-[11px] text-ink-muted">Cloud cost saved</p>
-                </div>
-              </div>
-
-              <div
-                className="glass absolute -right-5 bottom-12 flex animate-float items-center gap-2.5 rounded-2xl px-3.5 py-2.5"
-                style={{ animationDelay: '1.5s' }}
-              >
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/15 text-accent">
-                  <Icon icon="logos:aws" aria-hidden />
-                </span>
-                <div className="leading-tight">
-                  <p className="text-sm font-semibold text-ink">AWS Certified</p>
-                  <p className="text-[11px] text-ink-muted">Solutions Architect</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

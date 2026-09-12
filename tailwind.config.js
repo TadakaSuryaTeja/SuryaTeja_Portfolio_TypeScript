@@ -10,7 +10,10 @@ module.exports = {
     extend: {
       colors: {
         // Themeable via CSS variables (dark values == original palette).
-        base: 'rgb(var(--base-rgb) / <alpha-value>)',
+        // Renamed from 'base': a color token named `base` makes Tailwind emit
+        // `text-base` as a COLOR utility, which silently overrides text colors
+        // whenever it appears in a responsive variant (e.g. `sm:text-base`).
+        canvas: 'rgb(var(--base-rgb) / <alpha-value>)',
         surface: 'rgb(var(--surface-rgb) / <alpha-value>)',
         elevated: 'rgb(var(--elevated-rgb) / <alpha-value>)',
         line: 'var(--line)',

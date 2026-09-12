@@ -36,7 +36,7 @@ function CountUp({ value }: { value: string }) {
 
 export default function Metrics() {
   return (
-    <div className="container-px -mt-6">
+    <div className="container-px -mt-6" data-essential="true">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {metrics.map((m, i) => {
           const accent = accentMap[m.accent ?? 'accent'];

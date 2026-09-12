@@ -3,21 +3,28 @@ import Section from '@/components/ui/Section';
 import SectionHeading from '@/components/ui/SectionHeading';
 import Reveal from '@/components/ui/Reveal';
 import { blogPosts, socialLinks } from '@/portfolio';
+import type { BlogPostType } from '@/types/sections';
 
-export default function Writing() {
-  const hasPosts = blogPosts.length > 0;
+/**
+ * Insights. `posts` comes from Notion at build time when it is configured;
+ * when Notion is unreachable or unconfigured the local `blogPosts` fallback
+ * keeps the section rendering. The homepage never depends on Notion being up.
+ */
+export default function Writing({ posts }: { posts?: BlogPostType[] }) {
+  const items = posts && posts.length > 0 ? posts : blogPosts;
+  const hasPosts = items.length > 0;
 
   return (
     <Section id="writing">
       <SectionHeading
-        eyebrow="Writing"
+        eyebrow="Insights"
         title="Notes on building systems"
-        subtitle="I write about AI/ML, MLOps, AWS, system design, and Python — distilling what I learn shipping software."
+        subtitle="Notes on agentic architecture, retrieval, AWS and the engineering underneath production AI."
       />
 
       {hasPosts ? (
         <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post, i) => (
+          {items.map((post, i) => (
             <Reveal key={post.title} delay={i * 0.06}>
               <a
                 href={post.link}
