@@ -532,27 +532,31 @@ export const testimonials: TestimonialType[] = [];
 // TODO: swap each `link` for the exact Medium article URL.
 export const blogPosts: BlogPostType[] = [
   {
-    title: 'Getting Started with Computer Vision in OpenCV',
+    title: 'Build a CRUD API using AWS Lambda, API Gateway and DynamoDB',
+    excerpt:
+      'A walkthrough of a fully serverless CRUD API — Lambda handlers, API Gateway routing and DynamoDB persistence.',
+    tag: 'AWS',
+    date: '2022-08-25',
+    readTime: '6 min',
+    link: 'https://medium.com/@suryateja233/build-a-crud-api-using-aws-lambda-api-gateway-and-dynamodb-df306212d329',
+  },
+  {
+    title: 'Computer Vision with OpenCV Library using Python',
     excerpt:
       'A practical introduction to image processing and computer vision in Python with OpenCV.',
     tag: 'Computer Vision',
-    readTime: '6 min',
-    link: 'https://medium.com/@suryateja233',
-  },
-  {
-    title: 'Working with Amazon S3 in Python',
-    excerpt:
-      'Storing, retrieving and managing objects in Amazon S3 programmatically with boto3.',
-    tag: 'AWS',
+    date: '2021-12-05',
     readTime: '5 min',
-    link: 'https://medium.com/@suryateja233',
+    link: 'https://medium.com/@suryateja233/computer-vision-with-opencv-library-using-python-7246078892b7',
   },
   {
-    title: 'Automating NFT Creation & Listing with Python',
-    excerpt: 'Scripting the mint-to-marketplace pipeline end to end with Python automation.',
-    tag: 'Python',
-    readTime: '7 min',
-    link: 'https://medium.com/@suryateja233',
+    title: 'S3 Storage Classes',
+    excerpt:
+      'How the S3 storage classes differ on cost, durability and retrieval, and how to choose between them.',
+    tag: 'AWS',
+    date: '2021-09-04',
+    readTime: '4 min',
+    link: 'https://medium.com/@suryateja233/s3-storage-classes-4cc65b5f55c4',
   },
 ];
 
