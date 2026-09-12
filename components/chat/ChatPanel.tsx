@@ -254,15 +254,35 @@ function Turn({ message }: { message: ChatMessage }) {
 
   return (
     <div className="space-y-2.5">
-      <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">
-        {message.content}
-        {message.streaming && (
-          <span
-            className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 bg-accent motion-safe:animate-pulse"
-            aria-hidden
-          />
-        )}
-      </p>
+      {/*
+        The provider can think for seconds before emitting a token. A bare
+        caret on an empty line reads as a hung request, so the wait gets its
+        own visible state.
+      */}
+      {message.thinking ? (
+        <p className="flex items-center gap-2 text-sm text-ink-faint">
+          <span className="flex gap-1" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <span
+                key={i}
+                className="h-1.5 w-1.5 rounded-full bg-ink-faint motion-safe:animate-pulse"
+                style={{ animationDelay: `${i * 160}ms` }}
+              />
+            ))}
+          </span>
+          Reading the sources…
+        </p>
+      ) : (
+        <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">
+          {message.content}
+          {message.streaming && (
+            <span
+              className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 bg-accent motion-safe:animate-pulse"
+              aria-hidden
+            />
+          )}
+        </p>
+      )}
 
       {message.error && (
         <p className="rounded-xl border border-line bg-fill-2 px-3 py-2 text-xs text-ink-faint">

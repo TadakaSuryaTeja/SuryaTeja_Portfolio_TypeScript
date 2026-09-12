@@ -364,9 +364,14 @@ function portfolioChunks(input: CorpusInput): Chunk[] {
         title: 'Contact',
         url: '/#contact',
         text: lines(
+          // Leads with the question this chunk exists to answer, so "how do I
+          // get in touch?" has natural phrasing to match against.
+          'How to get in touch, contact him or reach out.',
           input.contactInfo.title,
           input.contactInfo.subtitle,
-          input.contactInfo.email ? `Email: ${input.contactInfo.email}.` : undefined,
+          input.contactInfo.email
+            ? `Email address: ${input.contactInfo.email}. Email him to start a conversation.`
+            : undefined,
         ),
       }),
     );
@@ -524,22 +529,56 @@ function taxonomyChunks(technologies: Technology[], systems: System[]): Chunk[] 
   );
 }
 
+/**
+ * Three chunks, not one.
+ *
+ * Contact details, education and certifications answer completely different
+ * questions, and bundling them produced an embedding that was a blur of all
+ * three — so a pointed query ("what's his number?") matched none of them well
+ * enough to clear the score floor, and the visitor got a refusal for a fact
+ * that is printed on the résumé.
+ *
+ * The contact chunk is phrased the way people actually ask, because retrieval
+ * matches the question against this text and nothing else: someone types
+ * "his number", not "Phone:".
+ */
 function resumeChunks(resume: ResumeFacts): Chunk[] {
-  return emit({
-    idBase: 'resume:facts',
-    source: 'resume',
-    section: 'resume',
-    title: 'Résumé facts',
-    url: '/resume',
-    text: lines(
-      `${resume.name} — ${resume.location}.`,
-      `Email: ${resume.email}. Phone: ${resume.phone}. Website: ${resume.website}.`,
-      'Education:',
-      bullets(resume.education.map((e) => `${e.detail}, ${e.school} — ${e.date}.`)),
-      'Certifications:',
-      bullets(resume.certifications),
-    ),
-  });
+  return [
+    ...emit({
+      idBase: 'resume:contact',
+      source: 'resume',
+      section: 'contact',
+      title: 'Contact details',
+      url: '/#contact',
+      text: lines(
+        `How to contact ${resume.name} — his contact details, phone number, email address and links.`,
+        `Phone number: ${resume.phone}.`,
+        `Email address: ${resume.email}.`,
+        `Website: ${resume.website}.`,
+        `Located in ${resume.location}.`,
+        `To reach him directly, call ${resume.phone} or email ${resume.email}.`,
+      ),
+    }),
+    ...emit({
+      idBase: 'resume:education',
+      source: 'resume',
+      section: 'education',
+      title: 'Education',
+      url: '/resume',
+      text: lines(
+        `Education, degrees and universities ${resume.name} attended:`,
+        bullets(resume.education.map((e) => `${e.detail}, ${e.school} — ${e.date}.`)),
+      ),
+    }),
+    ...emit({
+      idBase: 'resume:certifications',
+      source: 'resume',
+      section: 'certifications',
+      title: 'Certifications',
+      url: '/#certifications',
+      text: lines(`Certifications ${resume.name} holds:`, bullets(resume.certifications)),
+    }),
+  ];
 }
 
 /* ---------------------------------- entry --------------------------------- */

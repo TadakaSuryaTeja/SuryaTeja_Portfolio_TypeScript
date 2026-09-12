@@ -6,7 +6,12 @@
  * chain that fails the test if it is ever called, which is a stronger claim
  * than "the prompt tells the model not to".
  */
-import { REFUSAL_MESSAGE, PROVIDER_FALLBACK_MESSAGE, buildPrompt } from './prompt';
+import {
+  REFUSAL_MESSAGE,
+  PROVIDER_FALLBACK_MESSAGE,
+  buildPrompt,
+  contextualizeQuery,
+} from './prompt';
 import { generate, type Provider, type ProviderName } from './providers';
 import { MIN_SCORE, TOP_K, retrieve } from './vector';
 import type { ChatTurn, RagIndex, RetrievedChunk } from './types';
@@ -47,7 +52,9 @@ export async function* runPipeline(
   try {
     const index = await deps.loadIndex();
     if (index) {
-      const queryVector = await deps.embedQuery(question);
+      // Embed the question *in context* so a follow-up retrieves against the
+      // topic it refers to; the model still receives the question verbatim.
+      const queryVector = await deps.embedQuery(contextualizeQuery(question, history));
       results = retrieve(queryVector, index.chunks, index.vectors, {
         topK,
         minScore,

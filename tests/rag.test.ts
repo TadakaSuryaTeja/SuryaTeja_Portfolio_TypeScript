@@ -26,7 +26,13 @@ import {
 } from '../lib/rag/vector';
 import { RateLimiter, validateQuestion, detectInjection, MAX_INPUT_CHARS } from '../lib/rag/guard';
 import { runPipeline } from '../lib/rag/pipeline';
-import { REFUSAL_MESSAGE, buildPrompt, formatHistory, SYSTEM_CARD } from '../lib/rag/prompt';
+import {
+  REFUSAL_MESSAGE,
+  buildPrompt,
+  formatHistory,
+  contextualizeQuery,
+  SYSTEM_CARD,
+} from '../lib/rag/prompt';
 import type { Provider } from '../lib/rag/providers';
 import type { Chunk, RagIndex } from '../lib/rag/types';
 import type { ExperienceType, SkillCategoryType, CertificationType } from '../types/sections';
@@ -266,6 +272,30 @@ test('retrieval returns nothing when no chunk clears the score floor', () => {
   const query = normalize([0, 0, 0, 1, 1, 1, 1, 1]);
 
   assert.deepEqual(retrieve(query, fixtureIndex.chunks, fixtureIndex.vectors), []);
+});
+
+test('a precise question is not padded with near-miss citations', () => {
+  // One strong match plus two weak ones that merely clear the absolute floor.
+  const query = axisVector(0);
+  const all = retrieve(query, fixtureIndex.chunks, fixtureIndex.vectors, {
+    minScore: -1,
+    relativeFloor: 0,
+  });
+  assert.equal(all.length, 3, 'fixture should offer three scored chunks');
+
+  const gated = retrieve(query, fixtureIndex.chunks, fixtureIndex.vectors, { minScore: -1 });
+  assert.ok(gated.length < all.length, 'the relative gate dropped nothing');
+  assert.equal(gated[0].chunk.id, ragChunk.id);
+  for (const result of gated) {
+    assert.ok(result.score >= gated[0].score * 0.7);
+  }
+});
+
+test('comparable matches all survive the relative gate', () => {
+  // Three near-identical scores: a broad question should keep its breadth.
+  const chunks = [ragChunk, kafkaChunk, certChunk];
+  const vectors = [quantize(axisVector(0)), quantize(axisVector(0)), quantize(axisVector(0))];
+  assert.equal(retrieve(axisVector(0), chunks, vectors).length, 3);
 });
 
 test('retrieval caps results at top-k', () => {
@@ -559,4 +589,149 @@ test('ordinary questions are not mistaken for injection', () => {
     assert.equal(detectInjection(question), false, `false positive: ${question}`);
     assert.equal(validateQuestion(question).ok, true, `wrongly rejected: ${question}`);
   }
+});
+
+/* --------------------- conversational follow-up retrieval ------------------ */
+
+test('a standalone question is embedded verbatim', () => {
+  const history = [
+    { role: 'user' as const, content: 'Has he shipped RAG in production?' },
+    { role: 'assistant' as const, content: 'Yes, at Southwest Airlines [1].' },
+  ];
+
+  // Padding a self-contained question would drag retrieval toward the old topic.
+  assert.equal(
+    contextualizeQuery('Walk me through his AWS work in detail please', history),
+    'Walk me through his AWS work in detail please',
+  );
+});
+
+test('a referential follow-up is embedded with the topic it refers to', () => {
+  const history = [
+    { role: 'user' as const, content: 'Has he shipped RAG in production?' },
+    { role: 'assistant' as const, content: 'Yes, at Southwest Airlines [1].' },
+  ];
+
+  for (const followUp of ['Why?', 'What about that one?', 'Tell me more', 'How did he do it?']) {
+    const expanded = contextualizeQuery(followUp, history);
+    assert.ok(expanded.includes('RAG in production'), `"${followUp}" lost the topic it depends on`);
+    assert.ok(expanded.endsWith(followUp), `"${followUp}" must stay last, closest to the question`);
+  }
+});
+
+test('the first question of a conversation is never padded', () => {
+  assert.equal(contextualizeQuery('Why?', []), 'Why?');
+});
+
+test('follow-up context only folds in what the visitor asked, never the answers', () => {
+  const history = [
+    { role: 'user' as const, content: 'What about MCP?' },
+    { role: 'assistant' as const, content: 'A long assistant answer that should not be embedded.' },
+  ];
+
+  const expanded = contextualizeQuery('Why?', history);
+  assert.ok(expanded.includes('What about MCP?'));
+  assert.ok(!expanded.includes('long assistant answer'), 'assistant text leaked into the query');
+});
+
+test('a follow-up retrieves the topic chunk that its bare text would miss', async () => {
+  // Stands in for the encoder: "rag" in the embedded text points at the RAG
+  // axis, so this asserts the pipeline embeds the *contextualized* query.
+  const embedQuery = async (text: string) =>
+    /rag/i.test(text) ? axisVector(0) : normalize([0, 0, 0, 1, 1, 1, 1, 1]);
+
+  const chain: Provider[] = [
+    {
+      name: 'groq',
+      async *stream() {
+        yield 'Because the corpus was large [1].';
+      },
+    },
+  ];
+
+  const bare = await collect(
+    runPipeline(
+      'Why?',
+      [],
+      { loadIndex: async () => fixtureIndex, embedQuery, chain },
+      new AbortController().signal,
+    ),
+  );
+  assert.equal(bare.refused, true, 'a bare follow-up should have nothing to retrieve');
+
+  const withContext = await collect(
+    runPipeline(
+      'Why?',
+      [{ role: 'user', content: 'Has he shipped RAG in production?' }],
+      { loadIndex: async () => fixtureIndex, embedQuery, chain },
+      new AbortController().signal,
+    ),
+  );
+  assert.equal(withContext.refused, false, 'the follow-up did not inherit its topic');
+  assert.ok(withContext.sources.includes(ragChunk.id));
+});
+
+test('the model still receives the question verbatim, not the padded query', async () => {
+  let seen = '';
+  const chain: Provider[] = [
+    {
+      name: 'groq',
+      async *stream(prompt) {
+        seen = prompt.user;
+        yield 'ok';
+      },
+    },
+  ];
+
+  await collect(
+    runPipeline(
+      'Why?',
+      [{ role: 'user', content: 'Has he shipped RAG in production?' }],
+      {
+        loadIndex: async () => fixtureIndex,
+        embedQuery: async () => axisVector(0),
+        chain,
+      },
+      new AbortController().signal,
+    ),
+  );
+
+  assert.match(seen, /QUESTION\nWhy\?/, 'the padded retrieval query leaked into the prompt');
+});
+
+test('the system card asks for conversational answers without loosening grounding', () => {
+  assert.match(SYSTEM_CARD, /Resolve follow-ups/i);
+  // The guarantees must survive the friendlier tone.
+  assert.match(SYSTEM_CARD, /Answer only from the numbered SOURCES/);
+  assert.match(SYSTEM_CARD, /Cite every claim/);
+  assert.match(SYSTEM_CARD, /never speak as him/);
+});
+
+/* ------------------------- contact details retrieval ----------------------- */
+
+test('contact details are their own chunk, not buried with education', () => {
+  const chunks = buildChunks({
+    resume: {
+      name: 'Surya Teja Tadaka',
+      email: 'test@example.com',
+      phone: '+1 (555) 010-0000',
+      location: 'Dallas, Texas',
+      website: 'https://example.com',
+      education: [{ school: 'A University', detail: 'B.Tech', date: '2019' }],
+      certifications: ['A Certification'],
+    },
+  });
+
+  const contact = chunks.find((c) => c.id === 'resume:contact');
+  assert.ok(contact, 'there is no dedicated contact chunk');
+
+  // The phrasing people actually use has to be in the text, because retrieval
+  // matches the question against this and nothing else.
+  assert.match(contact!.text, /phone number/i);
+  assert.match(contact!.text, /\+1 \(555\) 010-0000/);
+  assert.ok(!/certification/i.test(contact!.text), 'certifications leaked into the contact chunk');
+  assert.ok(!/B\.Tech/.test(contact!.text), 'education leaked into the contact chunk');
+
+  assert.ok(chunks.some((c) => c.id === 'resume:education'));
+  assert.ok(chunks.some((c) => c.id === 'resume:certifications'));
 });

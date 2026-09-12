@@ -20,6 +20,22 @@ export const MIN_SCORE = 0.3;
 
 export const TOP_K = 5;
 
+/**
+ * Keep only chunks scoring within this fraction of the best match.
+ *
+ * The absolute floor answers "is anything relevant?", but it cannot tell a
+ * strong match from a weak one in the same result set. A question with one
+ * obvious answer — "what's his phone number?" — was retrieving the contact
+ * chunk alongside four unrelated ones that merely cleared 0.30, and every one
+ * of them got cited. Padding a precise answer with near-miss citations makes
+ * the whole answer look less trustworthy, not more.
+ *
+ * A relative gate keeps a genuinely broad question ("who is Surya?") at its
+ * full five sources, where the top matches really are comparable, while a
+ * precise question narrows to the one or two chunks that actually answer it.
+ */
+export const RELATIVE_SCORE_FLOOR = 0.7;
+
 const INT8_MAX = 127;
 
 export function quantize(vector: number[]): QuantizedVector {
@@ -90,7 +106,11 @@ export function retrieve(
   queryVector: number[],
   chunks: Chunk[],
   vectors: QuantizedVector[],
-  { topK = TOP_K, minScore = MIN_SCORE }: { topK?: number; minScore?: number } = {},
+  {
+    topK = TOP_K,
+    minScore = MIN_SCORE,
+    relativeFloor = RELATIVE_SCORE_FLOOR,
+  }: { topK?: number; minScore?: number; relativeFloor?: number } = {},
 ): RetrievedChunk[] {
   const scored: RetrievedChunk[] = [];
 
@@ -102,5 +122,10 @@ export function retrieve(
     if (score >= minScore) scored.push({ chunk: chunks[i], score });
   }
 
-  return scored.sort((a, b) => b.score - a.score).slice(0, topK);
+  const ranked = scored.sort((a, b) => b.score - a.score).slice(0, topK);
+  if (!ranked.length) return ranked;
+
+  // Drop the near-misses that only look relevant next to the real answer.
+  const cutoff = ranked[0].score * relativeFloor;
+  return ranked.filter((result) => result.score >= cutoff);
 }
